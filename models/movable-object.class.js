@@ -1,7 +1,7 @@
 class MovableObject {
 x = 120; // rechts-links
 y = 250;  // hoch
-height = 150;
+height = 200;
 width = 100;
 img;
 
