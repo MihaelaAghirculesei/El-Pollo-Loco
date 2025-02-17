@@ -6,6 +6,10 @@ function init() {
   canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d"); // ctx ist variable Name
 world = new World(canvas)
+}
+
+// das steht normalaweise in der Function init
+
 //  console.log('My Character is', world['character']);
 
   //PROBE
@@ -16,4 +20,3 @@ world = new World(canvas)
   // setTimeout (function(){
   //     ctx.drawImage(character, 20, 20, 50, 150); // Coordinate 20, 20 + breite 50, hoch 150px
   // }, 2000);
-}
