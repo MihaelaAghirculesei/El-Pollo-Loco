@@ -7,7 +7,15 @@ class Cloud extends MovableObject {
         super().loadImage('img_pollo_locco/img/5_background/layers/4_clouds/1.png');
 
         this.x = 100 + Math.random()*500; //( Math.random()*500;--> von der Konsole, startet in der unterschidliche stelle, jedes mahl)
+        this.animate();
+    }
 
+
+    animate() {
+        setInterval(() => {
+            this.x -= 0.15;
+        }, 1000 / 60);
+        
     }
 }
   

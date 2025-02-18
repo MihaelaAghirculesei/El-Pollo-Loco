@@ -4,6 +4,8 @@ y = 250;  // hoch
 height = 200;
 width = 100;
 img;
+imageCache = {};
+
 
 //loadImage('img/test.png');
 loadImage(path){
@@ -11,12 +13,24 @@ loadImage(path){
     this.img.src = path;
 }
 
-moveRight(){
+/** 
+ * @param {Array} arr - ['img/image1.png', 'img/image1.png', ...];
+*/
+loadImages(arr) {
+    arr.forEach((path) => {
+        let img = new Image();
+        img.src = path;
+        this.imageCache [path] = path;
+});
+}
+
+
+moveRight() {
     console.log('Moving right');
 }
 
-moveLeft(){
-    console.log('Moving left');
+moveLeft() {
+    // console.log('Moving left');
 }
 
 }
