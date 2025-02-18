@@ -5,6 +5,8 @@ height = 200;
 width = 100;
 img;
 imageCache = {};
+currentImage = 0;
+speed = 0.15;
 
 
 //loadImage('img/test.png');
@@ -20,7 +22,7 @@ loadImages(arr) {
     arr.forEach((path) => {
         let img = new Image();
         img.src = path;
-        this.imageCache [path] = path;
+        this.imageCache [path] = img;
 });
 }
 
@@ -30,7 +32,9 @@ moveRight() {
 }
 
 moveLeft() {
-    // console.log('Moving left');
+    setInterval(() =>{
+        this.x -= this.speed;
+    }, 1000 / 60);
 }
 
 }
