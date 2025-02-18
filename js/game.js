@@ -1,13 +1,22 @@
 let canvas;
-let ctx;
 let world;
+let keyboard = new Keyboard();
 
 function init() {
-  canvas = document.getElementById("canvas");
-  ctx = canvas.getContext("2d"); // ctx ist variable Name
-world = new World(canvas)
+  canvas = document.getElementById('canvas');
+  world = new World(canvas);
+
+  
+
+console.log('My Character is', world.character);
+
 }
 
+window.addEventListener("keypress", (e) => {
+  console.log(e);
+});
+
+// ctx = canvas.getContext("2d"); // ctx ist variable Name
 // das steht normalaweise in der Function init
 
 //  console.log('My Character is', world['character']);
