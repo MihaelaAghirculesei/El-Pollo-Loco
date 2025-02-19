@@ -20,16 +20,16 @@ class Character extends MovableObject {
   }
 
   animate() {
-    setInterval(() => {
-      if (this.world.keyboard.RIGHT) {
-        this.x += this.speed;
-        this.otherDirection = false;
-      }
-      if (this.world.keyboard.LEFT) {
-        this.x -= this.speed;
-        this.otherDirection = true;
-      }
-    }, 1000 / 60);
+    // setInterval(() => {
+    //   if (this.world.keyboard.RIGHT) {
+    //     this.x += this.speed;
+    //     this.otherDirection = false;
+    //   }
+    //   if (this.world.keyboard.LEFT) {
+    //     this.x -= this.speed;
+    //     this.otherDirection = true;
+    //   }
+    // }, 1000 / 60);
 
     setInterval(() => {
       if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
@@ -52,7 +52,6 @@ class Character extends MovableObject {
         this.x -= this.speed;
         this.otherDirection = true;
       }
-      // Fügen Sie hier weitere Bewegungslogik hinzu
     }
   
 
