@@ -10,7 +10,7 @@ IMAGES_WALKING = [
     'img_pollo_locco/img/2_character_pepe/2_walk/W-25.png',
     'img_pollo_locco/img/2_character_pepe/2_walk/W-26.png'
 ];
-
+world;
 
 constructor(){
     super().loadImage('img_pollo_locco/img/2_character_pepe/2_walk/W-21.png');
@@ -21,11 +21,13 @@ constructor(){
 
 animate() {
     setInterval(() => {
+        if(this.world.keyboard.RIGHT) {
         let i = this.currentImage % this.IMAGES_WALKING.length; //% =den rest und erhöht der index ab 7, let i = 6; 
         // i = 0,1,2,3,4,5,0,1,2,3,4,5,0
         let path = this.IMAGES_WALKING[i];
         this.img = this.imageCache[path];
         this.currentImage++;
+    }
     },1000);
 }
 

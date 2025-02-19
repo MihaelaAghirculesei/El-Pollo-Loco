@@ -16,22 +16,31 @@ class World {
 ];
   canvas;
   ctx;
+  keyboard;
 
-  constructor(canvas) {
+
+  constructor(canvas, keyboard) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d'); 
+    this.keyboard = keyboard;
     this.draw();
+    this.setWorld();
   }
+
+  setWorld() {
+    this.character.world = this;
+  }
+
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.addObjectsToMap(this.backgroundObjekts);
+
     this.addToMap(this.character);
     this.addObjectsToMap(this.clouds);
     this.addObjectsToMap(this.enemies);
    
-
 
     // Draw wird immer wieder aufgerufen
     let self = this;
@@ -41,10 +50,9 @@ class World {
   }
 
   addObjectsToMap(objects) {
-    objects.forEach(cloud => {
-      this.addToMap(cloud);
+    objects.forEach(o => {
+      this.addToMap(o);
 });
-
   }
 
   addToMap(mo) {
