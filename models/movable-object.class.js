@@ -7,6 +7,7 @@ img;
 imageCache = {};
 currentImage = 0;
 speed = 0.15;
+otherDirection = false;
 
 
 //loadImage('img/test.png');
