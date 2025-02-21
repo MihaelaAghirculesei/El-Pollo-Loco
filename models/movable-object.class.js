@@ -13,7 +13,7 @@ acceleration = 2.5;
 
 applyGravity() {
 setInterval(() => { 
-    if (this.isAboveGround()) {
+    if (this.isAboveGround() || this.speedY > 0) {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
     }
@@ -38,13 +38,14 @@ loadImages(arr) {
 }
 
 moveRight() {
-    console.log('Moving right');
+    this.x += this.speed;
+    this.otherDirection = false;
 }
 
 moveLeft() {
-    setInterval(() =>{
+    
         this.x -= this.speed;
-    }, 1000 / 60);
+        this.otherDirection = true;
 }
 
 playAnimation(images) { 
@@ -53,4 +54,8 @@ playAnimation(images) {
     this.img = this.imageCache[path];
     this.currentImage++;
 }
+jump() {
+    this.speedY = 30;
+}
+
 }
