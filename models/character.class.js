@@ -38,10 +38,12 @@ class Character extends MovableObject {
     setInterval(() => {
       if (this.world.keyboard.RIGHT) {
         this.moveRight();
+        this.otherDirection = false;
       }
 
       if (this.world.keyboard.LEFT && this.x > 0) {
         this.moveLeft();
+        this.otherDirection = true;
       }
 
       // console.log('this.speedY', 'this.speedY');
