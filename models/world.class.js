@@ -2,6 +2,7 @@ class World {
   character = new Character();
   enemies = level1.enemies;
   clouds = level1.clouds;
+  level = level1;
   backgroundObjekts = level1.backgroundObjects;
   canvas;
   ctx;
@@ -14,10 +15,21 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
+    this.checkCollisions();
   }
 
   setWorld() {
     this.character.world = this;
+  }
+
+  checkCollisions() {
+    setInterval(() => {
+      this.level.enemies.forEach((enemy) => {
+        if(this.character.isColliding(enemy)) {
+          console.log('Collision with Character', enemy);
+        }
+      });
+    }, 200);
   }
 
   draw() {
@@ -31,6 +43,8 @@ class World {
     this.addObjectsToMap(this.enemies);
 
     this.ctx.translate(-this.camera_x, 0);
+
+    this.checkCollisions();
 
     let self = this;
     requestAnimationFrame(function () {
