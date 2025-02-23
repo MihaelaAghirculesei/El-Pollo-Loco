@@ -19,16 +19,6 @@ isAboveGround(){
     return this.y < 180;
 }
 
-drawFrame(ctx) {
-    if(this instanceof Character || this instanceof Chicken) {
-        ctx.beginPath();
-        ctx.lineWidth = 4;
-        ctx.strokeStyle = "blue";
-        ctx.rect(this.x, this.y, this.width, this.height);
-        ctx.stroke(); 
-    }
-}
-
 // Bessere Formel zur Kollisionsberechnung (Genauer)
 isColliding(mo) {
     return  (this.x + this.width) >= mo.x && this.x <= (mo.x + mo.width) && 
