@@ -10,6 +10,7 @@ speed = 0.15;
 otherDirection = false;
 speedY = 0;
 acceleration = 2.5; 
+energy = 100;
 
 applyGravity() {
 setInterval(() => { 
@@ -52,12 +53,22 @@ drawFrame(ctx) {
 }
 
 // Bessere Formel zur Kollisionsberechnung (Genauer)
-isColliding(obj) {
-    return  (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) && 
-            (this.y + this.height) >= obj.y &&
-            this.y <= (obj.y + obj.height);
+isColliding(mo) {
+    return  (this.x + this.width) >= mo.x && this.x <= (mo.x + mo.width) && 
+            (this.y + this.height) >= mo.y &&
+            this.y <= (mo.y + mo.height);
 }
 
+hit() {
+    this.energy -= 5;
+    if(this.energy < 0) {
+        this.energy = 0;
+    }
+}
+
+isDead() {
+return this.energy == 0;
+}
 
 moveRight() {
     this.x += this.speed;
