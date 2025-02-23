@@ -1,16 +1,10 @@
-class MovableObject {
-x = 120;
-y = 250;  
-height = 200;
-width = 100;
-img;
-imageCache = {};
-currentImage = 0;
+class MovableObject extends DrawableObject {
 speed = 0.15;
 otherDirection = false;
 speedY = 0;
 acceleration = 2.5; 
 energy = 100;
+lastHit = 0;
 
 applyGravity() {
 setInterval(() => { 
@@ -23,23 +17,6 @@ setInterval(() => {
 
 isAboveGround(){
     return this.y < 180;
-}
-
-loadImage(path){
-    this.img = new Image();
-    this.img.src = path;
-}
-
-loadImages(arr) {
-    arr.forEach((path) => {
-        let img = new Image();
-        img.src = path;
-        this.imageCache [path] = img;
-    });
-}
-
-draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width,this.height);
 }
 
 drawFrame(ctx) {
@@ -60,12 +37,19 @@ isColliding(mo) {
 }
 
 hit() {
-    this.energy -= 5;
+    this.energy -= 8;
     if(this.energy < 0) {
         this.energy = 0;
+    } else {
+        this.lastHit =new Date().getTime();
     }
 }
 
+isHurt() {
+    let timePassed = new Date().getTime() - this.lastHit; // Difference in ms
+    timePassed = timePassed /1000; // diferenz in secunden
+    return timePassed < 1;
+}
 isDead() {
 return this.energy == 0;
 }
