@@ -36,5 +36,4 @@ loadImages(arr) {
     });
 }
 
-
 }

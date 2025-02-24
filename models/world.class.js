@@ -9,6 +9,7 @@ class World {
   keyboard;
   camera_x = 0;
   statusBar = new StatusBar();
+  StatusBarBottle = new StatusBarBottle();
 
   constructor(canvas, keyboard) {
     this.canvas = canvas;
@@ -27,8 +28,9 @@ class World {
     setInterval(() => {
       this.level.enemies.forEach((enemy) => {
         if(this.character.isColliding(enemy)&& !this.character.isDead()) {  //eingefügt: && !this.character.isDead())
-         this.character.hit();
+          this.character.hit();
           console.log('Collision with Character', this.character.energy);
+          this.statusBar.setPercentage(this.character.energy);
         }
       });
     }, 200);
@@ -38,16 +40,21 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
-
     this.addObjectsToMap(this.backgroundObjekts);
-    this.addToMap(this.statusBar);
+ 
+   // this.ctx.translate(this.camera_x, 0);
+     this.addToMap(this.statusBar);
+     this.addToMap(this.StatusBarBottle);
+      // --------Space fof Fixed objects------------------
+    //this.ctx.translate(this.camera_x, 0); // Forwards
+
     this.addToMap(this.character);
     this.addObjectsToMap(this.clouds);
     this.addObjectsToMap(this.enemies);
 
     this.ctx.translate(-this.camera_x, 0);
 
-    this.checkCollisions();
+    // this.checkCollisions(); () // in piu
 
     let self = this;
     requestAnimationFrame(function () {
