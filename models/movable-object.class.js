@@ -16,7 +16,11 @@ setInterval(() => {
 }
 
 isAboveGround(){
+    if (this instanceof ThrowableObjecet){
+        return true;
+    } else {
     return this.y < 180;
+    }
 }
 
 // Bessere Formel zur Kollisionsberechnung (Genauer)
