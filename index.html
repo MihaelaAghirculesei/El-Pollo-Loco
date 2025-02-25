@@ -9,9 +9,17 @@
 </head>
 
 <body onload="init()">
-    <h1>El Pollo Loco </h1>
-    <canvas id="canvas" width="720" height="480"></canvas> 
-
+    <div id = "fullscreen">
+        <h1>El Pollo Loco </h1>
+        <canvas id="canvas" width="720" height="480"></canvas> 
+    
+         <!-- Fullscreen-Button -->
+         <button id="fullscreen-btn" class="btn btn-primary">
+            <span id="enter-text">Vollbild</span>
+            <span id="exit-text" style="display: none;">Vollbild verlassen</span>
+        </button>
+    </div>
+    
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/character.class.js"></script>
@@ -30,5 +38,6 @@
     <script src="js/game.js"></script>
 
     <script src="levels/fonts/particle-background.js"></script>
+    <script src="models/fullscreen.js"></script>
 </body>
 </html>
