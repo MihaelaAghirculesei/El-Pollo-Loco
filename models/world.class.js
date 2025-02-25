@@ -3,14 +3,14 @@ class World {
   enemies = level1.enemies;
   clouds = level1.clouds;
   level = level1;
-  backgroundObjekts = level1.backgroundObjects;
+  backgroundObjects = level1.backgroundObjects;
   canvas;
   ctx;
   keyboard;
   camera_x = 0;
   statusBar = new StatusBar();
   StatusBarBottle = new StatusBarBottle();
-  ThrowableObjecet = [];
+  ThrowableObject  = [];
   StatusBarCoins = new StatusBarCoins();
 
   constructor(canvas, keyboard) {
@@ -19,7 +19,6 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
     this.run();
   }
 
@@ -34,14 +33,15 @@ class World {
     }, 200);
   }
 
-  checkThrowObjects(){
-    if(this.keyboard.D) {
-      let bottle = new ThrowableObjecet(this.character.x + 100, this.character.y + 100);
-      this.ThrowableObjecet.push(bottle);
+  checkThrowObjects() {
+    if (this.keyboard.D && this.StatusBarBottle.percentageBottle > 0) {
+        let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+        this.ThrowableObject.push(bottle);
+        this.StatusBarBottle.setPercentageBottle(this.StatusBarBottle.percentageBottle - 1);
     }
-  }
+}
 
-  checkCollisions() {
+checkCharacterCollisions() {
     this.level.enemies.forEach((enemy) => {
       if(this.character.isColliding(enemy)&& !this.character.isDead()) {  //eingefügt: && !this.character.isDead())
         this.character.hit();
@@ -54,8 +54,8 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.backgroundObjekts);
-    this.addObjectsToMap(this.ThrowableObjecet);
+    this.addObjectsToMap(this.backgroundObjects);
+    this.addObjectsToMap(this.ThrowableObject);
    // this.ctx.translate(this.camera_x, 0);
      this.addToMap(this.statusBar);
      this.addToMap(this.StatusBarBottle);
@@ -74,12 +74,6 @@ class World {
     let self = this;
     requestAnimationFrame(function () {
       self.draw();
-    });
-  }
-
-  addObjectsToMap(objects) {
-    objects.forEach(o => {
-      this.addToMap(o);
     });
   }
 
@@ -108,4 +102,48 @@ flipImageBack(mo) {
   this.ctx.restore();
 }
 
+checkCollisions() {
+  this.checkCharacterCollisions();
+  this.checkBottleCollisions();
+} 
+
+checkBottleCollisions() {
+  this.ThrowableObject.forEach((bottle, bottleIndex) => {
+      this.level.enemies.forEach((enemy, enemyIndex) => {
+          if (bottle.isColliding(enemy)) {
+              enemy.hit();
+              bottle.splash();
+              
+              if (enemy.isDead()) {
+                  setTimeout(() => {
+                      enemy.removeFromWorld();
+                      this.level.enemies.splice(enemyIndex, 1);
+                  }, 1000);
+                  this.checkBottleSpawn();
+              }
+          }
+      });
+      
+      if (bottle.y > 360) {
+          bottle.splash();
+      }
+  });
+
+  // Remove marked objects
+  this.ThrowableObject = this.ThrowableObject.filter(b => !b.markedForRemoval);
+  this.level.enemies = this.level.enemies.filter(e => !e.markedForRemoval);
+}
+
+addObjectsToMap(objects) {
+  objects.filter(o => !o.markedForRemoval).forEach(o => {
+      this.addToMap(o);
+  });
+}
+
+
+checkBottleSpawn() {
+  if (this.level.enemies.length <= (level1.enemies.length - 2)) {
+      this.StatusBarBottle.setPercentageBottle(10);
+  }
+}
 }

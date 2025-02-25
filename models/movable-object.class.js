@@ -16,7 +16,7 @@ setInterval(() => {
 }
 
 isAboveGround(){
-    if (this instanceof ThrowableObjecet){
+    if (this instanceof ThrowableObject){
         return true;
     } else {
     return this.y < 180;
