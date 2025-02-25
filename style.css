@@ -1,8 +1,26 @@
+@font-face {
+  font-family: 'nabla';
+  src: 
+       url('levels/fonts/nabla-regular-variable-font.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
 body {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background-image: url('img_pollo_locco/img/5_background/layers/background-mesico.jpeg');
+  background-size: cover;
+  background-position: center;
+  font-family: 'nabla', Arial, Helvetica, sans-serif;
+}
+h1 {
+  font-size: 80px;
+  letter-spacing: 3px;
+  text-shadow: 2px, 2px, 8px rgba(0, 0, 0, 60);
+  color: white !important;
 }
 
 canvas {
