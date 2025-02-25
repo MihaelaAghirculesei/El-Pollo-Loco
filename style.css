@@ -17,12 +17,37 @@ body {
   font-family: 'nabla', Arial, Helvetica, sans-serif;
 }
 h1 {
-  font-size: 80px;
+  display: block;
+  position: relative;
+  top:0;
+  font-size: 60px;
   letter-spacing: 3px;
-  text-shadow: 2px, 2px, 8px rgba(0, 0, 0, 60);
-  color: white !important;
+  text-align: center;
 }
 
 canvas {
   background-color: black;
+  display: block;
+}
+
+/* Smartphones */
+@media only screen and (max-width: 760px) {
+  h1 {
+    font-size: 40px;
+  }
+  canvas {
+    width: 100%;
+  }
+}
+
+  
+  /* Smartphones */
+@media only screen and (max-height: 480px) {
+  h1 {
+    font-size: 24px;
+    display: none;
+  }
+  canvas {
+    height: 100vh;
+  }
 }
