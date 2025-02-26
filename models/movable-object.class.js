@@ -48,6 +48,10 @@ isDead() {
 return this.energy == 0;
 }
 
+removeFromWorld() {
+    this.markedForRemoval = true;
+}
+
 moveRight() {
     this.x += this.speed;
 }

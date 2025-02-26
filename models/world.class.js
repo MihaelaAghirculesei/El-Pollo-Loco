@@ -56,20 +56,16 @@ checkCharacterCollisions() {
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.backgroundObjects);
     this.addObjectsToMap(this.ThrowableObject);
-   // this.ctx.translate(this.camera_x, 0);
      this.addToMap(this.statusBar);
      this.addToMap(this.StatusBarBottle);
      this.addToMap(this.StatusBarCoins);
-      // --------Space fof Fixed objects------------------
-    //this.ctx.translate(this.camera_x, 0); // Forwards
+
 
     this.addToMap(this.character);
     this.addObjectsToMap(this.clouds);
     this.addObjectsToMap(this.enemies);
 
     this.ctx.translate(-this.camera_x, 0);
-
-    // this.checkCollisions(); () // in piu
 
     let self = this;
     requestAnimationFrame(function () {
@@ -114,7 +110,7 @@ checkBottleCollisions() {
               enemy.hit();
               bottle.splash();
               
-              if (enemy.isDead()) {
+              if (enemy.isEnemyDead()) {
                   setTimeout(() => {
                       enemy.removeFromWorld();
                       this.level.enemies.splice(enemyIndex, 1);
@@ -129,7 +125,6 @@ checkBottleCollisions() {
       }
   });
 
-  // Remove marked objects
   this.ThrowableObject = this.ThrowableObject.filter(b => !b.markedForRemoval);
   this.level.enemies = this.level.enemies.filter(e => !e.markedForRemoval);
 }
@@ -139,7 +134,6 @@ addObjectsToMap(objects) {
       this.addToMap(o);
   });
 }
-
 
 checkBottleSpawn() {
   if (this.level.enemies.length <= (level1.enemies.length - 2)) {

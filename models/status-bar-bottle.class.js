@@ -60,7 +60,7 @@ class StatusBarBottle extends DrawableObject {
     drawHearts(ctx) {
         ctx.fillStyle = 'red';
         ctx.font = '30px Arial';
-        ctx.fillText(`❤️ x${this.extraLives}`, this.x + 220, this.y + 40);
+        ctx.fillText(`❤️ x${this.extraLives}`, this.x + 220, this.y + 15);
     }
 }
 
