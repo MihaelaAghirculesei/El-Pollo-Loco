@@ -37,7 +37,6 @@ hit() {
         if (this.life > 0){
             this.energy= 100;
             this.life -- ;
-            this.localStorage.setItem('caracter-life', this.life)
         }else {
             this.lastHit =new Date().getTime();
         }
