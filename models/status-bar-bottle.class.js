@@ -1,6 +1,5 @@
 class StatusBarBottle extends DrawableObject {
     MAX_BOTTLES = 10;
-    extraLives = 0;
 
     IMAGES = [
     'img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png', //0
@@ -27,7 +26,6 @@ class StatusBarBottle extends DrawableObject {
     setPercentageBottle(percentage) {
         this.percentageBottle = percentage; // Diese Zeile hinzufügen
         if (percentage >= this.MAX_BOTTLES) {
-            this.extraLives += Math.floor(percentage / this.MAX_BOTTLES);
             percentage = percentage % this.MAX_BOTTLES;
         }
         let imagePath = this.resolveImageIndex();
@@ -48,21 +46,6 @@ class StatusBarBottle extends DrawableObject {
             } else {
                 return this.IMAGES[0];
             }
-    }
 
-    draw(ctx) {
-        super.draw(ctx);
-        if (this.extraLives > 0) {
-            this.drawHearts(ctx);
-        }
+            }        
     }
-
-    drawHearts(ctx) {
-        if (this.extraLives > 0) {  // Controlla se ci sono vite extra da visualizzare
-            ctx.fillStyle = 'red';
-            ctx.font = '30px Arial';
-            ctx.fillText(`❤️ x${this.extraLives}`, this.x + 220, this.y + 15);
-        }
-    }
-}
-
