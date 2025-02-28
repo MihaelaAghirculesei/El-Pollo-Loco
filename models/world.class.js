@@ -10,16 +10,19 @@ class World {
   camera_x = 0;
   statusBar = new StatusBar();
   StatusBarBottle = new StatusBarBottle();
-  ThrowableObject  = [];
+  throwableObject  = [];
   StatusBarCoins = new StatusBarCoins();
+  coins;
 
   constructor(canvas, keyboard) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
     this.keyboard = keyboard;
+
     this.draw();
     this.setWorld();
     this.run();
+    this.spawnChickens();
   }
 
   setWorld() {
@@ -36,7 +39,7 @@ class World {
   checkThrowObjects() {
     if (this.keyboard.D && this.StatusBarBottle.percentageBottle > 0) {
         let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
-        this.ThrowableObject.push(bottle);
+        this.throwableObject.push(bottle);
         this.StatusBarBottle.setPercentageBottle(this.StatusBarBottle.percentageBottle - 1);
     }
 }
@@ -44,28 +47,31 @@ class World {
 checkCharacterCollisions() {
     this.level.enemies.forEach((enemy) => {
       if(this.character.isColliding(enemy)&& !this.character.isDead()) {  //eingefügt: && !this.character.isDead())
-        this.character.hit();
-        this.statusBar.setPercentage(this.character.energy);
+        if (this.character.y + this.character.height - 20 < enemy.y) { // Charakter trifft von oben
+          enemy.hit(); // Reduziert Leben des Huhns
+          this.character.jump(); // Charakter springt nach dem Treffer
+      } else {
+          this.character.hit(); // Charakter wird verletzt
       }
+      this.statusBar.setPercentage(this.character.energy);
+    }
     });
-  }
+}
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
     this.ctx.translate(this.camera_x, 0);
+
     this.addObjectsToMap(this.backgroundObjects);
-    this.addObjectsToMap(this.ThrowableObject);
-     this.addToMap(this.statusBar);
-     this.addToMap(this.StatusBarBottle);
-     this.addToMap(this.StatusBarCoins);
-
-
-    this.addToMap(this.character);
     this.addObjectsToMap(this.clouds);
-    this.addObjectsToMap(this.enemies);
-
+    this.addObjectsToMap(this.throwableObject);
+    this.addToMap(this.character);
+    this.addObjectsToMap(this.level.enemies);
+    
     this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusBar);
+    this.addToMap(this.StatusBarBottle);
+    this.addToMap(this.StatusBarCoins);
 
     let self = this;
     requestAnimationFrame(function () {
@@ -104,11 +110,11 @@ checkCollisions() {
 } 
 
 checkBottleCollisions() {
-  this.ThrowableObject.forEach((bottle, bottleIndex) => {
+  this.throwableObject.forEach((bottle, bottleIndex) => {
       this.level.enemies.forEach((enemy, enemyIndex) => {
-          if (bottle.isColliding(enemy)) {
-              enemy.hit();
-              bottle.splash();
+        if (bottle.isColliding(enemy) && enemy instanceof Chicken) {
+          enemy.hit();
+          bottle.splash();
               
               if (enemy.isEnemyDead()) {
                   setTimeout(() => {
@@ -125,7 +131,7 @@ checkBottleCollisions() {
       }
   });
 
-  this.ThrowableObject = this.ThrowableObject.filter(b => !b.markedForRemoval);
+  this.throwableObject = this.throwableObject.filter(b => !b.markedForRemoval);
   this.level.enemies = this.level.enemies.filter(e => !e.markedForRemoval);
 }
 
@@ -140,4 +146,15 @@ checkBottleSpawn() {
       this.StatusBarBottle.setPercentageBottle(10);
   }
 }
+
+spawnChickens() {
+  setInterval(() => {
+      if (this.level.enemies.length < 5) {
+        let newChicken = new Chicken();
+        newChicken.x = this.character.x + 800 + Math.random() * 300; 
+        this.level.enemies.push(newChicken);
+    }
+}, 5000); 
+}
+
 }

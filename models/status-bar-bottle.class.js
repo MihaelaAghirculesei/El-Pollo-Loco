@@ -58,9 +58,11 @@ class StatusBarBottle extends DrawableObject {
     }
 
     drawHearts(ctx) {
-        ctx.fillStyle = 'red';
-        ctx.font = '30px Arial';
-        ctx.fillText(`❤️ x${this.extraLives}`, this.x + 220, this.y + 15);
+        if (this.extraLives > 0) {  // Controlla se ci sono vite extra da visualizzare
+            ctx.fillStyle = 'red';
+            ctx.font = '30px Arial';
+            ctx.fillText(`❤️ x${this.extraLives}`, this.x + 220, this.y + 15);
+        }
     }
 }
 

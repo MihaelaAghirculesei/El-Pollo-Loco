@@ -12,6 +12,12 @@ class Cloud extends MovableObject {
     }
 
     animate() {
-        this.moveLeft();
-    }
+        setInterval(() => {
+            this.moveLeft();
+            if (this.x < -this.width) {  // Wolke zurücksetzen, bevor sie ganz weg ist
+                this.x = canvas.width + Math.random() * 200;
+                this.y = 20 + Math.random() * 50;  // Höhenvariation für realistischere Bewegung
+            }
+        }, 1000 / 60);
+    } 
 }
