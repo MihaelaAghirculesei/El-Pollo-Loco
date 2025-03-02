@@ -31,5 +31,19 @@ const level1 = new Level(
         new BackgroundObjekt("img_pollo_locco/img/5_background/layers/3_third_layer/2.png", 719 * 3),
         new BackgroundObjekt("img_pollo_locco/img/5_background/layers/2_second_layer/2.png", 719 * 3),
         new BackgroundObjekt("img_pollo_locco/img/5_background/layers/1_first_layer/2.png", 719 * 3),
+      ],
+     [
+        new Coin(600, 200), 
+        new Coin(800, 260), 
+        new Coin(880, 210), 
+        new Coin(960, 150), 
+        new Coin(1040, 210), 
+        new Coin(1700, 210), 
+        new Coin(2100, 210), 
+        new Coin(2400, 290), 
+        new Coin(2500, 150), 
+        new Coin(1900, 250), 
+        new Coin(2000, 300)
       ]
+
     );

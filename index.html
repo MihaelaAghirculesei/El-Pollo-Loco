@@ -8,7 +8,7 @@
     <title>El Pollo Loco</title>
 </head>
 
-<body onload="init()">
+<body >
     <div id = "fullscreen">
         <h1>El Pollo Loco </h1>
         <canvas id="canvas" width="720" height="480"></canvas> 
@@ -18,7 +18,22 @@
             <span id="enter-text">Vollbild</span>
             <span id="exit-text" style="display: none;">Vollbild verlassen</span>
         </button>
+
+        <!-- Start Game Button (Covers the Canvas) -->
+        <button id="start-btn" >
+            <img src="img_pollo_locco/img//9_intro_outro_screens/start/start-button.png" alt="Start Game">
+        </button>
+        
     </div>
+
+    <script>
+        document.getElementById("start-btn").addEventListener("click", function() {
+            this.style.display = "none";
+            setTimeout(() => {
+                init(); 
+            }, 300); 
+        });
+    </script>
     
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
@@ -29,7 +44,7 @@
     <script src="models/keyboard.class.js"></script>
     <script src="models/level.class.js"></script>
     <script src="models/endboss.class.js"></script>
-    <script src="models/status-bar.class.js"></script>
+    <script src="models/status-bar-heart.class.js"></script>
     <script src="models/status-bar-bottle.class.js"></script>
     <script src="models/status-bar-coins.class.js"></script>
     <script src="models/coins.class.js"></script>
@@ -37,8 +52,8 @@
     <script src ="models/throwable-object.class.js"></script>
     <script src="models/world.class.js"></script>
     <script src="js/game.js"></script>
-
+    <script src="js/audio.js"></script>
     <script src="levels/fonts/particle-background.js"></script>
     <script src="models/fullscreen.js"></script>
-</body>
+
 </html>

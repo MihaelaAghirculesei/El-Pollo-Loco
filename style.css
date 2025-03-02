@@ -70,3 +70,25 @@ canvas {
     height: 100vh;
   }
 }
+
+#start-btn {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 720px;  
+  height: 480px; 
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10; 
+}
+
+
+#start-btn img {
+  width: 200px; 
+  height: auto;
+  position: fixed;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%); 
+}

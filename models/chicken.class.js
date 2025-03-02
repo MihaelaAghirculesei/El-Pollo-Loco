@@ -2,7 +2,6 @@ class Chicken extends MovableObject{
     height = 70;
     width = 80;
     y = 360;
-    health = 2;
     isDead = false;
     IMAGE_DEAD = 'img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
 
@@ -19,6 +18,8 @@ class Chicken extends MovableObject{
           this.x = 500 + Math.random()*500; 
           this.speed = 0.15 + Math.random() * 0.5;
           this.animate();
+          this.life = 1;
+          this.health = 2;  
     }
     
     animate() {
@@ -33,7 +34,7 @@ class Chicken extends MovableObject{
 
     hit() {
         this.health--;
-        if (this.health <= 0) {
+        if (this.health == 0) {
             this.die();
         }
     }
@@ -41,6 +42,6 @@ class Chicken extends MovableObject{
     die() {
         this.isDead = true;
         this.loadImage(this.IMAGE_DEAD);
-        setTimeout(() => this.removeFromWorld(), 1000);
+        setTimeout(() => this.removeFromWorld(), 50);
     }
 }

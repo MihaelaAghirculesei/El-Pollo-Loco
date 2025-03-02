@@ -1,5 +1,5 @@
 class World {
-  character = new Character();
+  character;
   enemies = level1.enemies;
   clouds = level1.clouds;
   level = level1;
@@ -8,17 +8,20 @@ class World {
   ctx;
   keyboard;
   camera_x = 0;
-  statusBar = new StatusBarHeart();
-  StatusBarBottle = new StatusBarBottle();
+  statusBarHeart;
+  statusBarBottle;
+  statusBarCoins;
   throwableObject = [];
-  StatusBarCoins = new StatusBarCoins();
-  coins;
+  
 
   constructor(canvas, keyboard) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
     this.keyboard = keyboard;
-
+    this.character = new Character();
+    this.statusBarHeart = new StatusBarHeart(this.character);
+    this.statusBarBottle = new StatusBarBottle(this);
+    this.statusBarCoins = new StatusBarCoins(this);
     this.draw();
     this.setWorld();
     this.run();
@@ -26,25 +29,25 @@ class World {
   }
 
   setWorld() {
-    this.character.world = this;
+    this.character.world = this;  // give the charcater acces to the world
   }
 
   run() {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
-    }, 200);
+    }, 35 );
   }
 
   checkThrowObjects() {
-    if (this.keyboard.D && this.StatusBarBottle.percentageBottle > 0) {
+    if (this.keyboard.D && this.statusBarBottle.percentageBottle > 0) {
       let bottle = new ThrowableObject(
         this.character.x + 100,
         this.character.y + 100
       );
       this.throwableObject.push(bottle);
-      this.StatusBarBottle.setPercentageBottle(
-        this.StatusBarBottle.percentageBottle - 1
+      this.statusBarBottle.setPercentageBottle(
+        this.statusBarBottle.percentageBottle - 1
       );
     }
   }
@@ -53,10 +56,16 @@ class World {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy) && !this.character.isDead()) {
         //eingefügt: && !this.character.isDead())
-        this.character.hit();
-        if (this.character.energy == 0) {
-        }
-        this.statusBar.setPercentage(this.character.energy);
+            if (this.character.isAboveGround() && this.character.speedY < 0) {  
+               enemy.hit();  // Damage enemy (not character)
+               this.character.jump();
+            } else {
+              this.character.hit();  // Character only gets hit if coming from the side
+              if (this.character.health == 0) {
+                 this.character.life --
+              }
+            }
+        this.statusBarHeart.setPercentage(this.character.health);
       }
     });
   }
@@ -68,13 +77,13 @@ class World {
     this.addObjectsToMap(this.backgroundObjects);
     this.addObjectsToMap(this.clouds);
     this.addObjectsToMap(this.throwableObject);
-    this.addToMap(this.character);
+    this.addToMap(this.character); 
     this.addObjectsToMap(this.level.enemies);
 
     this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
-    this.addToMap(this.StatusBarBottle);
-    this.addToMap(this.StatusBarCoins);
+    this.addToMap(this.statusBarHeart);
+    this.addToMap(this.statusBarBottle);
+    this.addToMap(this.statusBarCoins);
 
     let self = this;
     requestAnimationFrame(function () {
@@ -163,4 +172,10 @@ class World {
       }
     }, 5000);
   }
+
+  playGameSound(soundFilePath, volume = 0.2) {
+    let gameSound = new Audio(soundFilePath);
+    gameSound.volume = volume;
+    gameSound.play();
+}
 }

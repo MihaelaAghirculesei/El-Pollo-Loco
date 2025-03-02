@@ -3,9 +3,10 @@ speed = 0.15;
 otherDirection = false;
 speedY = 0;
 acceleration = 2.5; 
-energy = 100;
-life = 5;
-lastHit = 0;
+lastHitTime = 0;
+hitCoolDown = 250;
+health = 10; 
+life = 5; 
 
 applyGravity() {
 setInterval(() => { 
@@ -32,24 +33,28 @@ isColliding(mo) {
 }
 
 hit() {
-    this.energy -= 10;
-    if (this.energy == 0) {
+    this.lastHitTime = new Date().getTime();
+    this.health -= 10;
+        
+    if (this.health == 0) {
         if (this.life > 0){
-            this.energy= 100;
+            this.health = 100;
             this.life -- ;
-        }else {
-            this.lastHit =new Date().getTime();
+        } else {
+            this.removeFromWorld();
+            this.lastHitTime =new Date().getTime();
         }
     }
 }
 
 isHurt() {
-    let timePassed = new Date().getTime() - this.lastHit; // Difference in ms
+    let timePassed = new Date().getTime() - this.lastHitTime; // Difference in ms
     timePassed = timePassed /1000; // diferenz in secunden
     return timePassed < 1;
 }
+
 isDead() {
-return this.energy == 0;
+ return this.life <= 0;
 }
 
 removeFromWorld() {

@@ -2,7 +2,6 @@ class Endboss extends MovableObject {
     height = 400;
     width = 250;
     y = 60;
-    health = 3;
     isDead = false;
 
     IMAGES_WALKING = [
@@ -27,6 +26,8 @@ constructor(){
     this.loadImages(this.IMAGES_WALKING);
     this.x = 2500;
     this.animate();
+    this.life = 1;
+    this.health = 6;
 }
 
 animate() {
