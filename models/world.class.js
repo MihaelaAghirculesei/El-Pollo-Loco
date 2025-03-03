@@ -118,6 +118,7 @@ class World {
   checkCollisions() {
     this.checkCharacterCollisions();
     this.checkBottleCollisions();
+    this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
   }
 
   checkBottleCollisions() {
@@ -162,9 +163,10 @@ class World {
 
   spawnChickens() {
     setInterval(() => {
-      if (this.level.enemies.length < 5) {
+      if (this.level.enemies.length < 10) {
         let newChicken = new Chicken();
         newChicken.x = this.character.x + 800 + Math.random() * 300;
+        newChicken.world = this;
         this.level.enemies.push(newChicken);
       }
     }, 5000);

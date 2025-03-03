@@ -42,7 +42,12 @@ class Chicken extends MovableObject{
     die() {
         this.dead = true;
         this.loadImage(this.IMAGE_DEAD);
-        setTimeout(() => this.removeFromWorld(), 50);
+        if (this.world && this.world.character) {
+        this.world.character.speedY = 0;
+        }
+        this.markedForRemoval = true;
+        setTimeout(() => {
+        }, 50);
     }
 
     isEnemyDead() {

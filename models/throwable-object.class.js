@@ -22,7 +22,6 @@ class ThrowableObject  extends MovableObject {
     }
 
     constructor (x, y) {
-        // super().loadImage('img_pollo_locco/img/7_statusbars/3_icons/icon_salsa_bottle.png');
         super().loadImage(this.IMAGES_ROTATION[0]);
         this.loadImages(this.IMAGES_ROTATION);
         this.loadImages(this.IMAGES_SPLASH);
@@ -35,7 +34,6 @@ class ThrowableObject  extends MovableObject {
     }
 
     throw(){
-
         this.speedY = 30;
         this.applyGravity();
         this.rotationInterval = setInterval(() => {
@@ -55,6 +53,7 @@ class ThrowableObject  extends MovableObject {
     splash() {
         this.splashed = true;
         clearInterval(this.rotationInterval);
+        this.y = this.y - 30;
         this.playAnimationOnce(this.IMAGES_SPLASH).then(() => {
             this.removeFromWorld();
         });
