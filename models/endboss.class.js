@@ -47,7 +47,7 @@ hit() {
 }
 
 die() {
-    this.isDead = true;
+    this.dead = true;
     this.loadImage(this.IMAGES_HURT[2]);
     setTimeout(() => this.removeFromWorld(), 1000);
 }

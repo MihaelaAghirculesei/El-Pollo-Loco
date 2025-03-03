@@ -29,7 +29,7 @@ class World {
   }
 
   setWorld() {
-    this.character.world = this;  // give the charcater acces to the world
+    this.character.world = this; 
   }
 
   run() {
@@ -55,12 +55,11 @@ class World {
   checkCharacterCollisions() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy) && !this.character.isDead()) {
-        //eingefügt: && !this.character.isDead())
             if (this.character.isAboveGround() && this.character.speedY < 0) {  
-               enemy.hit();  // Damage enemy (not character)
+               enemy.hit(); 
                this.character.jump();
             } else {
-              this.character.hit();  // Character only gets hit if coming from the side
+              this.character.hit(); 
               if (this.character.health == 0) {
                  this.character.life --
               }
@@ -122,16 +121,16 @@ class World {
   }
 
   checkBottleCollisions() {
-    this.throwableObject.forEach((bottle, bottleIndex) => {
-      this.level.enemies.forEach((enemy, enemyIndex) => {
+    this.throwableObject.forEach((bottle) => {
+      this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy) && enemy instanceof Chicken) {
           enemy.hit();
           bottle.splash();
 
           if (enemy.isEnemyDead()) {
             setTimeout(() => {
-              enemy.removeFromWorld();
-              this.level.enemies.splice(enemyIndex, 1);
+              // enemy.removeFromWorld();
+              this.level.enemies = this.level.enemies.filter(e => e !== enemy);
             }, 1000);
             this.checkBottleSpawn();
           }
@@ -143,10 +142,8 @@ class World {
       }
     });
 
-    this.throwableObject = this.throwableObject.filter(
-      (b) => !b.markedForRemoval
-    );
-    this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
+    this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
+    // this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
   }
 
   addObjectsToMap(objects) {
@@ -159,7 +156,7 @@ class World {
 
   checkBottleSpawn() {
     if (this.level.enemies.length <= level1.enemies.length - 2) {
-      this.StatusBarBottle.setPercentageBottle(10);
+      this.statusBarBottle.setPercentageBottle(10);
     }
   }
 
