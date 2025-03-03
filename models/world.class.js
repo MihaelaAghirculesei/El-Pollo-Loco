@@ -78,6 +78,8 @@ class World {
     this.addObjectsToMap(this.throwableObject);
     this.addToMap(this.character); 
     this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.bottle);
 
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBarHeart);
@@ -148,6 +150,7 @@ class World {
   }
 
   addObjectsToMap(objects) {
+    if (!objects || !Array.isArray(objects)) return; // 2 giro
     objects
       .filter((o) => !o.markedForRemoval)
       .forEach((o) => {
