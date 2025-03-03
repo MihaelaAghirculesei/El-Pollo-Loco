@@ -37,10 +37,10 @@ const level1 = new Level(
         new Coin(1950, 300), 
         new Coin(2000, 300),
 
-        new Coin(2350, 300),
-        new Coin(2400, 300), 
-        new Coin(2450, 300), 
-        new Coin(2500, 300), 
+        new Coin(2350, 100),
+        new Coin(2400, 100), 
+        new Coin(2450, 100), 
+        new Coin(2500, 100), 
         new Coin(2550, 200), 
         new Coin(2600, 200), 
         new Coin(2650, 200), 
@@ -49,7 +49,13 @@ const level1 = new Level(
         new Coin(3850, 300), 
         new Coin(3900, 300), 
         new Coin(3950, 300), 
-        new Coin(3000, 300)
+        new Coin(4000, 300),
+
+        new Coin(3300, 300),
+        new Coin(3350, 300),
+        new Coin(3400, 300),
+        new Coin(3450, 300),
+        new Coin(3500, 300)
       ],
       [
         new Bottle(180, 370), 
@@ -79,18 +85,17 @@ const level1 = new Level(
         new Bottle(1705, 370),
         new Bottle(1725, 370),
 
-        new Bottle(3550, 370),
-        new Bottle(3900, 370),  
-        new Bottle(4700, 370), 
-        new Bottle(4400, 370), 
-        new Bottle(4800, 370), 
-        
-
         new Bottle(3645, 370),
         new Bottle(3665, 370),
         new Bottle(3685, 370),
         new Bottle(3705, 370),
         new Bottle(3725, 370),
+
+        new Bottle(4700, 370),
+        new Bottle(4720, 370),  
+        new Bottle(4740, 370), 
+        new Bottle(4760, 370), 
+        new Bottle(4780, 370), 
       ],
       [
         new BackgroundObjekt("img_pollo_locco/img/5_background/layers/air.png", -719),
