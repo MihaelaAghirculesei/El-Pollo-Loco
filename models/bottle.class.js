@@ -4,8 +4,8 @@ class Bottle extends MovableObject {
         'img_pollo_locco/img/6_salsa_bottle/2_salsa_bottle_on_ground.png'
     ];
     y = 380;
-    height = 100;
-    width = 100;
+    height = 50;
+    width = 50;
 
     oftset = {
         top: 16,
