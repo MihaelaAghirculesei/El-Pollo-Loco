@@ -1,8 +1,7 @@
 @font-face {
   font-family: 'nabla';
-  src: 
-       url('levels/fonts/nabla-regular-variable-font.ttf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
-}  
+  src: url('levels/fonts/nabla-regular-variable-font.ttf') format('truetype');
+}
 
 body {
   display: flex;
@@ -20,7 +19,7 @@ body {
 h1 {
   display: block;
   position: relative;
-  top:0;
+  top: 0;
   font-size: 60px;
   letter-spacing: 3px;
   text-align: center;
@@ -29,8 +28,15 @@ h1 {
 canvas {
   background-color: black;
   display: block;
-    width: 100%;
-  height: 100%; 
+  width: 720px;
+  height: 480px;
+}
+
+#titleCanvas {
+  background-color: black;
+  display: block;
+  width: 720px;
+  height: 100px;
 }
 
 #fullscreen-btn {
@@ -53,52 +59,110 @@ canvas {
 /* Smartphones */
 @media only screen and (max-width: 760px) {
   h1 {
-    font-size: 40px;
+      font-size: 40px;
   }
+
   canvas {
-    width: 100%;
+      width: 100%;
   }
 }
 
-  /* Smartphones */
+/* Smartphones */
 @media only screen and (max-height: 480px) {
   h1 {
-    font-size: 24px;
-    display: none;
+      font-size: 24px;
+      display: none;
   }
+
   canvas {
-    height: 100vh;
+      height: 100vh;
   }
 }
 
 /*_________________________ START SCREEN _________________________*/
 
 .start-screen {
-  height: 480px;
   width: 720px;
+  height: 480px;
   position: absolute;
   z-index: 2;
-  background-image: url(img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png) 0% 0% / 100% 100% no-repeat;
-}
-
-#start-btn {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 720px;  
-  height: 480px; 
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 10; 
-}
-
-
-#start-btn img {
-  width: 200px; 
-  height: auto;
-  position: fixed;
-  top: 54%;
+  background-image: url(img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the top */
+}
+
+.menu {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  align-items: center; /* Align items vertically */
+  width: 100%; /* Take full width */
+  padding-top: 20px; /* Add some padding to the top */
+}
+
+.button-99 {
+  background-color: orange;
+  border: 3px solid aqua;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 20px;
+  margin: 0 10px; /* Add horizontal margin between buttons */
+  font-family: 'nabla', Arial, Helvetica, sans-serif;
+}
+
+.button-99:hover {
+  background-color: darkorange;
+}
+
+/* Style für die anderen Screens */
+.controls-screen,
+.settings-screen,
+.story-container,
+.end-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+  z-index: 3;
+  width: 720px;
+  height: 480px;
+}
+
+.fs-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controls-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.controls-container img {
+  margin: 0 10px;
 }
