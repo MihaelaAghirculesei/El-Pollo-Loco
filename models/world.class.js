@@ -180,4 +180,17 @@ class World {
     gameSound.volume = volume;
     gameSound.play();
 }
+
+checkCollection() {
+  this.level.collectableItems.forEach((item) => {
+    if (this.canCollectItem(item, Bottle)) {
+      item.collectItem();
+      this.collectBottle();
+    }
+    if (this.canCollectItem(item, Coin)) {
+      item.collectItem();
+      this.collectCoin();
+    }
+  });
+}
 }

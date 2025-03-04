@@ -1,4 +1,4 @@
-class Coin extends MovableObject {
+class Coin extends CollectableObject {
     coinImg = ['img_pollo_locco/img/8_coin/coin_1.png','img_pollo_locco/img/8_coin/coin_2.png'];
     y = 330;
     height = 150;
@@ -10,6 +10,7 @@ class Coin extends MovableObject {
         right: 50,
         bottom:50
     }
+    collect_sound = new Audio('audio/coin-collect-sound.mp3');
 
     constructor (x, y) {
         super().loadImage('img_pollo_locco/img/8_coin/coin_1.png');
