@@ -28,14 +28,14 @@ h1 {
 canvas {
   background-color: black;
   display: block;
-  width: 720px;
-  height: 480px;
+  width: 100%;
+  height: 100%;
 }
 
 #titleCanvas {
   background-color: black;
   display: block;
-  width: 720px;
+  width: 100%;
   height: 100px;
 }
 
@@ -71,9 +71,7 @@ canvas {
 @media only screen and (max-height: 480px) {
   h1 {
       font-size: 24px;
-      display: none;
   }
-
   canvas {
       height: 100vh;
   }
@@ -82,8 +80,8 @@ canvas {
 /*_________________________ START SCREEN _________________________*/
 
 .start-screen {
-  width: 720px;
   height: 480px;
+  width: 720px;
   position: absolute;
   z-index: 2;
   background-image: url(img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png);
@@ -94,15 +92,15 @@ canvas {
   transform: translate(-50%, -50%);
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align items to the top */
+  align-items: flex-start;
 }
 
 .menu {
   display: flex;
-  justify-content: center; /* Center the buttons horizontally */
-  align-items: center; /* Align items vertically */
-  width: 100%; /* Take full width */
-  padding-top: 20px; /* Add some padding to the top */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-top: 20px;
 }
 
 .button-99 {
@@ -116,12 +114,14 @@ canvas {
   font-size: 16px;
   cursor: pointer;
   border-radius: 20px;
-  margin: 0 10px; /* Add horizontal margin between buttons */
+  margin: 0 10px;
   font-family: 'nabla', Arial, Helvetica, sans-serif;
+  transition: transform 0.3s ease; /* Add transition for smooth scaling */
 }
 
 .button-99:hover {
   background-color: darkorange;
+  transform: scale(1.1); /* Scale the button on hover */
 }
 
 /* Style für die anderen Screens */
@@ -134,7 +134,7 @@ canvas {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
-  color: white;
+  color: black;
   padding: 20px;
   border-radius: 10px;
   text-align: center;
@@ -165,4 +165,13 @@ canvas {
 
 .controls-container img {
   margin: 0 10px;
+}
+
+#content {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 480px;
 }

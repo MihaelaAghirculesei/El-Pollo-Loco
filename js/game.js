@@ -39,7 +39,7 @@ window.addEventListener("keyup", (e) => {
         keyboard.LEFT = false;
     }
     if (e.keyCode == 38) {
-        keyboard.UP = false;
+        keyboard.UP = true;
     }
     if (e.keyCode == 40) {
         keyboard.DOWN = false;
@@ -62,6 +62,7 @@ function startGame() {
 
 function openControls() {
     document.getElementById("controlsScreen").style.display = "flex";
+    document.getElementById("controlsScreen").style.backgroundColor = "white";
 }
 
 function closeControls() {
@@ -70,6 +71,7 @@ function closeControls() {
 
 function openStory() {
     document.getElementById("storyScreen").style.display = "flex";
+    document.getElementById("storyScreen").style.backgroundColor = "white";
 }
 
 function closeStory() {
@@ -78,6 +80,7 @@ function closeStory() {
 
 function openSettings() {
     document.getElementById("settingsScreen").style.display = "flex";
+    document.getElementById("settingsScreen").style.backgroundColor = "white";
 }
 
 function closeSettings() {
