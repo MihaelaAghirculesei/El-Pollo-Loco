@@ -100,9 +100,13 @@ function muteBottleSounds() {
     }
 }
 
+function muteSingleBottleSounds(bottle) {
+    bottle.collect_sound.muted = isGameMuted;
+}
 function muteCharacterSounds() {
     if (world && world.character) {
         world.character.walking_sound.muted = isGameMuted;
         world.character.hurt_sound.muted = isGameMuted;
     }
+
 }

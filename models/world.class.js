@@ -21,6 +21,7 @@ class World {
     this.character = new Character();
     this.statusBarHeart = new StatusBarHeart(this.character);
     this.statusBarBottle = new StatusBarBottle(this);
+    this.statusBarBottle.percentageBottle = 0; 
     this.statusBarCoins = new StatusBarCoins(this);
     this.draw();
     this.setWorld();
@@ -36,6 +37,7 @@ class World {
     setInterval(() => {
       this.checkCollisions();
       this.checkThrowObjects();
+      this.checkCollection();
     }, 35 );
   }
 
@@ -181,16 +183,30 @@ class World {
     gameSound.play();
 }
 
-checkCollection() {
-  this.level.collectableItems.forEach((item) => {
-    if (this.canCollectItem(item, Bottle)) {
-      item.collectItem();
-      this.collectBottle();
-    }
-    if (this.canCollectItem(item, Coin)) {
-      item.collectItem();
-      this.collectCoin();
-    }
-  });
+collectBottle() {
+  this.statusBarBottle.setPercentageBottle(this.statusBarBottle.percentageBottle + 10); // Füge 10 oder eine andere Menge hinzu
+  if (this.statusBarBottle.percentageBottle > 100) {
+      this.statusBarBottle.percentageBottle = 100; // Setze Maximum auf 100
+  }
+}
+
+ checkCollection() {
+    this.level.bottle.forEach((bottle, index) => { // Überprüfe Flaschen
+        if (this.character.isColliding(bottle) && !bottle.isCollected) {
+            this.playGameSound('audio/bottle-collect-sound.mp3'); // Spiele Sound ab
+            this.collectBottle(); // Aktualisiere Flaschenanzahl
+            bottle.isCollected = true; // Markiere Flasche als gesammelt
+            muteSingleBottleSounds(bottle) // HIER Funktion einfügen
+            // Entferne die Flasche aus dem Level
+            this.level.bottle.splice(index, 1);
+        }
+    });
+
+    this.level.coins.forEach((coin) => {
+        if (this.character.isColliding(coin)) {
+            coin.collectItem();
+            this.collectCoin();
+        }
+    });
 }
 }

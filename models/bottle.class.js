@@ -6,6 +6,8 @@ class Bottle extends MovableObject {
     y = 380;
     height = 50;
     width = 50;
+    isCollected = false;
+    collect_sound = new Audio('audio/bottle-collect-sound.mp3');  // Hinzufügen des Sounds
 
     oftset = {
         top: 16,
