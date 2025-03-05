@@ -17,6 +17,7 @@ class Coin extends CollectableObject {
         this.loadImages(this.coinImg);
         this.x = x;
         this.y = y;
+        this.collect_sound = new Audio('audio/coin-collect-sound.mp3'); // Sound für Münze sammeln
         this.animateCoins();
     }
     
@@ -24,5 +25,11 @@ class Coin extends CollectableObject {
         setInterval(() => {
           this.playAnimation(this.coinImg);
         }, 100);
+      }
+
+      collectItem(item) {
+        this.isCollected = true;
+        this.collect_sound.play(); // Sound abspielen, wenn Münze gesammelt wird
+        // ...
       }
 }

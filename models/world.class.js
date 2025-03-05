@@ -60,8 +60,10 @@ class World {
             if (this.character.isAboveGround() && this.character.speedY < 0) {  
                enemy.hit(); 
                this.character.jump();
+               this.playGameSound('audio/enemy-hit-sound.mp3');
             } else {
               this.character.hit(); 
+              this.playGameSound('audio/character-hurt-sound.mp3');
               if (this.character.health == 0) {
                  this.character.life --
               }

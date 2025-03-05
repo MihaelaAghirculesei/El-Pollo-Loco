@@ -21,6 +21,7 @@ class Bottle extends MovableObject {
         this.loadImages(this.bottleImg);
         this.x = x;
         this.y = y;
+        this.collect_sound = new Audio('audio/bottle-collect-sound.mp3'); // Sound für Flasche sammeln
         this.animateBottle();
     }
     
