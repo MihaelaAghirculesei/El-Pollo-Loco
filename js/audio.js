@@ -38,10 +38,10 @@ function updateSoundStatus() {
     let musicToggleButton = document.getElementById('music-toggle-button');
     let soundIcon = document.getElementById('sound-icon');
     if (backgroundMusicMuted) {
-        musicToggleButton.innerText = 'Sound Off';
+        musicToggleButton.innerText = 'Background Music Off';
         soundIcon.src = './img/12_icons/SOUND_OFF_icon.png';
     } else {
-        musicToggleButton.innerText = 'Sound On';
+        musicToggleButton.innerText = 'Background Music On';
         soundIcon.src = './img/12_icons/SOUND_ON_icon.png';
     }
     if (gameActive) {

@@ -16,10 +16,7 @@
         <canvas id="titleCanvas" width="720" height="100"></canvas>
 
         <!-- Fullscreen-Button -->
-        <button id="fullscreen-btn" class="btn btn-primary">
-            <span id="enter-text">Vollbild</span>
-            <span id="exit-text" style="display: none;">Vollbild verlassen</span>
-        </button>
+
 
         <canvas id="canvas" width="720" height="480"></canvas>
 
@@ -85,10 +82,11 @@
                 <div class="screen-title">
                     <h2>Settings</h2>
                 </div>
-                <div id="settings" class="settings">
-                    <button class="button-99 fullscreen-toggle" onclick="toggleFullScreen()">Fullscreen
-                        On</button>
-                    <button id="music-toggle-button" onclick="toggleSoundAndImage()">Sound
+                <button id="fullscreen-btn" class="btn btn-primary">
+                    <span id="enter-text">Vollbild</span>
+                    <span id="exit-text" style="display: none;">Vollbild verlassen</span>
+                </button>
+                    <button id="music-toggle-button" onclick="toggleSoundAndImage()">Background music
                         On</button>
                 </div>
             </div>

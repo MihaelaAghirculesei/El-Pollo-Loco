@@ -209,4 +209,8 @@ collectBottle() {
         }
     });
 }
+removeCollectedBottles() {
+  this.level.bottles = this.level.bottles.filter(bottle => !bottle.isCollected);
+}
+
 }
