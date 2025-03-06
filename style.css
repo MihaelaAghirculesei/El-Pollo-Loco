@@ -151,3 +151,37 @@ h1 {
   top: 100px;
   transform: translateX(-50%);
 }
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 10px; /* Runde Ecken */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Schatten */
+  z-index: 1000; /* Stellt sicher, dass das Popup im Vordergrund bleibt */
+  font-size: 18px; /* Schriftgröße */
+  text-align: center; /* Text zentrieren */
+}
+
+/* Optionale Stiländerungen für die Nachricht */
+.popup p {
+  margin: 0;
+}
+
+/* Ein Button, um das Popup zu schließen (optional) */
+.popup button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #4CAF50; /* Grüner Hintergrund */
+  color: white; /* Weißer Text */
+  border: none; 
+  border-radius: 5px; /* Runde Ecken */
+  cursor: pointer; /* Handzeiger anzeigen */
+}
+
+.popup button:hover {
+  background-color: #45a049; /* Dunklerer Grünton beim Hover */
+}

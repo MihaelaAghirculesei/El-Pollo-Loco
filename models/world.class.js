@@ -230,22 +230,19 @@ removeCollectedBottles() {
 
 showCongratulations() {
   const popup = document.createElement("div");
-  popup.innerText = "Congratulations! You've collected 30 Coins and earned a new life!";
-  popup.style.position = "fixed";
-  popup.style.top = "50%";
-  popup.style.left = "50%";
-  popup.style.transform = "translate(-50%, -50%)";
-  popup.style.backgroundColor = "white";
-  popup.style.padding = "20px";
-  popup.style.border = "2px solid black";
-  popup.style.zIndex = "1000"; 
+  popup.classList.add("popup"); // Füge die Popup-Klasse hinzu
+  popup.innerHTML = `
+      <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
+      <button onclick="this.parentElement.remove();">Close</button>
+  `;
 
   document.body.appendChild(popup);
 
-
+  // Ton abspielen
   const audio = new Audio('audio/new-life.mp3');
   audio.play();
 
+  // Popup nach 2 Sekunden entfernen, wenn der Schließen-Button nicht verwendet wird.
   setTimeout(() => {
       document.body.removeChild(popup);
   }, 3000);
