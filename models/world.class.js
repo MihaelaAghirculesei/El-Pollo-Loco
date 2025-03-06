@@ -151,7 +151,7 @@ class World {
   }
 
   addObjectsToMap(objects) {
-    if (!objects || !Array.isArray(objects)) return; // 2 giro
+    if (!objects || !Array.isArray(objects)) return; 
     objects
       .filter((o) => !o.markedForRemoval)
       .forEach((o) => {
@@ -230,19 +230,17 @@ removeCollectedBottles() {
 
 showCongratulations() {
   const popup = document.createElement("div");
-  popup.classList.add("popup"); // Füge die Popup-Klasse hinzu
+  popup.classList.add("popup"); 
   popup.innerHTML = `
       <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-      <button onclick="this.parentElement.remove();">Close</button>
+      <button class="button-popup" onclick="this.parentElement.remove();">Close</button>
   `;
 
   document.body.appendChild(popup);
 
-  // Ton abspielen
   const audio = new Audio('audio/new-life.mp3');
   audio.play();
 
-  // Popup nach 2 Sekunden entfernen, wenn der Schließen-Button nicht verwendet wird.
   setTimeout(() => {
       document.body.removeChild(popup);
   }, 3000);

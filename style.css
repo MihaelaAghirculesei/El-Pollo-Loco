@@ -83,7 +83,7 @@ h1 {
   padding-top: 20px;
 }
 
-.button-start-screen {
+.button-start-screen, .button-popup {
   background-color: #960b06;
   border: 3px solid #0ff;
   color: #0ff;
@@ -115,9 +115,12 @@ h1 {
   top: 51%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #7cfce0 !important;
-  color: #000;
+  background-image: url(img_pollo_locco/img/11_others/background-gamepad.png);
+  background-repeat: no-repeat;
+  /* background-color: #7cfce0 !important; */
+  color: rgb(13, 14, 14);
   padding: 20px;
+  font-size: 15px;
   border-radius: 10px;
   text-align: center;
   display: none;
@@ -156,32 +159,12 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: rgba(14, 163, 233, 0.699);
   padding: 20px;
-  border: 2px solid black;
-  border-radius: 10px; /* Runde Ecken */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Schatten */
-  z-index: 1000; /* Stellt sicher, dass das Popup im Vordergrund bleibt */
-  font-size: 18px; /* Schriftgröße */
-  text-align: center; /* Text zentrieren */
-}
-
-/* Optionale Stiländerungen für die Nachricht */
-.popup p {
-  margin: 0;
-}
-
-/* Ein Button, um das Popup zu schließen (optional) */
-.popup button {
-  margin-top: 10px;
-  padding: 10px 15px;
-  background-color: #4CAF50; /* Grüner Hintergrund */
-  color: white; /* Weißer Text */
-  border: none; 
-  border-radius: 5px; /* Runde Ecken */
-  cursor: pointer; /* Handzeiger anzeigen */
-}
-
-.popup button:hover {
-  background-color: #45a049; /* Dunklerer Grünton beim Hover */
+  border: 3px solid #0ff;
+  border-radius: 10px; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); 
+  z-index: 1000; 
+  font-size: 18px; 
+  text-align: center;
 }
