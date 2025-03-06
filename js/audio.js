@@ -5,9 +5,26 @@ let gameWon = new Audio('audio/winning-game-sound.mp3');
 
 let gameLost = new Audio('audio/lose-game-sound.mp3');
 
-let isGameMuted = false;
+// let characterHurt = new Audio('audio/character-hurt-sound.mp3');
 
+
+// let bottleCollect = new Audio('audio/bottle-collect-sound.mp3');
+
+// let characterCoinCollect = new Audio('audio/coin-collect-sound.mp3');
+
+// let characterWalking = new Audio('audio/character-walking-sound.mp3');
+
+
+// let chickenHurt = new Audio('audio/chicken-hurt.mp3'); 
+
+// let endbossHurt = new Audio('audio/endboss-hurt.mp3');
+
+// let  endbossAtack = new Audio('audio/endboss-atack.mp3');
+
+let isGameMuted = false;
 let backgroundMusicMuted = false;
+backgroundMusic.loop = true;
+let isMusicPlaying = false;
 
 function gameWonSound() {
     if (!isGameMuted) {
@@ -24,12 +41,15 @@ function gameLostSound() {
 function playBackgroundMusic() {
     backgroundMusic.volume = 0.1;
     backgroundMusic.muted = backgroundMusicMuted;
+    backgroundMusic.loop = true;
     backgroundMusic.play();
+    isMusicPlaying = true;
 }
 
 function stopBackgroundMusic() {
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
+    isMusicPlaying = false;
 }
 
 function updateSoundStatus() {
@@ -39,13 +59,35 @@ function updateSoundStatus() {
     let soundIcon = document.getElementById('sound-icon');
     if (backgroundMusicMuted) {
         musicToggleButton.innerText = 'Background Music Off';
-        soundIcon.src = './img/12_icons/SOUND_OFF_icon.png';
+        // musicToggleButton2.innerText = 'Music Off';
+        soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-off.png';
+        stopBackgroundMusic();
     } else {
         musicToggleButton.innerText = 'Background Music On';
-        soundIcon.src = './img/12_icons/SOUND_ON_icon.png';
+        soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-on.png';
+        playBackgroundMusic();
     }
     if (gameActive) {
         muteSounds();
+    }
+}
+
+function toggleSound() {
+    isGameMuted = !isGameMuted;
+    
+    let musicToggleButton2 = document.getElementById('music-toggle-button-2');
+
+    if (isGameMuted) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+        isMusicPlaying = false;
+        musicToggleButton2.innerText = 'Music Off';
+    } else {
+        if (!isMusicPlaying) {
+            backgroundMusic.play();
+            isMusicPlaying = true;
+        }
+        musicToggleButton2.innerText = 'Music On';
     }
 }
 
