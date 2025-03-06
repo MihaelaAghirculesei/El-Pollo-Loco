@@ -13,7 +13,6 @@ class World {
   statusBarCoins;
   throwableObject = [];
   
-
   constructor(canvas, keyboard) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
@@ -60,7 +59,7 @@ class World {
             if (this.character.isAboveGround() && this.character.speedY < 0) {  
                enemy.hit(); 
                this.character.jump();
-               this.playGameSound('audio/enemy-hit-sound.mp3');
+               this.playGameSound('audio/chicken-hurt.mp3');
             } else {
               this.character.hit(); 
               this.playGameSound('audio/character-hurt-sound.mp3');
@@ -148,9 +147,7 @@ class World {
         bottle.splash();
       }
     });
-
     this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
-    // this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
   }
 
   addObjectsToMap(objects) {
@@ -188,18 +185,17 @@ class World {
 collectBottle() {
   this.statusBarBottle.setPercentageBottle(this.statusBarBottle.percentageBottle + 10); // Füge 10 oder eine andere Menge hinzu
   if (this.statusBarBottle.percentageBottle > 100) {
-      this.statusBarBottle.percentageBottle = 100; // Setze Maximum auf 100
+      this.statusBarBottle.percentageBottle = 100; 
   }
 }
 
  checkCollection() {
-    this.level.bottle.forEach((bottle, index) => { // Überprüfe Flaschen
+    this.level.bottle.forEach((bottle, index) => { 
         if (this.character.isColliding(bottle) && !bottle.isCollected) {
-            this.playGameSound('audio/bottle-collect-sound.mp3'); // Spiele Sound ab
-            this.collectBottle(); // Aktualisiere Flaschenanzahl
-            bottle.isCollected = true; // Markiere Flasche als gesammelt
-            muteSingleBottleSounds(bottle) // HIER Funktion einfügen
-            // Entferne die Flasche aus dem Level
+            this.playGameSound('audio/bottle-collect-sound.mp3');
+            this.collectBottle(); 
+            bottle.isCollected = true; 
+            muteSingleBottleSounds(bottle) 
             this.level.bottle.splice(index, 1);
         }
     });
@@ -211,6 +207,14 @@ collectBottle() {
         }
     });
 }
+
+collectCoin() {
+  this.statusBarCoins.setPercentageCoins(this.statusBarCoins.percentageCoins + 1);
+  if (this.statusBarCoins.percentageCoins > 100) {
+      this.statusBarCoins.percentageCoins = 100;
+  }
+}
+
 removeCollectedBottles() {
   this.level.bottles = this.level.bottles.filter(bottle => !bottle.isCollected);
 }

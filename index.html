@@ -22,7 +22,7 @@
 
         <div id="controlsScreen" class="controls-screen" style="display:none">
             <div class="button-container">
-                <button class="button-99" onclick="closeControls()">Back</button>
+                <button class="button-start-screen" onclick="closeControls()">Back</button>
             </div>
             <div class="fs-centered">
                 <div class="screen-title">
@@ -59,7 +59,7 @@
         </div>
         <div id="storyScreen" class="story-container" style="display:none">
             <div class="button-container">
-                <button class="button-99" onclick="closeStory()">Back</button>
+                <button class="button-start-screen" onclick="closeStory()">Back</button>
             </div>
             <div class="fs-centered">
                 <div class="screen-title">
@@ -76,35 +76,37 @@
         </div>
         <div id="settingsScreen" class="settings-screen" style="display:none">
             <div class="button-container">
-                <button class="button-99" onclick="closeSettings()">Back</button>
+                <button class="button-start-screen" onclick="closeSettings()">Back</button>
             </div>
             <div class="fs-centered">
                 <div class="screen-title">
                     <h2>Settings</h2>
                 </div>
-                <button id="fullscreen-btn" class="btn btn-primary">
-                    <span id="enter-text">Vollbild</span>
-                    <span id="exit-text" style="display: none;">Vollbild verlassen</span>
-                </button>
-                    <button id="music-toggle-button" onclick="toggleSoundAndImage()">Background music
-                        On</button>
+                <div class="button-2-container">
+                    <button id="fullscreen-btn" class="button-start-screen">
+                        <span id="enter-text">Vollbild</span>
+                        <span id="exit-text" style="display: none;">Vollbild verlassen</span>
+                    </button>
+                    <button id="music-toggle-button" class="button-start-screen" onclick="toggleSoundAndImage()">
+                        Background music On
+                    </button>
                 </div>
             </div>
         </div>
         <div id="endScreen" class="end-screen" style="display:none">
-            <button class="button-99" onclick="returnToMenu()">Back to Menu</button>
+            <button class="button-start-screen" onclick="returnToMenu()">Back to Menu</button>
         </div>
         <div id="content" class="content" style="display:none">
-            <!-- Hier wird das Spiel angezeigt -->
+            <!-- The game is shown here -->
         </div>
     </div>
 
     <div id="startScreen" class="start-screen" style="display:flex">
         <div id="menu" class="menu">
-            <button class="button-99" onclick="startGame()">Play</button>
-            <button class="button-99" onclick="openControls()">Controls</button>
-            <button class="button-99" onclick="openStory()">Story</button>
-            <button class="button-99" onclick="openSettings()">Settings</button>
+            <button class="button-start-screen" onclick="startGame()">Play</button>
+            <button class="button-start-screen" onclick="openControls()">Controls</button>
+            <button class="button-start-screen" onclick="openStory()">Story</button>
+            <button class="button-start-screen" onclick="openSettings()">Settings</button>
         </div>
     </div>
 
