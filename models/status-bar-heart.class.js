@@ -50,7 +50,13 @@ draw(ctx) {
     this.drawHearts(ctx);
   }
 }
-
+// drawHearts(ctx) { VOHER
+//   if (this.character.life > 0) {
+//     // Controlla se ci sono vite extra da visualizzare
+//     ctx.fillStyle = "red";
+//     ctx.font = "30px Arial";
+//     ctx.fillText(`❤️ x${this.character.life}`, this.x + 220, this.y + 52);
+//   }
 drawHearts(ctx) {
   if (this.character.life > 0) {
     // Controlla se ci sono vite extra da visualizzare

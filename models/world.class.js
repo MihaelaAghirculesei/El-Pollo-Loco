@@ -200,23 +200,55 @@ collectBottle() {
         }
     });
 
-    this.level.coins.forEach((coin) => {
-        if (this.character.isColliding(coin)) {
-            coin.collectItem();
-            this.collectCoin();
-        }
-    });
+    this.level.coins.forEach((coin, index) => {
+      if (this.character.isColliding(coin) && !coin.isCollected) {
+          coin.collectItem();
+          this.collectCoin();
+          coin.isCollected = true; 
+          this.level.coins.splice(index, 1); 
+      }
+  });
 }
 
 collectCoin() {
   this.statusBarCoins.setPercentageCoins(this.statusBarCoins.percentageCoins + 1);
+
+  if (this.statusBarCoins.percentageCoins === 30) {
+      this.showCongratulations();
+      
+      this.character.life++; 
+  }
+  
   if (this.statusBarCoins.percentageCoins > 100) {
-      this.statusBarCoins.percentageCoins = 100;
+      this.statusBarCoins.percentageCoins = 100; 
   }
 }
 
 removeCollectedBottles() {
   this.level.bottles = this.level.bottles.filter(bottle => !bottle.isCollected);
+}
+
+showCongratulations() {
+  const popup = document.createElement("div");
+  popup.innerText = "Congratulations! You've collected 30 Coins and earned a new life!";
+  popup.style.position = "fixed";
+  popup.style.top = "50%";
+  popup.style.left = "50%";
+  popup.style.transform = "translate(-50%, -50%)";
+  popup.style.backgroundColor = "white";
+  popup.style.padding = "20px";
+  popup.style.border = "2px solid black";
+  popup.style.zIndex = "1000"; 
+
+  document.body.appendChild(popup);
+
+
+  const audio = new Audio('audio/new-life.mp3');
+  audio.play();
+
+  setTimeout(() => {
+      document.body.removeChild(popup);
+  }, 3000);
 }
 
 }
