@@ -17,9 +17,9 @@ let gameLost = new Audio('audio/lose-game-sound.mp3');
 
 // let chickenHurt = new Audio('audio/chicken-hurt.mp3'); 
 
-// let endbossHurt = new Audio('audio/endboss-hurt.mp3');
+let endbossHurt = new Audio('audio/endboss-hurt.mp3');
 
-// let  endbossAtack = new Audio('audio/endboss-atack.mp3');
+let  endbossAtack = new Audio('audio/endboss-atack.mp3');
 
 let isGameMuted = false;
 let backgroundMusicMuted = false;
