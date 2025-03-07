@@ -22,21 +22,21 @@ constructor(){
 }
 
 setPercentageCoins (percentage) {
-    this.percentageCoins = percentage; // => 0... 5 //100
+    this.percentageCoins = percentage % 31; 
     let imagePath = this.resolveImageIndex();
     this.img = this.imageCache[imagePath];
 }
 
 resolveImageIndex() {
-    if (this.percentageCoins == 100) {
+    if (this.percentageCoins == 30) {
         return this.IMAGES[5];
-        } else if (this.percentageCoins >= 80) {
+        } else if (this.percentageCoins >= 24) {
             return this.IMAGES[4];
-        } else if (this.percentageCoins > 60) {
+        } else if (this.percentageCoins > 18) {
             return this.IMAGES[3];
-        } else if (this.percentageCoins > 40) {
+        } else if (this.percentageCoins > 12) {
             return this.IMAGES[2];
-        } else if(this.percentageCoins > 20) {
+        } else if(this.percentageCoins > 6) {
             return this.IMAGES[1];
         } else {
             return this.IMAGES[0];

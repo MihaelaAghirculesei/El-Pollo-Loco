@@ -58,12 +58,12 @@ function updateSoundStatus() {
     let musicToggleButton = document.getElementById('music-toggle-button');
     let soundIcon = document.getElementById('sound-icon');
     if (backgroundMusicMuted) {
-        musicToggleButton.innerText = 'Background Music Off';
+        musicToggleButton.innerText = 'Background Music: Off';
         // musicToggleButton2.innerText = 'Music Off';
         soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-off.png';
         stopBackgroundMusic();
     } else {
-        musicToggleButton.innerText = 'Background Music On';
+        musicToggleButton.innerText = 'Background Music: On';
         soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-on.png';
         playBackgroundMusic();
     }
@@ -81,13 +81,13 @@ function toggleSound() {
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;
         isMusicPlaying = false;
-        musicToggleButton2.innerText = 'Music Off';
+        musicToggleButton2.innerText = 'Mute: Off';
     } else {
         if (!isMusicPlaying) {
             backgroundMusic.play();
             isMusicPlaying = true;
         }
-        musicToggleButton2.innerText = 'Music On';
+        musicToggleButton2.innerText = 'Mute: On';
     }
 }
 
