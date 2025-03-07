@@ -129,7 +129,7 @@ class World {
   checkBottleCollisions() {
     this.throwableObject.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy) && enemy instanceof Chicken) {
+        if (bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken)) {
           enemy.hit();
           bottle.splash();
 
@@ -168,10 +168,10 @@ class World {
   spawnChickens() {
     setInterval(() => {
       if (this.level.enemies.length < 10) {
-        let newChicken = new Chicken();
-        newChicken.x = this.character.x + 800 + Math.random() * 300;
-        newChicken.world = this;
-        this.level.enemies.push(newChicken);
+        let randomEnemy = Math.random() < 0.5 ? new Chicken() : new SmallChicken();
+        randomEnemy.x = this.character.x + 800 + Math.random() * 300;
+        randomEnemy.world = this;
+        this.level.enemies.push(randomEnemy);
       }
     }, 5000);
   }

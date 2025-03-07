@@ -34,7 +34,7 @@ class Chicken extends MovableObject{
 
     hit() {
         this.health--;
-        if (this.health == 0) {
+        if (this.health <= 0) {
             this.die();
         }
     }
@@ -47,7 +47,8 @@ class Chicken extends MovableObject{
         }
         this.markedForRemoval = true;
         setTimeout(() => {
-        }, 50);
+            this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+        }, 500);
     }
 
     isEnemyDead() {
