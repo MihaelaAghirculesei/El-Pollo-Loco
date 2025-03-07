@@ -6,7 +6,18 @@ const level1 = new Level(
        new Endboss()
       ],
       [
-        new Cloud()
+        new Cloud(100),
+        new Cloud(500),
+        new Cloud(900),
+        new Cloud(1300),
+        new Cloud(1700),
+        new Cloud(2100),
+        new Cloud(2500),
+        new Cloud(2900),
+        new Cloud(3300),
+        new Cloud(3700),
+        new Cloud(4100),
+        new Cloud(4500),
       ],
       [
         new Coin(300, 300),
