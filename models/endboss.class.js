@@ -2,7 +2,8 @@ class Endboss extends MovableObject {
     height = 400;
     width = 250;
     y = 60;
-    isDead = false;  
+    isDead = false; 
+    health = 3; 
 
     IMAGES_WALKING = [
         'img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -48,18 +49,21 @@ hit() {
     if (this.isDead) return;
         this.health--;
     if (this.health > 0) {
-        this.playAnimation(this.IMAGES_HURT);
         this.playSound(endbossHurt);
+        if (this.health > 0) {
+            this.playAnimation(this.IMAGES_HURT);
     } else {
         this.die();
     }
 }
-
+}
 die() {
-    this.dead = true;
+    this.isDead = true;
     this.playAnimation(this.IMAGES_HURT);
-    this.playSound(endbossHurt);
-    setTimeout(() => this.removeFromWorld(), 1000);
+    setTimeout(() => {
+        this.world.removeEndboss(this);
+        this.world.showWinScreen();  // Zeige den Gewinnbildschirm
+    }, 1000);
 }
 
 playSound(sound) {

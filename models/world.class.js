@@ -283,4 +283,29 @@ showGameOver() {
   this.playGameSound('audio/lose-game-sound.mp3');
 }
 
+showWinScreen() {
+  const winScreen = document.createElement('div');
+  winScreen.style.position = 'absolute';
+  winScreen.style.top = '0';
+  winScreen.style.left = '0';
+  winScreen.style.width = '100%';
+  winScreen.style.height = '100%';
+  winScreen.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+  winScreen.style.zIndex = '1000';
+  winScreen.style.display = 'flex';
+  winScreen.style.justifyContent = 'center';
+  winScreen.style.alignItems = 'center';
+  winScreen.style.color = 'white';
+  winScreen.style.fontSize = '48px';
+  winScreen.innerText = 'You Win!';
+
+  document.body.appendChild(winScreen);
+
+  this.playGameSound('audio/winning-game-sound.mp3');
+}
+
+removeEndboss(endboss) {
+  this.level.enemies = this.level.enemies.filter(e => e !== endboss);
+}
+
 }
