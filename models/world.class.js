@@ -55,22 +55,27 @@ class World {
 
   checkCharacterCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !this.character.isDead()) {
+        if (this.character.isColliding(enemy) && !this.character.isDead()) {
             if (this.character.isAboveGround() && this.character.speedY < 0) {  
-               enemy.hit(); 
-               this.character.jump();
-               this.playGameSound('audio/chicken-hurt.mp3');
+                enemy.hit(); 
+                this.character.jump();  
+                if (enemy instanceof SmallChicken) {
+                  console.log('Small Chicken hit'); 
+                    this.playGameSound('audio/small-chicken-hurt.mp3');
+                } else {
+                    this.playGameSound('audio/chicken-hurt.mp3');
+                }
             } else {
-              this.character.hit(); 
-              this.playGameSound('audio/character-hurt-sound.mp3');
-              if (this.character.health == 0) {
-                 this.character.life --
-              }
+                this.character.hit(); 
+                this.playGameSound('audio/character-hurt-sound.mp3');
+                if (this.character.health == 0) {
+                    this.character.life--;
+                }
             }
-        this.statusBarHeart.setPercentage(this.character.health);
-      }
+            this.statusBarHeart.setPercentage(this.character.health);
+        }
     });
-  }
+}
 
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -168,7 +173,7 @@ class World {
   spawnChickens() {
     setInterval(() => {
       if (this.level.enemies.length < 10) {
-        let randomEnemy = Math.random() < 0.5 ? new Chicken() : new SmallChicken();
+        let randomEnemy = Math.random() < 0.5 ? new Chicken() : new SmallChicken(this.character.x + 800);
         randomEnemy.x = this.character.x + 800 + Math.random() * 300;
         randomEnemy.world = this;
         this.level.enemies.push(randomEnemy);
