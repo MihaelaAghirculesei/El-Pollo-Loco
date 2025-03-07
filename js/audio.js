@@ -21,9 +21,9 @@ let endbossHurt = new Audio('audio/endboss-hurt.mp3');
 
 let  endbossAtack = new Audio('audio/endboss-atack.mp3');
 
-let isGameMuted = false;
-let backgroundMusicMuted = false;
-backgroundMusic.loop = true;
+let isGameMuted = true;
+let backgroundMusicMuted = true;
+backgroundMusic.loop = false;
 let isMusicPlaying = false;
 
 function gameWonSound() {
@@ -58,35 +58,40 @@ function updateSoundStatus() {
     let musicToggleButton = document.getElementById('music-toggle-button');
     let soundIcon = document.getElementById('sound-icon');
     if (backgroundMusicMuted) {
+        console.log('Background Music muted');
         musicToggleButton.innerText = 'Background Music: Off';
         // musicToggleButton2.innerText = 'Music Off';
-        soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-off.png';
+        // soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-off.png';
         stopBackgroundMusic();
     } else {
         musicToggleButton.innerText = 'Background Music: On';
-        soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-on.png';
+        // soundIcon.src = 'img_pollo_locco/img/10_buttons/sound-icon-on.png';
         playBackgroundMusic();
     }
-    if (gameActive) {
-        muteSounds();
-    }
+    // if (gameActive) {
+    //     muteSounds();
+    // }
 }
 
 function toggleSound() {
-    isGameMuted = !isGameMuted;
     
     let musicToggleButton2 = document.getElementById('music-toggle-button-2');
-
-    if (isGameMuted) {
+    if (!isGameMuted) {
+        console.log('Game Sounds muted');
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;
         isMusicPlaying = false;
         musicToggleButton2.innerText = 'Mute: Off';
+        console.log(isGameMuted)
+        isGameMuted= !isGameMuted
+        console.log(isGameMuted)
+        muteSounds()
     } else {
         if (!isMusicPlaying) {
             backgroundMusic.play();
             isMusicPlaying = true;
         }
+        isGameMuted =!isGameMuted;
         musicToggleButton2.innerText = 'Mute: On';
     }
 }
@@ -107,6 +112,7 @@ function muteSounds() {
 }
 
 function muteChickenSounds() {
+    console.log(isGameMuted)
     if (world && world.level && world.level.enemies) {
         world.level.enemies.forEach((enemy) => {
             if (enemy instanceof Chicken) {
