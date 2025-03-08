@@ -37,6 +37,7 @@ class World {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCollection();
+      this.checkGameEnd();
     }, 35 );
   }
 
@@ -129,31 +130,48 @@ class World {
     this.checkCharacterCollisions();
     this.checkBottleCollisions();
     this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
+    
   }
 
   checkBottleCollisions() {
     this.throwableObject.forEach((bottle) => {
-      this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken)) {
-          enemy.hit();
-          bottle.splash();
+        this.level.enemies.forEach((enemy) => {
+            if (bottle.isColliding(enemy)) {
+                if (enemy instanceof Endboss) {
+                    enemy.hit();
+                    this.playGameSound('audio/endboss-atack.mp3');
+                    if (enemy.health <= 0) {
+                        enemy.die();
+                        // Optional: Spiel gewinnen Logik hier
+                    }
+                } else if (enemy instanceof Chicken || enemy instanceof SmallChicken) {
+                    enemy.hit();
+                    bottle.splash();
 
-          if (enemy.isEnemyDead()) {
-            setTimeout(() => {
-              // enemy.removeFromWorld();
-              this.level.enemies = this.level.enemies.filter(e => e !== enemy);
-            }, 1000);
-            this.checkBottleSpawn();
-          }
+                    if (enemy.isEnemyDead()) {
+                        setTimeout(() => {
+                            this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+                        }, 1000);
+                        this.checkBottleSpawn();
+                    }
+
+                    if (enemy instanceof SmallChicken) {
+                        this.playGameSound('audio/small-chicken-hurt.mp3');
+                    } else {
+                        this.playGameSound('audio/chicken-hurt.mp3');
+                    }
+                }
+            }
+        });
+
+        if (bottle.y > 360) {
+            bottle.splash();
         }
-      });
-
-      if (bottle.y > 360) {
-        bottle.splash();
-      }
     });
+
+    // Entfernen Sie gebrauchte Flaschen
     this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
-  }
+}
 
   addObjectsToMap(objects) {
     if (!objects || !Array.isArray(objects)) return; 
@@ -250,5 +268,62 @@ showCongratulations() {
       document.body.removeChild(popup);
   }, 3000);
 }
+showGameOver() {
+  const gameOverScreen = document.createElement('div');
+  gameOverScreen.style.position = 'absolute';
+  gameOverScreen.style.top = '0';
+  gameOverScreen.style.left = '0';
+  gameOverScreen.style.width = '100%';
+  gameOverScreen.style.height = '100%';
+  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/11_others/designer-congratulations.jpeg')";
+  gameOverScreen.style.backgroundSize = 'cover';
+  gameOverScreen.style.zIndex = '1000';
+
+  const gameOverImage = document.createElement('img');
+  gameOverImage.src = 'img_pollo_locco/img/9_intro_outro_screens/game_over/game_over.png';
+  gameOverImage.style.position = 'absolute';
+  gameOverImage.style.top = '50%';
+  gameOverImage.style.left = '50%';
+  gameOverImage.style.transform = 'translate(-50%, -50%)';
+
+  gameOverScreen.appendChild(gameOverImage);
+  document.body.appendChild(gameOverScreen);
+
+  this.playGameSound('audio/lose-game-sound.mp3');
+}
+checkGameEnd() {
+  const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss); // Endboss suchen
+  if (this.character.isDead()) {
+      this.showGameOver();
+  } else if (endboss && endboss.isDead) { // Überprüfen, ob der Endboss existiert und tot ist
+      this.showGameWon();
+  }
+}
+showGameWon() {
+  const gameWonScreen = document.createElement('div');
+  gameWonScreen.style.position = 'absolute';
+  gameWonScreen.style.top = '0';
+  gameWonScreen.style.left = '0';
+  gameWonScreen.style.width = '100%';
+  gameWonScreen.style.height = '100%';
+  gameWonScreen.style.backgroundImage = "url('img_pollo_locco/img/11_others/designer-congratulations.jpeg')";
+  gameWonScreen.style.backgroundSize = 'cover';
+  gameWonScreen.style.zIndex = '1000';
+
+  const gameWonText = document.createElement('h1');
+  gameWonText.textContent = 'You Won!';
+  gameWonText.style.position = 'absolute';
+  gameWonText.style.top = '50%';
+  gameWonText.style.left = '50%';
+  gameWonText.style.transform = 'translate(-50%, -50%)';
+  gameWonText.style.color = 'white';
+  gameWonText.style.fontSize = '48px';
+
+  gameWonScreen.appendChild(gameWonText);
+  document.body.appendChild(gameWonScreen);
+
+  this.playGameSound('audio/winning-game-sound.mp3');
+}
+
 
 }

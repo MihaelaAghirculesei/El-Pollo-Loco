@@ -3,6 +3,8 @@ class Endboss extends MovableObject {
     width = 250;
     y = 60;
     isDead = false;  
+    hurt_sound = new Audio('audio/endboss-hurt.mp3'); // Sound für Verletzung
+    atack_sound = new Audio('audio/endboss-atack.mp3'); // Sound für Angriff
 
     IMAGES_WALKING = [
         'img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -24,35 +26,65 @@ class Endboss extends MovableObject {
 constructor(){
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_HURT);
     this.x = 4000;
     this.animate();
     this.life = 1;
-    this.health = 6;
+    this.health = 15;
+    this.speed = 1;
 }
 
 animate() {
     setInterval(() => {                                          
-        this.playAnimation(this.IMAGES_WALKING);
+        if (!this.isDead) {
+            this.moveLeft();
+            this.playAnimation(this.IMAGES_WALKING); // Animation für Laufen
+        }
     }, 200);
+}
+move() {
+    if (this.isMovingLeft()) {
+        this.moveLeft();
+        this.otherDirection = true;
+    } else {
+        this.moveRight();
+        this.otherDirection = false;
+    }
+}
+
+isMovingLeft() {
+    return Math.random() < 0.5;  // 50% Chance, sich nach links zu bewegen
+}
+
+moveLeft() {
+    this.x -= this.speed;
+}
+
+moveRight() {
+    this.x += this.speed;
 }
 
 hit() {
     if (this.isDead) return;
         this.health--;
-    if (this.health > 0) {
-        this.loadImage(this.IMAGES_HURT[3 - this.health]);
-    } else {
-        this.die();
+        this.playSound(endbossHurt);
+        if (this.health > 0) {
+            this.playAnimation(this.IMAGES_HURT);
+        } else {
+            this.die();
+        }
     }
-}
 
-die() {
-    this.dead = true;
-    this.loadImage(this.IMAGES_HURT[2]);
-    setTimeout(() => this.removeFromWorld(), 1000);
-}
+    die() {
+        this.isDead = true;
+        this.playAnimation(this.IMAGES_HURT);
+        this.playSound(endbossHurt);
+        setTimeout(() => this.removeFromWorld(), 1000);
+    }
 
-isEnemyDead() {
-    return this.health <= 0;
-    }  
+    playSound(sound) {
+        if (!isGameMuted) {
+            sound.play();
+        }
+    }
 }
