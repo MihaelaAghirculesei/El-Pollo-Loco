@@ -11,6 +11,7 @@
 </head>
 
 <body>
+
     <div id="fullscreen">
         <h1>El Pollo Loco</h1>
         <canvas id="titleCanvas" width="720" height="100"></canvas>
@@ -114,9 +115,14 @@
         <button class="button-footer" onclick="openImpressum">Impressum</button>
         <p>© 2025 El Pollo Loco. <br> 
             All rights reserved.</p>
-        <div class="audio-class">
+
+            <button id="music-toggle-button" class="button-footer" onclick="toggleAllSounds()">
+                Sound : On
+            </button>
+
+        <!-- <div class="audio-class">
             <img class="audio-img" src="img_pollo_locco/img/10_buttons/sound-icon-on.png" onclick="muteSounds()">
-        </div>
+        </div> -->
     </footer>
 
     <script src="models/drawable-object.class.js"></script>

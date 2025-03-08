@@ -1,9 +1,14 @@
 
 let backgroundMusic = new Audio('audio/game.mp3');
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5; // Lautstärke anpassen
+// backgroundMusic.play();
 
 let gameWon = new Audio('audio/winning-game-sound.mp3');
 
 let gameLost = new Audio('audio/lose-game-sound.mp3');
+
+let endbossHurt = new Audio('audio/endboss-hurt.mp3');
 
 // let characterHurt = new Audio('audio/character-hurt-sound.mp3');
 
@@ -92,19 +97,17 @@ function toggleSoundForBackgroundMusic() {
 }
 
 function muteSounds() {
-    if (backgroundMusic) {
-        backgroundMusic.muted = isGameMuted;
-    }
-    muteChickenSounds();
-    muteCharacterSounds();
-    muteEndbossSounds();
+    let allSounds = document.querySelectorAll('audio'); // Alle <audio>-Elemente holen
+    allSounds.forEach(sound => {
+        sound.muted = isGameMuted; // Alle Sounds muten oder entmuten
+    });
 }
 
 function muteChickenSounds() {
     if (world && world.level && world.level.enemies) {
         world.level.enemies.forEach((enemy) => {
             if (enemy instanceof Chicken) {
-                enemy.death_sound.muted = isGameMuted;
+                endbossHurt.muted = isGameMuted;
             }
         });
     }
@@ -141,8 +144,24 @@ function muteSingleBottleSounds(bottle) {
 }
 function muteCharacterSounds() {
     if (world && world.character) {
-        world.character.walking_sound.muted = isGameMuted;
         world.character.hurt_sound.muted = isGameMuted;
     }
 
+}
+
+function toggleAllSounds() {
+    isGameMuted = !isGameMuted; // Wechselt zwischen Stumm und Laut
+
+    // Hintergrundmusik muten oder wieder abspielen
+    if (backgroundMusic) {
+        backgroundMusic.muted = isGameMuted;
+    }
+    // Alle anderen Sounds muten
+    muteSounds();
+
+    // Aktualisiere den Button-Text
+    let soundToggleButton = document.getElementById('music-toggle-button');
+    if (soundToggleButton) {
+        soundToggleButton.innerText = isGameMuted ? 'Sound: Off' : 'Sound: On';
+    }
 }
