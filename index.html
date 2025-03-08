@@ -87,11 +87,8 @@
                         <span id="enter-text">Fullscreen</span>
                         <span id="exit-text" style="display: none;">Leave Fullscreen</span>
                     </button>
-                    <!-- <button id="music-toggle-button" class="button-start-screen" onclick="toggleSoundAndImage()">
+                    <button id="music-toggle-button" class="button-start-screen" onclick="toggleSoundForBackgroundMusic()">
                         Background music: On
-                    </button> -->
-                    <button id="music-toggle-button-2" class="button-start-screen" onclick="toggleSound()">
-                        Mute: On 
                     </button>
                 </div>
             </div>
@@ -112,6 +109,15 @@
             <button class="button-start-screen" onclick="openSettings()">Settings</button>
         </div>
     </div>
+
+    <footer class="footer">
+        <button class="button-footer" onclick="openImpressum">Impressum</button>
+        <p>© 2025 El Pollo Loco. <br> 
+            All rights reserved.</p>
+        <div class="audio-class">
+            <img class="audio-img" src="img_pollo_locco/img/10_buttons/sound-icon-on.png" onclick="muteSounds()">
+        </div>
+    </footer>
 
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
@@ -137,6 +143,8 @@
     <script src="levels/fonts/particle-background.js"></script>
     <script src="models/fullscreen.js"></script>
 
+
 </body>
+
 
 </html>

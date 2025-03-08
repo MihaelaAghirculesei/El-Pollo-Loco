@@ -30,7 +30,6 @@ class World {
 
   setWorld() {
     this.character.world = this; 
-    this.level.enemies.forEach(enemy => enemy.world = this);
   }
 
   run() {
@@ -135,32 +134,25 @@ class World {
   checkBottleCollisions() {
     this.throwableObject.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy)) {
-          if (enemy instanceof Endboss) {
-              enemy.hit();
-              this.playGameSound('audio/endboss-attack.mp3');
-              if (enemy.health <= 0) {
-                  enemy.die();
-              }
-          } else if (enemy instanceof Chicken || enemy instanceof SmallChicken) {
-              enemy.hit();
-              bottle.splash();
+        if (bottle.isColliding(enemy) && (enemy instanceof Chicken || enemy instanceof SmallChicken)) {
+          enemy.hit();
+          bottle.splash();
 
-              if (enemy.isEnemyDead()) {
-                  setTimeout(() => {
-                      this.level.enemies = this.level.enemies.filter(e => e !== enemy);
-                  }, 1000);
-                  this.checkBottleSpawn();
-              }
+          if (enemy.isEnemyDead()) {
+            setTimeout(() => {
+              // enemy.removeFromWorld();
+              this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+            }, 1000);
+            this.checkBottleSpawn();
           }
-      }
-  });
+        }
+      });
 
-  if (bottle.y > 360) {
-      bottle.splash();
-  }
-});
-this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
+      if (bottle.y > 360) {
+        bottle.splash();
+      }
+    });
+    this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
   }
 
   addObjectsToMap(objects) {
@@ -257,55 +249,6 @@ showCongratulations() {
   setTimeout(() => {
       document.body.removeChild(popup);
   }, 3000);
-}
-
-showGameOver() {
-  const gameOverScreen = document.createElement('div');
-  gameOverScreen.style.position = 'absolute';
-  gameOverScreen.style.top = '0';
-  gameOverScreen.style.left = '0';
-  gameOverScreen.style.width = '100%';
-  gameOverScreen.style.height = '100%';
-  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/11_others/designer-congratulations.jpeg')";
-  gameOverScreen.style.backgroundSize = 'cover';
-  gameOverScreen.style.zIndex = '1000';
-
-  const gameOverImage = document.createElement('img');
-  gameOverImage.src = 'img_pollo_locco/img/9_intro_outro_screens/game_over/game_over.png';
-  gameOverImage.style.position = 'absolute';
-  gameOverImage.style.top = '50%';
-  gameOverImage.style.left = '50%';
-  gameOverImage.style.transform = 'translate(-50%, -50%)';
-
-  gameOverScreen.appendChild(gameOverImage);
-  document.body.appendChild(gameOverScreen);
-
-  this.playGameSound('audio/lose-game-sound.mp3');
-}
-
-showWinScreen() {
-  const winScreen = document.createElement('div');
-  winScreen.style.position = 'absolute';
-  winScreen.style.top = '0';
-  winScreen.style.left = '0';
-  winScreen.style.width = '100%';
-  winScreen.style.height = '100%';
-  winScreen.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-  winScreen.style.zIndex = '1000';
-  winScreen.style.display = 'flex';
-  winScreen.style.justifyContent = 'center';
-  winScreen.style.alignItems = 'center';
-  winScreen.style.color = 'white';
-  winScreen.style.fontSize = '48px';
-  winScreen.innerText = 'You Win!';
-
-  document.body.appendChild(winScreen);
-
-  this.playGameSound('audio/winning-game-sound.mp3');
-}
-
-removeEndboss(endboss) {
-  this.level.enemies = this.level.enemies.filter(e => e !== endboss);
 }
 
 }

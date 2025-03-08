@@ -2,8 +2,7 @@ class Endboss extends MovableObject {
     height = 400;
     width = 250;
     y = 60;
-    isDead = false; 
-    health = 3; 
+    isDead = false;  
 
     IMAGES_WALKING = [
         'img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -21,12 +20,6 @@ class Endboss extends MovableObject {
         'img_pollo_locco/img/4_enemie_boss_chicken/5_dead/G25.png',
         'img_pollo_locco/img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
-    IMAGES_WALKING_LEFT = [
-        'img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G1.png',
-        'img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G2.png',
-        'img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G3.png',
-        'img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G4.png'
-    ];
 
 constructor(){
     super().loadImage(this.IMAGES_WALKING[0]);
@@ -35,13 +28,11 @@ constructor(){
     this.animate();
     this.life = 1;
     this.health = 6;
-    this.loadImages(this.IMAGES_WALKING_LEFT);
-    this.loadImages(this.IMAGES_HURT);
 }
 
 animate() {
     setInterval(() => {                                          
-            this.playAnimation(this.IMAGES_WALKING);
+        this.playAnimation(this.IMAGES_WALKING);
     }, 200);
 }
 
@@ -49,26 +40,19 @@ hit() {
     if (this.isDead) return;
         this.health--;
     if (this.health > 0) {
-        this.playSound(endbossHurt);
-        if (this.health > 0) {
-            this.playAnimation(this.IMAGES_HURT);
+        this.loadImage(this.IMAGES_HURT[3 - this.health]);
     } else {
         this.die();
     }
 }
-}
+
 die() {
-    this.isDead = true;
-    this.playAnimation(this.IMAGES_HURT);
-    setTimeout(() => {
-        this.world.removeEndboss(this);
-        this.world.showWinScreen();  // Zeige den Gewinnbildschirm
-    }, 1000);
+    this.dead = true;
+    this.loadImage(this.IMAGES_HURT[2]);
+    setTimeout(() => this.removeFromWorld(), 1000);
 }
 
-playSound(sound) {
-    if (!isGameMuted) {
-        sound.play();
-    }
-}
+isEnemyDead() {
+    return this.health <= 0;
+    }  
 }

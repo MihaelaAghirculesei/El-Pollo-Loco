@@ -107,12 +107,4 @@ class Character extends MovableObject {
   jump() {
     this.speedY = 30; 
   }
-
-  die() {
-    this.health = 0;
-    this.playAnimation(this.IMAGES_DEAD);
-    setTimeout(() => {
-        this.world.showGameOverScreen();
-    }, 1000);
-}
 }
