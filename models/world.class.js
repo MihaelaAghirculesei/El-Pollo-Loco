@@ -12,6 +12,9 @@ class World {
   statusBarBottle;
   statusBarCoins;
   throwableObject = [];
+      gameOver = false;
+    gameInterval;
+    currentSounds = {};
   
   constructor(canvas, keyboard) {
     this.canvas = canvas;
@@ -33,12 +36,37 @@ class World {
   }
 
   run() {
-    setInterval(() => {
+    this.gameInterval = setInterval(()  => {
+      if (!this.gameOver) {
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCollection();
       this.checkGameEnd();
+      }
     }, 35 );
+  }
+
+  draw() {
+    if (this.gameOver) return;
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.translate(this.camera_x, 0);
+
+    this.addObjectsToMap(this.backgroundObjects);
+    this.addObjectsToMap(this.clouds);
+    this.addObjectsToMap(this.throwableObject);
+    this.addToMap(this.character); 
+    this.addObjectsToMap(this.level.enemies);
+    this.addObjectsToMap(this.level.coins);
+    this.addObjectsToMap(this.level.bottle);
+
+    this.ctx.translate(-this.camera_x, 0);
+    this.addToMap(this.statusBarHeart);
+    this.addToMap(this.statusBarBottle);
+    this.addToMap(this.statusBarCoins);
+
+    if (!this.gameOver) {
+      requestAnimationFrame(() => this.draw());
+    }
   }
 
   checkThrowObjects() {
@@ -76,29 +104,6 @@ class World {
         }
     });
 }
-
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.translate(this.camera_x, 0);
-
-    this.addObjectsToMap(this.backgroundObjects);
-    this.addObjectsToMap(this.clouds);
-    this.addObjectsToMap(this.throwableObject);
-    this.addToMap(this.character); 
-    this.addObjectsToMap(this.level.enemies);
-    this.addObjectsToMap(this.level.coins);
-    this.addObjectsToMap(this.level.bottle);
-
-    this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBarHeart);
-    this.addToMap(this.statusBarBottle);
-    this.addToMap(this.statusBarCoins);
-
-    let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
-  }
 
   addToMap(mo) {
     if (mo.otherDirection) {
@@ -196,9 +201,14 @@ class World {
   }
 
   playSound(soundFilePath, volume = 0.2) {
+    if (this.currentSounds[soundFilePath]) return;
     let gameSound = new Audio(soundFilePath);
     gameSound.volume = volume;
     gameSound.play();
+    this.currentSounds[soundFilePath] = gameSound;
+    gameSound.onended = () => {
+      delete this.currentSounds[soundFilePath];
+    };
 }
 
 collectBottle() {
@@ -265,6 +275,9 @@ showCongratulations() {
   }, 3000);
 }
 showGameOver() {
+  if (this.gameOver) return;
+  this.gameOver = true;
+  clearInterval(this.gameInterval);
   const gameOverScreen = document.createElement('div');
   gameOverScreen.style.position = 'absolute';
   gameOverScreen.style.top = '0';
@@ -276,7 +289,7 @@ showGameOver() {
   gameOverScreen.style.zIndex = '1000';
 
   const gameOverImage = document.createElement('img');
-  gameOverImage.src = 'img_pollo_locco/img/9_intro_outro_screens/game_over/game_over.png';
+  gameOverImage.src = 'img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png';
   gameOverImage.style.position = 'absolute';
   gameOverImage.style.top = '50%';
   gameOverImage.style.left = '50%';
@@ -285,7 +298,7 @@ showGameOver() {
   gameOverScreen.appendChild(gameOverImage);
   document.body.appendChild(gameOverScreen);
 
-  playSound('audio/lose-game-sound.mp3');
+  this.playSound('audio/lose-game-sound.mp3');
 }
 checkGameEnd() {
   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -296,6 +309,9 @@ checkGameEnd() {
   }
 }
 showGameWon() {
+  if (this.gameOver) return;
+  this.gameOver = true;
+  clearInterval(this.gameInterval);
   const gameWonScreen = document.createElement('div');
   gameWonScreen.style.position = 'absolute';
   gameWonScreen.style.top = '0';
@@ -318,7 +334,7 @@ showGameWon() {
   gameWonScreen.appendChild(gameWonText);
   document.body.appendChild(gameWonScreen);
 
-  playSound('audio/winning-game-sound.mp3');
+  this.playSound('audio/winning-game-sound.mp3');
 }
 
 }
