@@ -12,14 +12,15 @@ class Chicken extends MovableObject{
         
     ];
 
-    constructor(){
+    constructor(world){
         super().loadImage('img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
           this.loadImages(this.IMAGES_WALKING);
           this.x = 800 + Math.random()*4500; 
           this.speed = 0.15 + Math.random() * 0.5;
           this.animate();
           this.life = 1;
-          this.health = 2;  
+          this.health = 2; 
+          this.world = world; 
     }
     
     animate() {
@@ -47,7 +48,9 @@ class Chicken extends MovableObject{
         }
         this.markedForRemoval = true;
         setTimeout(() => {
-            this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+            if (this.world && this.world.level && this.world.level.enemies) {
+                this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+            }
         }, 500);
     }
 

@@ -3,7 +3,7 @@ class SmallChicken extends MovableObject {
   height = 60;
   width = 60;
   isDead=false;
-  IMAGES_DEAD = 'img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png';
+  IMAGE_DEAD = 'img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png';
 
 
   offset = {
@@ -18,14 +18,15 @@ class SmallChicken extends MovableObject {
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/3_w.png",
   ];
 
-  constructor(){
+  constructor(world){
     super().loadImage('img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
       this.loadImages(this.IMAGES_WALKING);
       this.x = 600 + Math.random()*4000; 
       this.speed = 0.15 + Math.random() * 0.5;
       this.animate();
       this.life = 1;
-      this.health = 2;  
+      this.health = 2;
+      this.world = world;   
 }
 
 animate() {
@@ -53,7 +54,9 @@ die() {
     }
     this.markedForRemoval = true;
     setTimeout(() => {
-        this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+        if (this.world && this.world.level) {
+            this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+        }
     }, 500);
 }
 

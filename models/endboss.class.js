@@ -3,8 +3,8 @@ class Endboss extends MovableObject {
     width = 250;
     y = 60;
     isDead = false;  
-    hurt_sound = new Audio('audio/endboss-hurt.mp3'); // Sound für Verletzung
-    atack_sound = new Audio('audio/endboss-atack.mp3'); // Sound für Angriff
+    hurt_sound = new Audio('audio/endboss-hurt.mp3'); 
+    atack_sound = new Audio('audio/endboss-atack.mp3');
 
     IMAGES_WALKING = [
         'img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -38,7 +38,7 @@ animate() {
     setInterval(() => {                                          
         if (!this.isDead) {
             this.moveLeft();
-            this.playAnimation(this.IMAGES_WALKING); // Animation für Laufen
+            this.playAnimation(this.IMAGES_WALKING);
         }
     }, 200);
 }
@@ -53,7 +53,7 @@ move() {
 }
 
 isMovingLeft() {
-    return Math.random() < 0.5;  // 50% Chance, sich nach links zu bewegen
+    return Math.random() < 0.5;
 }
 
 moveLeft() {
@@ -67,7 +67,7 @@ moveRight() {
 hit() {
     if (this.isDead) return;
         this.health--;
-        this.playSound(endbossHurt);
+        this.playSound(this.hurt_sound);
         if (this.health > 0) {
             this.playAnimation(this.IMAGES_HURT);
         } else {
@@ -82,9 +82,19 @@ hit() {
         setTimeout(() => this.removeFromWorld(), 1000);
     }
 
+    removeFromWorld() {
+        if (this.world && this.world.level) {
+            this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+        }
+    }
+
     playSound(sound) {
         if (!isGameMuted) {
             sound.play();
         }
+    }
+
+    isEnemyDead() {
+        return this.health <= 0;
     }
 }

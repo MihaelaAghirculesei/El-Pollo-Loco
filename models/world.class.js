@@ -61,7 +61,6 @@ class World {
                 enemy.hit(); 
                 this.character.jump();  
                 if (enemy instanceof SmallChicken) {
-                  console.log('Small Chicken hit'); 
                     this.playGameSound('audio/small-chicken-hurt.mp3');
                 } else {
                     this.playGameSound('audio/chicken-hurt.mp3');
@@ -142,7 +141,6 @@ class World {
                     this.playGameSound('audio/endboss-atack.mp3');
                     if (enemy.health <= 0) {
                         enemy.die();
-                        // Optional: Spiel gewinnen Logik hier
                     }
                 } else if (enemy instanceof Chicken || enemy instanceof SmallChicken) {
                     enemy.hit();
@@ -168,8 +166,6 @@ class World {
             bottle.splash();
         }
     });
-
-    // Entfernen Sie gebrauchte Flaschen
     this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
 }
 
@@ -191,7 +187,7 @@ class World {
   spawnChickens() {
     setInterval(() => {
       if (this.level.enemies.length < 10) {
-        let randomEnemy = Math.random() < 0.5 ? new Chicken() : new SmallChicken(this.character.x + 800);
+        let randomEnemy = Math.random() < 0.5 ? new Chicken(this) : new SmallChicken(this);
         randomEnemy.x = this.character.x + 800 + Math.random() * 300;
         randomEnemy.world = this;
         this.level.enemies.push(randomEnemy);
@@ -206,7 +202,7 @@ class World {
 }
 
 collectBottle() {
-  this.statusBarBottle.setPercentageBottle(this.statusBarBottle.percentageBottle + 10); // Füge 10 oder eine andere Menge hinzu
+  this.statusBarBottle.setPercentageBottle(this.statusBarBottle.percentageBottle + 10); 
   if (this.statusBarBottle.percentageBottle > 100) {
       this.statusBarBottle.percentageBottle = 100; 
   }
@@ -292,11 +288,11 @@ showGameOver() {
   this.playGameSound('audio/lose-game-sound.mp3');
 }
 checkGameEnd() {
-  const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss); // Endboss suchen
+  const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
   if (this.character.isDead()) {
       this.showGameOver();
-  } else if (endboss && endboss.isDead) { // Überprüfen, ob der Endboss existiert und tot ist
-      this.showGameWon();
+  } else if (endboss && endboss.isEnemyDead()) {
+    this.showGameWon();
   }
 }
 showGameWon() {
@@ -324,6 +320,5 @@ showGameWon() {
 
   this.playGameSound('audio/winning-game-sound.mp3');
 }
-
 
 }
