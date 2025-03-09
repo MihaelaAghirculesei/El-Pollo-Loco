@@ -285,7 +285,7 @@ showGameOver() {
   gameOverScreen.style.left = '0';
   gameOverScreen.style.width = '100%';
   gameOverScreen.style.height = '100%';
-  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/5_background/layers/background-mesico.jpeg')";
+  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png')";
   gameOverScreen.style.backgroundRepeat = 'no-repeat';
   gameOverScreen.style.backgroundSize = 'cover';
   gameOverScreen.style.zIndex = '1000';
@@ -296,6 +296,13 @@ showGameOver() {
   gameOverImage.style.top = '50%';
   gameOverImage.style.left = '50%';
   gameOverImage.style.transform = 'translate(-50%, -50%)';
+
+
+  const restartButton = document.createElement('button');
+  restartButton.textContent = 'Restart Game';
+  restartButton.classList.add('button-start-screen');
+  restartButton.onclick = () => this.restartGame(); // Funktion aufrufen
+  gameOverScreen.appendChild(restartButton);
 
   gameOverScreen.appendChild(gameOverImage);
   document.body.appendChild(gameOverScreen);
@@ -336,10 +343,31 @@ showGameWon() {
   gameWonText.style.color = 'white';
   gameWonText.style.fontSize = '48px';
 
+  const restartButton = document.createElement('button');
+  restartButton.textContent = 'Restart Game';
+  restartButton.classList.add('button-start-screen');
+  restartButton.onclick = () => this.restartGame(); // Funktion aufrufen
+
   gameWonScreen.appendChild(gameWonText);
   document.body.appendChild(gameWonScreen);
+  gameWonScreen.appendChild(restartButton);
 
   playSound('audio/winning-game-sound.mp3');
+}
+
+restartGame() {
+  this.gameOver = false;
+  this.character = new Character(); // Erstelle ein neues Charakter-Objekt oder setze es zurück
+  this.level.enemies = level1.enemies; // Setze die Feinde zurück
+  this.level.bottle = level1.bottle; // Setze die Flaschen zurück
+  this.level.coins = level1.coins; // Setze die Münzen zurück
+  this.statusBarHeart = new StatusBarHeart(this.character);
+  this.statusBarBottle = new StatusBarBottle(this);
+  this.statusBarBottle.percentageBottle = 0; 
+  this.statusBarCoins = new StatusBarCoins(this);
+  this.run(); // Starte das Spiel erneut
+  this.draw(); // Zeichne das Spiel
+  this.spawnChickens(); // Lass die Hühner wieder erscheinen
 }
 
 }
