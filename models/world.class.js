@@ -306,6 +306,7 @@ showGameOver() {
 
   gameOverScreen.appendChild(gameOverImage);
   document.body.appendChild(gameOverScreen);
+  document.querySelector('footer').style.display = 'flex';
 
   playSound('audio/lose-game-sound.mp3');
 }
@@ -351,6 +352,7 @@ showGameWon() {
   gameWonScreen.appendChild(gameWonText);
   document.body.appendChild(gameWonScreen);
   gameWonScreen.appendChild(restartButton);
+  document.querySelector('footer').style.display = 'flex';
 
   playSound('audio/winning-game-sound.mp3');
 }

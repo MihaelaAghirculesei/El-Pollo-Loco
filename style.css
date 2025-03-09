@@ -184,8 +184,9 @@ footer {
   width: 100%;
   font-size: 24px;
   background-color:#0ff;
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  z-index: 1100;
 }
 .button-footer {
   border: 3px solid rgb(5, 5, 5) !important;
