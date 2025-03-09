@@ -24,7 +24,7 @@ class StatusBarBottle extends DrawableObject {
     }
 
     setPercentageBottle(percentage) {
-        this.percentageBottle = percentage; // Diese Zeile hinzufügen
+        this.percentageBottle = percentage;
         if (percentage >= this.MAX_BOTTLES) {
             percentage = percentage % this.MAX_BOTTLES;
         }

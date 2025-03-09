@@ -22,9 +22,8 @@ constructor(character) {
   this.character = character;
 }
 
-// setPercentage (50);
 setPercentage(percentage) {
-  this.percentage = percentage; // => 0... 5 //100
+  this.percentage = percentage; 
   let path = this.IMAGES[this.resolveImageIndex()];
   this.img = this.imageCache[path];
 }
@@ -53,7 +52,6 @@ draw(ctx) {
 
 drawHearts(ctx) {
   if (this.character.life > 0) {
-    // Controlla se ci sono vite extra da visualizzare
     ctx.fillStyle = "red";
     ctx.font = "30px Arial";
     ctx.fillText(`❤️ x${this.character.life}`, this.x + 220, this.y + 52);

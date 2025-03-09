@@ -12,9 +12,9 @@ class World {
   statusBarBottle;
   statusBarCoins;
   throwableObject = [];
-      gameOver = false;
-    gameInterval;
-    currentSounds = {};
+  gameOver = false;
+  gameInterval;
+  currentSounds = {};
   
   constructor(canvas, keyboard) {
     this.canvas = canvas;
@@ -274,6 +274,7 @@ showCongratulations() {
       document.body.removeChild(popup);
   }, 3000);
 }
+
 showGameOver() {
   if (this.gameOver) return;
   this.gameOver = true;
@@ -319,6 +320,7 @@ checkGameEnd() {
     this.showGameWon();
   }
 }
+
 showGameWon() {
   if (this.gameOver) return;
   this.gameOver = true;
@@ -371,5 +373,4 @@ restartGame() {
   this.draw(); // Zeichne das Spiel
   this.spawnChickens(); // Lass die Hühner wieder erscheinen
 }
-
 }
