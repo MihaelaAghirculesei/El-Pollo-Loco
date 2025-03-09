@@ -36,7 +36,7 @@ class World {
   }
 
   run() {
-    this.gameInterval = setInterval(()  => {
+    this.gameInterval = setInterval(() => {
       if (!this.gameOver) {
       this.checkCollisions();
       this.checkThrowObjects();
@@ -143,7 +143,7 @@ class World {
             if (bottle.isColliding(enemy)) {
                 if (enemy instanceof Endboss) {
                     enemy.hit();
-                    playSound('audio/endboss-atack.mp3');
+                    // playSound('audio/endboss-atack.mp3'); später einbauen
                     if (enemy.health <= 0) {
                         enemy.die();
                     }
@@ -278,13 +278,15 @@ showGameOver() {
   if (this.gameOver) return;
   this.gameOver = true;
   clearInterval(this.gameInterval);
+  stopBackgroundMusic();
   const gameOverScreen = document.createElement('div');
   gameOverScreen.style.position = 'absolute';
   gameOverScreen.style.top = '0';
   gameOverScreen.style.left = '0';
   gameOverScreen.style.width = '100%';
   gameOverScreen.style.height = '100%';
-  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/11_others/designer-congratulations.jpeg')";
+  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/5_background/layers/background-mesico.jpeg')";
+  gameOverScreen.style.backgroundRepeat = 'no-repeat';
   gameOverScreen.style.backgroundSize = 'cover';
   gameOverScreen.style.zIndex = '1000';
 
@@ -298,8 +300,9 @@ showGameOver() {
   gameOverScreen.appendChild(gameOverImage);
   document.body.appendChild(gameOverScreen);
 
-  this.playSound('audio/lose-game-sound.mp3');
+  playSound('audio/lose-game-sound.mp3');
 }
+
 checkGameEnd() {
   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
   if (this.character.isDead()) {
@@ -312,6 +315,8 @@ showGameWon() {
   if (this.gameOver) return;
   this.gameOver = true;
   clearInterval(this.gameInterval);
+  stopBackgroundMusic();
+  // stopEndbossAtack(); später einbauen
   const gameWonScreen = document.createElement('div');
   gameWonScreen.style.position = 'absolute';
   gameWonScreen.style.top = '0';
@@ -334,7 +339,7 @@ showGameWon() {
   gameWonScreen.appendChild(gameWonText);
   document.body.appendChild(gameWonScreen);
 
-  this.playSound('audio/winning-game-sound.mp3');
+  playSound('audio/winning-game-sound.mp3');
 }
 
 }
