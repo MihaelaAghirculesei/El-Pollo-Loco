@@ -1,13 +1,9 @@
 
 let backgroundMusic = new Audio('audio/game.mp3');
 backgroundMusic.loop = true;
-backgroundMusic.volume = 0.5; // Lautstärke anpassen
-// backgroundMusic.play();
-
+backgroundMusic.volume = 0.5; 
 let gameWon = new Audio('audio/winning-game-sound.mp3');
-
 let gameLost = new Audio('audio/lose-game-sound.mp3');
-
 let endbossHurt = new Audio('audio/endboss-hurt.mp3');
 
 // let characterHurt = new Audio('audio/character-hurt-sound.mp3');
@@ -30,10 +26,11 @@ let isGameMuted = false;
 let backgroundMusicMuted = false;
 backgroundMusic.loop = true;
 let isMusicPlaying = false;
+let audioInstances = {};
 
 function gameWonSound() {
     if (!isGameMuted) {
-        gameWon.play();
+        playSound('audio/winning-game-sound.mp3');
     }
 }
 
@@ -49,6 +46,19 @@ function playBackgroundMusic() {
     backgroundMusic.loop = true;
     backgroundMusic.play();
     isMusicPlaying = true;
+}
+
+function playSound(soundFilePath, volume = 0.2) {
+    // Suche, ob der Sound bereits erstellt wurde
+    if (!audioInstances[soundFilePath]) {
+        let audio = new Audio(soundFilePath);
+        audio.volume = volume;
+        audioInstances[soundFilePath] = audio;
+    }
+
+    // Setze die aktuelle Zeit des Audios zurück und spiele es ab
+    audioInstances[soundFilePath].currentTime = 0;
+    audioInstances[soundFilePath].play();
 }
 
 function stopBackgroundMusic() {

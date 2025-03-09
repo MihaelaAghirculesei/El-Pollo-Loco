@@ -61,13 +61,13 @@ class World {
                 enemy.hit(); 
                 this.character.jump();  
                 if (enemy instanceof SmallChicken) {
-                    this.playGameSound('audio/small-chicken-hurt.mp3');
+                    playSound('audio/small-chicken-hurt.mp3');
                 } else {
-                    this.playGameSound('audio/chicken-hurt.mp3');
+                    playSound('audio/chicken-hurt.mp3');
                 }
             } else {
                 this.character.hit(); 
-                this.playGameSound('audio/character-hurt-sound.mp3');
+                playSound('audio/character-hurt-sound.mp3');
                 if (this.character.health == 0) {
                     this.character.life--;
                 }
@@ -138,7 +138,7 @@ class World {
             if (bottle.isColliding(enemy)) {
                 if (enemy instanceof Endboss) {
                     enemy.hit();
-                    this.playGameSound('audio/endboss-atack.mp3');
+                    playSound('audio/endboss-atack.mp3');
                     if (enemy.health <= 0) {
                         enemy.die();
                     }
@@ -154,9 +154,9 @@ class World {
                     }
 
                     if (enemy instanceof SmallChicken) {
-                        this.playGameSound('audio/small-chicken-hurt.mp3');
+                        playSound('audio/small-chicken-hurt.mp3');
                     } else {
-                        this.playGameSound('audio/chicken-hurt.mp3');
+                        playSound('audio/chicken-hurt.mp3');
                     }
                 }
             }
@@ -195,7 +195,7 @@ class World {
     }, 5000);
   }
 
-  playGameSound(soundFilePath, volume = 0.2) {
+  playSound(soundFilePath, volume = 0.2) {
     let gameSound = new Audio(soundFilePath);
     gameSound.volume = volume;
     gameSound.play();
@@ -211,7 +211,7 @@ collectBottle() {
  checkCollection() {
     this.level.bottle.forEach((bottle, index) => { 
         if (this.character.isColliding(bottle) && !bottle.isCollected) {
-            this.playGameSound('audio/bottle-collect-sound.mp3');
+            playSound('audio/bottle-collect-sound.mp3');
             this.collectBottle(); 
             bottle.isCollected = true; 
             muteSingleBottleSounds(bottle) 
@@ -285,7 +285,7 @@ showGameOver() {
   gameOverScreen.appendChild(gameOverImage);
   document.body.appendChild(gameOverScreen);
 
-  this.playGameSound('audio/lose-game-sound.mp3');
+  playSound('audio/lose-game-sound.mp3');
 }
 checkGameEnd() {
   const endboss = this.level.enemies.find(enemy => enemy instanceof Endboss);
@@ -318,7 +318,7 @@ showGameWon() {
   gameWonScreen.appendChild(gameWonText);
   document.body.appendChild(gameWonScreen);
 
-  this.playGameSound('audio/winning-game-sound.mp3');
+  playSound('audio/winning-game-sound.mp3');
 }
 
 }
