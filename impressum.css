@@ -1,0 +1,55 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-image: url(img_pollo_locco/img/11_others/background-water.jpg);
+    background-size: cover;
+    background-position: center;
+  }
+
+  header {
+    background-color: #0ff;
+    width: 100%;
+    height: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+  }
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    font-size: 24px;
+    background-color:#0ff;
+    position: fixed;
+    bottom: 0;
+    z-index: 1100;
+  }
+  .button-footer {
+    border: 3px solid rgb(5, 5, 5) !important;
+  }
+
+.button-footer {
+    background-color: #960b06;
+    border: 3px solid #0ff;
+    color: #0ff;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 20px;
+    margin: 0 10px;
+    font-family: Arial, "nabla", Helvetica, sans-serif;
+    transition: transform .3s ease;
+  }
