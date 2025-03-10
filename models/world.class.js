@@ -280,13 +280,17 @@ showGameOver() {
   this.gameOver = true;
   clearInterval(this.gameInterval);
   stopBackgroundMusic();
+
+    document.getElementById('canvas').style.display = 'none'; // Hide the canvas
+    document.getElementById('titleCanvas').style.display = 'none'; // Hide the title canvas if necessary
+
   const gameOverScreen = document.createElement('div');
   gameOverScreen.style.position = 'absolute';
   gameOverScreen.style.top = '0';
   gameOverScreen.style.left = '0';
   gameOverScreen.style.width = '100%';
   gameOverScreen.style.height = '100%';
-  gameOverScreen.style.backgroundImage = "url('img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png')";
+  gameOverScreen.style.backgroundImage = "url(img_pollo_locco/img/5_background/layers/background-mesico.jpeg);";
   gameOverScreen.style.backgroundRepeat = 'no-repeat';
   gameOverScreen.style.backgroundSize = 'cover';
   gameOverScreen.style.zIndex = '1000';
@@ -297,13 +301,6 @@ showGameOver() {
   gameOverImage.style.top = '50%';
   gameOverImage.style.left = '50%';
   gameOverImage.style.transform = 'translate(-50%, -50%)';
-
-
-  const restartButton = document.createElement('button');
-  restartButton.textContent = 'Restart Game';
-  restartButton.classList.add('button-start-screen');
-  restartButton.onclick = () => this.restartGame(); // Funktion aufrufen
-  gameOverScreen.appendChild(restartButton);
 
   gameOverScreen.appendChild(gameOverImage);
   document.body.appendChild(gameOverScreen);
@@ -346,14 +343,8 @@ showGameWon() {
   gameWonText.style.color = 'white';
   gameWonText.style.fontSize = '48px';
 
-  const restartButton = document.createElement('button');
-  restartButton.textContent = 'Restart Game';
-  restartButton.classList.add('button-start-screen');
-  restartButton.onclick = () => this.restartGame(); // Funktion aufrufen
-
   gameWonScreen.appendChild(gameWonText);
   document.body.appendChild(gameWonScreen);
-  gameWonScreen.appendChild(restartButton);
   document.querySelector('footer').style.display = 'flex';
 
   playSound('audio/winning-game-sound.mp3');
