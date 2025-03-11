@@ -99,7 +99,7 @@ h1 {
   transition: transform .3s ease;
 }
 
-.button-start-screen:hover {
+.button-start-screen:hover, .button-footer:hover {
   background-color: #eb1111;
   transform: scale(1.1);
 }
@@ -117,7 +117,6 @@ h1 {
   transform: translate(-50%, -50%);
   background-image: url(img_pollo_locco/img/11_others/background-gamepad.png);
   background-repeat: no-repeat;
-  /* background-color: #7cfce0 !important; */
   color: rgb(13, 14, 14);
   padding: 20px;
   font-size: 15px;
@@ -154,6 +153,7 @@ h1 {
   top: 100px;
   transform: translateX(-50%);
 }
+
 .popup {
   position: fixed;
   top: 50%;
@@ -169,16 +169,49 @@ h1 {
   text-align: center;
 }
 
-.audio-img {
-  width: 60px;
-  height: 60px;
-  cursor: pointer;
-  
+.game-over-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-over-screen img {
+  max-width: 50%;
+  height: auto;
+}
+
+.game-won-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("img_pollo_locco/img/11_others/designer-congratulations.jpeg");
+  background-size: cover;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.game-won-screen h1 {
+  color: white;
+  font-size: 68px;
+  text-align: center;
 }
 
 footer {
-  display: flex
-;
+  display: flex;
   justify-content: space-around;
   align-items: center;
   width: 100%;
@@ -188,6 +221,7 @@ footer {
   bottom: 0;
   z-index: 1100;
 }
+
 .button-footer {
   border: 3px solid rgb(5, 5, 5) !important;
 }

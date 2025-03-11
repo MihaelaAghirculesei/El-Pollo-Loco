@@ -1,4 +1,3 @@
-/* Impressum spezifisches Styling */
 header {
     background-color: aqua;
     width: 100%;
@@ -6,10 +5,10 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: fixed;
     top: 0;
     z-index: 1000;
 }
+
 @font-face {
     font-family: "nabla";
     src: url(levels/fonts/nabla-regular-variable-font.ttf) format("truetype");
@@ -27,9 +26,8 @@ header {
   }
 
   .main-impressum {
-    font-size: 4.5rem !important; /* Falls du den Text des Impressums selbst anpassen möchtest */
+    font-size: 1.6rem !important; 
   }
-
 
 main {
     margin-top: 0px;
@@ -47,7 +45,6 @@ body {
     background-size: cover;
     background-position: center;
   }
-
 
 footer {
     display: flex;
@@ -78,4 +75,9 @@ footer {
     margin: 0 10px;
     font-family: Arial, "nabla", Helvetica, sans-serif;
     transition: transform .3s ease;
+  }
+  
+  .button-footer:hover{
+    background-color: #eb1111;
+    transform: scale(1.1);
   }

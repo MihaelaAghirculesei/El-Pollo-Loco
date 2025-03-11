@@ -6,8 +6,6 @@ function init() {
     playBackgroundMusic()
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
-
-    console.log('My Character is', world.character);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -85,4 +83,9 @@ function openSettings() {
 
 function closeSettings() {
     document.getElementById("settingsScreen").style.display = "none";
+}
+
+function restartGame() {
+    console.log("Spiel wird neu gestartet!");
+    location.reload(); // Eine einfache Möglichkeit, das Spiel neu zu starten
 }

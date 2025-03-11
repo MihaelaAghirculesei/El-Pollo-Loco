@@ -75,8 +75,8 @@ class World {
         this.character.x + 100,
         this.character.y + 100
       );
-      this.throwableObject.push(bottle);
-      this.statusBarBottle.setPercentageBottle(
+        this.throwableObject.push(bottle);
+        this.statusBarBottle.setPercentageBottle(
         this.statusBarBottle.percentageBottle - 1
       );
     }
@@ -176,7 +176,7 @@ class World {
 
   addObjectsToMap(objects) {
     if (!objects || !Array.isArray(objects)) return; 
-    objects
+      objects
       .filter((o) => !o.markedForRemoval)
       .forEach((o) => {
         this.addToMap(o);
@@ -258,55 +258,38 @@ removeCollectedBottles() {
 }
 
 showCongratulations() {
-  const popup = document.createElement("div");
-  popup.classList.add("popup"); 
-  popup.innerHTML = `
-      <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-      <button class="button-popup" onclick="this.parentElement.remove();">Close</button>
-  `;
+    const popup = document.createElement("div");
+    popup.classList.add("popup"); 
+    popup.innerHTML = `
+        <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
+        <button class="button-popup" onclick="this.parentElement.remove();">Close</button>
+    `;
 
-  document.body.appendChild(popup);
+    document.body.appendChild(popup);
 
-  const audio = new Audio('audio/new-life.mp3');
-  audio.play();
+    const audio = new Audio('audio/new-life.mp3');
+    audio.play();
 
-  setTimeout(() => {
-      document.body.removeChild(popup);
+    setTimeout(() => {
+        document.body.removeChild(popup);
   }, 3000);
 }
 
 showGameOver() {
   if (this.gameOver) return;
-  this.gameOver = true;
-  clearInterval(this.gameInterval);
-  stopBackgroundMusic();
-
-    document.getElementById('canvas').style.display = 'none'; // Hide the canvas
-    document.getElementById('titleCanvas').style.display = 'none'; // Hide the title canvas if necessary
-
-  const gameOverScreen = document.createElement('div');
-  gameOverScreen.style.position = 'absolute';
-  gameOverScreen.style.top = '0';
-  gameOverScreen.style.left = '0';
-  gameOverScreen.style.width = '100%';
-  gameOverScreen.style.height = '100%';
-  gameOverScreen.style.backgroundImage = "url(img_pollo_locco/img/5_background/layers/background-mesico.jpeg);";
-  gameOverScreen.style.backgroundRepeat = 'no-repeat';
-  gameOverScreen.style.backgroundSize = 'cover';
-  gameOverScreen.style.zIndex = '1000';
-
-  const gameOverImage = document.createElement('img');
-  gameOverImage.src = 'img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png';
-  gameOverImage.style.position = 'absolute';
-  gameOverImage.style.top = '50%';
-  gameOverImage.style.left = '50%';
-  gameOverImage.style.transform = 'translate(-50%, -50%)';
-
-  gameOverScreen.appendChild(gameOverImage);
-  document.body.appendChild(gameOverScreen);
-  document.querySelector('footer').style.display = 'flex';
-
-  playSound('audio/lose-game-sound.mp3');
+    this.gameOver = true;
+    clearInterval(this.gameInterval);
+    stopBackgroundMusic();
+    document.getElementById('canvas').style.display = 'none'; 
+    document.getElementById('titleCanvas').style.display = 'none';
+    const gameOverScreen = document.createElement('div');
+    gameOverScreen.classList.add('game-over-screen');
+    const gameOverImage = document.createElement('img');
+    gameOverImage.src = 'img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png';
+    gameOverScreen.appendChild(gameOverImage);
+    document.body.appendChild(gameOverScreen);
+    document.querySelector('footer').style.display = 'flex';
+    playSound('audio/lose-game-sound.mp3');
 }
 
 checkGameEnd() {
@@ -319,49 +302,33 @@ checkGameEnd() {
 }
 
 showGameWon() {
-  if (this.gameOver) return;
-  this.gameOver = true;
-  clearInterval(this.gameInterval);
+  let gameWonScreen = document.getElementById('game-won-screen');  clearInterval(this.gameInterval);
   stopBackgroundMusic();
-  // stopEndbossAtack(); später einbauen
-  const gameWonScreen = document.createElement('div');
-  gameWonScreen.style.position = 'absolute';
-  gameWonScreen.style.top = '0';
-  gameWonScreen.style.left = '0';
-  gameWonScreen.style.width = '100%';
-  gameWonScreen.style.height = '100%';
-  gameWonScreen.style.backgroundImage = "url('img_pollo_locco/img/11_others/designer-congratulations.jpeg')";
-  gameWonScreen.style.backgroundSize = 'cover';
-  gameWonScreen.style.zIndex = '1000';
-
-  const gameWonText = document.createElement('h1');
-  gameWonText.textContent = 'You Won!';
-  gameWonText.style.position = 'absolute';
-  gameWonText.style.top = '50%';
-  gameWonText.style.left = '50%';
-  gameWonText.style.transform = 'translate(-50%, -50%)';
-  gameWonText.style.color = 'white';
-  gameWonText.style.fontSize = '48px';
-
-  gameWonScreen.appendChild(gameWonText);
-  document.body.appendChild(gameWonScreen);
-  document.querySelector('footer').style.display = 'flex';
-
-  playSound('audio/winning-game-sound.mp3');
+  if (!gameWonScreen) {
+      gameWonScreen = document.createElement('div');
+      gameWonScreen.id = 'game-won-screen';
+      gameWonScreen.classList.add('game-won-screen');
+      const gameWonText = document.createElement('h1');
+      gameWonText.textContent = 'You Won!';
+      gameWonScreen.appendChild(gameWonText);
+      document.body.appendChild(gameWonScreen);
+      playSound('audio/winning-game-sound.mp3');
+      }
 }
 
 restartGame() {
   this.gameOver = false;
-  this.character = new Character(); // Erstelle ein neues Charakter-Objekt oder setze es zurück
-  this.level.enemies = level1.enemies; // Setze die Feinde zurück
-  this.level.bottle = level1.bottle; // Setze die Flaschen zurück
-  this.level.coins = level1.coins; // Setze die Münzen zurück
+  this.character = new Character(); 
+  this.level.enemies = level1.enemies; 
+  this.level.bottle = level1.bottle; 
+  this.level.coins = level1.coins; 
   this.statusBarHeart = new StatusBarHeart(this.character);
   this.statusBarBottle = new StatusBarBottle(this);
   this.statusBarBottle.percentageBottle = 0; 
   this.statusBarCoins = new StatusBarCoins(this);
-  this.run(); // Starte das Spiel erneut
-  this.draw(); // Zeichne das Spiel
-  this.spawnChickens(); // Lass die Hühner wieder erscheinen
+  this.run(); 
+  this.draw(); 
+  this.spawnChickens(); 
 }
+
 }
