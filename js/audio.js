@@ -71,7 +71,7 @@ function updateSoundStatus() {
     backgroundMusicMuted = !backgroundMusicMuted;
     backgroundMusic.muted = backgroundMusicMuted;
     let musicToggleButton = document.getElementById('music-toggle-button');
-    let soundIcon = document.getElementById('sound-icon');
+    // let soundIcon = document.getElementById('sound-icon');
     if (backgroundMusicMuted) {
         musicToggleButton.innerText = 'Background Music: Off';
         stopBackgroundMusic();
@@ -156,7 +156,6 @@ function muteCharacterSounds() {
     if (world && world.character) {
         world.character.hurt_sound.muted = isGameMuted;
     }
-
 }
 
 function toggleAllSounds() {

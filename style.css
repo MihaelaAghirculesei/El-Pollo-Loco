@@ -195,8 +195,8 @@ h1 {
   left: 0;
   width: 100%;
   height: 100%;
+  background-size: cover !important;
   background-image: url("img_pollo_locco/img/11_others/designer-congratulations.jpeg");
-  background-size: cover;
   z-index: 1000;
   display: flex;
   align-items: center;
