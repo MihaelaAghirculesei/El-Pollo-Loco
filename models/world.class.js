@@ -85,7 +85,7 @@ class World {
   checkCharacterCollisions() {
     this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy) && !this.character.isDead()) {
-            if (this.character.isAboveGround() && this.character.speedY < 0) {  
+            if (this.character.isAboveGround() && this.character.speedY <= 0) {  
                 enemy.hit(); 
                 this.character.jump();  
                 if (enemy instanceof SmallChicken) {
