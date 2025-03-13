@@ -7,7 +7,7 @@ class Bottle extends MovableObject {
     height = 50;
     width = 50;
     isCollected = false;
-    collect_sound = new Audio('audio/bottle-collect-sound.mp3');  // Hinzufügen des Sounds
+    collect_sound = new Audio('audio/bottle-collect-sound.mp3'); 
 
     oftset = {
         top: 16,
@@ -21,7 +21,7 @@ class Bottle extends MovableObject {
         this.loadImages(this.bottleImg);
         this.x = x;
         this.y = y;
-        this.collect_sound = new Audio('audio/bottle-collect-sound.mp3'); // Sound für Flasche sammeln
+        this.collect_sound = new Audio('audio/bottle-collect-sound.mp3'); 
         this.animateBottle();
     }
     

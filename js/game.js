@@ -3,9 +3,13 @@ let world;
 let keyboard = new Keyboard();
 
 function init() {
-    playBackgroundMusic()
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
+    if(!isGameMuted) {
+        playBackgroundMusic();
+     } else {
+        muteAllSounds();
+     }
 }
 
 window.addEventListener("keydown", (e) => {

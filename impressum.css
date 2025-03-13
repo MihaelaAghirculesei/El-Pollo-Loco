@@ -81,3 +81,37 @@ footer {
     background-color: #eb1111;
     transform: scale(1.1);
   }
+
+  
+@media screen and (max-width: 768px) {
+  .main-impressum {
+      padding: 10px;
+  }
+
+  header {
+      padding: 10px;
+  }
+
+  footer {
+      flex-direction: column;
+      text-align: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+      font-size: 14px;
+  }
+
+  .button-footer {
+      width: 100%;
+      padding: 12px;
+  }
+}
+
+img {
+max-width: 100%;
+height: auto;
+display: block;
+margin: 0 auto; 
+}
