@@ -280,6 +280,7 @@ showGameOver() {
     this.gameOver = true;
     clearInterval(this.gameInterval);
     stopBackgroundMusic();
+    muteSnoringSound();
     document.getElementById('canvas').style.display = 'none'; 
     document.getElementById('titleCanvas').style.display = 'none';
     const gameOverScreen = document.createElement('div');
@@ -302,8 +303,13 @@ checkGameEnd() {
 }
 
 showGameWon() {
-  let gameWonScreen = document.getElementById('game-won-screen');  clearInterval(this.gameInterval);
+  let gameWonScreen = document.getElementById('game-won-screen');  
+  clearInterval(this.gameInterval);
   stopBackgroundMusic();
+  this.character.muteSnoringSound();
+  if(this.character) {
+    this.character.muteSnoringSound();
+  }
   if (!gameWonScreen) {
       gameWonScreen = document.createElement('div');
       gameWonScreen.id = 'game-won-screen';

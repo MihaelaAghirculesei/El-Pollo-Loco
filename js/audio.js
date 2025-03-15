@@ -7,6 +7,7 @@ let gameLost = new Audio('audio/lose-game-sound.mp3');
 let endbossHurt = new Audio('audio/endboss-hurt.mp3');
 let bottleCollect = new Audio('audio/bottle-collect-sound.mp3');
 let coinsCollect = new Audio('audio/coin-collect-sound.mp3');
+let snoringSound = new Audio('audio/character-snoring-sound.mp3');
 
 
 let isGameMuted = true;
@@ -16,6 +17,7 @@ let isMusicPlaying = false;
 let audioInstances = {};
 
 function gameWonSound() {
+    muteSnoringSound();
     if (!isGameMuted) {
         playSound('audio/winning-game-sound.mp3');
     }
@@ -23,7 +25,7 @@ function gameWonSound() {
 
 function gameLostSound() {
     if (!isGameMuted) {
-        gameLost.play();
+        gameLost.play('audio/lose-game-sound.mp3');
     }
 }
 
@@ -90,6 +92,7 @@ function muteAllSounds() {
     muteChickenSounds();
     muteEndbossSounds();
     muteCoinSounds();
+    muteSnoringSound();
 }
 
 function muteChickenSounds() {
@@ -137,6 +140,12 @@ function muteCharacterSounds() {
         world.character.hurt_sound.pause();
     }
 }
+
+function muteSnoringSound() {
+    if(world && world.character) {
+      world.character.snoringSound.pause();
+    }
+  }
 
 document.getElementById("music-toggle-button").addEventListener("keydown", function (e) {
     if (e.code === "Space" || e.key === " ") {
