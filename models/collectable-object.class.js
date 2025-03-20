@@ -20,9 +20,7 @@ class CollectableObject extends DrawableObject {
   collectItem(item) {
     this.isCollected = true;
     this.collect_sound.playbackRate = 2;
-    // world.playSound(this.collect_sound);
     let indexofitem = world.getIndexOfItem(world.level.collectableItems, item);
     world.level.collectableItems.splice(indexofitem, 1);
   }
 }
-  

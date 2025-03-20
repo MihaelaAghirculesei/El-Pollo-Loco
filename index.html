@@ -1,125 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <link rel="icon" type="image/x-icon"
-        href="img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png"
+    />
     <title>El Pollo Loco</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <div id="fullscreen">
-        <h1>El Pollo Loco</h1>
-        <canvas id="titleCanvas" width="720" height="100"></canvas>
+      <h1>El Pollo Loco</h1>
+      <canvas id="titleCanvas" width="720" height="100"></canvas>
 
-        <!-- Fullscreen-Button -->
+      <!-- Fullscreen-Button -->
 
+      <canvas id="canvas" width="720" height="480"></canvas>
 
-        <canvas id="canvas" width="720" height="480"></canvas>
-
-        <div id="controlsScreen" class="controls-screen" style="display:none">
-            <div class="button-container">
-                <button class="button-start-screen" onclick="closeControls()">Back</button>
-            </div>
-            <div class="fs-centered">
-                <div class="screen-title">
-                    <h2>Controls</h2>
-                </div>
-                <div class="controls">
-                    <div class="controls-container">
-                        <div class="box jc-center">
-                            <img src="img_pollo_locco/img/10_buttons/LEFT_icon.png">
-                            <img src="img_pollo_locco/img/10_buttons/RIGHT_icon.png">
-                        </div>
-                        <div class="box jc-center">
-                            <span>Use LEFT AND RIGHT Arrow Keys to move left or right</span>
-                        </div>
-                    </div>
-                    <div class="controls-container">
-                        <div class="box jc-center">
-                            <img src="img_pollo_locco/img/10_buttons/SPACE_icon.png">
-                        </div>
-                        <div class="box jc-center">
-                            <span>Press <b>SPACE</b> to jump</span>
-                        </div>
-                    </div>
-                    <div class="controls-container">
-                        <div class="box jc-center">
-                            <img src="img_pollo_locco/img/10_buttons/D_icon.png">
-                        </div>
-                        <div class="box jc-center">
-                            <span>Press <b>D</b> to throw bottles at enemies</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div id="controlsScreen" class="controls-screen" style="display: none">
+        <div class="button-container">
+          <button class="button-start-screen" onclick="closeControls()">
+            Back
+          </button>
         </div>
-        <div id="storyScreen" class="story-container" style="display:none">
-            <div class="button-container">
-                <button class="button-start-screen" onclick="closeStory()">Back</button>
+        <div class="fs-centered">
+          <div class="screen-title">
+            <h2>Controls</h2>
+          </div>
+          <div class="controls">
+            <div class="controls-container">
+              <div class="box jc-center">
+                <img src="img_pollo_locco/img/10_buttons/LEFT_icon.png" />
+                <img src="img_pollo_locco/img/10_buttons/RIGHT_icon.png" />
+              </div>
+              <div class="box jc-center">
+                <span>Use LEFT AND RIGHT Arrow Keys to move left or right</span>
+              </div>
             </div>
-            <div class="fs-centered">
-                <div class="screen-title">
-                    <h2>The Legend of Pepe</h2>
-                </div>
-                <div class="story">
-                    <p>Pepe, a courageous villager from a serene Mexican town, finds his peaceful home
-                        unexpectedly threatened by a flock of wild chickens. Renowned for his agility and bravery,
-                        Pepe boldly steps up to defend his village. With unwavering determination and a spark of
-                        heroism, he faces his feathery foes, striving to restore harmony and safeguard the place he
-                        cherishes.</p>
-                </div>
+            <div class="controls-container">
+              <div class="box jc-center">
+                <img src="img_pollo_locco/img/10_buttons/SPACE_icon.png" />
+              </div>
+              <div class="box jc-center">
+                <span>Press <b>SPACE</b> to jump</span>
+              </div>
             </div>
-        </div>
-        <div id="settingsScreen" class="settings-screen" style="display:none">
-            <div class="button-container">
-                <button class="button-start-screen" onclick="closeSettings()">Back</button>
+            <div class="controls-container">
+              <div class="box jc-center">
+                <img src="img_pollo_locco/img/10_buttons/D_icon.png" />
+              </div>
+              <div class="box jc-center">
+                <span>Press <b>D</b> to throw bottles at enemies</span>
+              </div>
             </div>
-            <div class="fs-centered">
-                <div class="screen-title">
-                    <h2>Settings</h2>
-                </div>
-                <div class="button-2-container">
-                    <button id="fullscreen-btn" class="button-start-screen">
-                        <span id="enter-text">Fullscreen</span>
-                        <span id="exit-text" style="display: none;">Leave Fullscreen</span>
-                    </button>
-                </div>
-            </div>
+          </div>
         </div>
-        <div id="endScreen" class="end-screen" style="display:none">
-            <button class="button-start-screen" onclick="returnToMenu()">Back to Menu</button>
+      </div>
+      <div id="storyScreen" class="story-container" style="display: none">
+        <div class="button-container">
+          <button class="button-start-screen" onclick="closeStory()">
+            Back
+          </button>
         </div>
-        <div id="content" class="content" style="display:none">
+        <div class="fs-centered">
+          <div class="screen-title">
+            <h2>The Legend of Pepe</h2>
+          </div>
+          <div class="story">
+            <p>
+              Pepe, a courageous villager from a serene Mexican town, finds his
+              peaceful home unexpectedly threatened by a flock of wild chickens.
+              Renowned for his agility and bravery, Pepe boldly steps up to
+              defend his village. With unwavering determination and a spark of
+              heroism, he faces his feathery foes, striving to restore harmony
+              and safeguard the place he cherishes.
+            </p>
+          </div>
         </div>
+      </div>
+      <div id="settingsScreen" class="settings-screen" style="display: none">
+        <div class="button-container">
+          <button class="button-start-screen" onclick="closeSettings()">
+            Back
+          </button>
+        </div>
+        <div class="fs-centered">
+          <div class="screen-title">
+            <h2>Settings</h2>
+          </div>
+          <div class="button-2-container">
+            <button id="fullscreen-btn" class="button-start-screen">
+              <span id="enter-text">Fullscreen</span>
+              <span id="exit-text" style="display: none">Leave Fullscreen</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div id="endScreen" class="end-screen" style="display: none">
+        <button class="button-start-screen" onclick="returnToMenu()">
+          Back to Menu
+        </button>
+      </div>
+      <div id="content" class="content" style="display: none"></div>
     </div>
 
-    <div id="startScreen" class="start-screen" style="display:flex">
-        <div id="menu" class="menu">
-            <button class="button-start-screen" onclick="startGame()">Play</button>
-            <button class="button-start-screen" onclick="openControls()">Controls</button>
-            <button class="button-start-screen" onclick="openStory()">Story</button>
-            <button class="button-start-screen" onclick="openSettings()">Settings</button>
-        </div>
+    <div id="startScreen" class="start-screen" style="display: flex">
+      <div id="menu" class="menu">
+        <button class="button-start-screen" onclick="startGame()">Play</button>
+        <button class="button-start-screen" onclick="openControls()">
+          Controls
+        </button>
+        <button class="button-start-screen" onclick="openStory()">Story</button>
+        <button class="button-start-screen" onclick="openSettings()">
+          Settings
+        </button>
+      </div>
     </div>
 
     <footer class="footer">
-        <a href="impressum.html"><button class="button-footer" onclick="openImpressum">Impressum</button></a>
-        <p>© 2025 El Pollo Loco. <br> 
-            All rights reserved.</p>
+      <a href="impressum.html"
+        ><button class="button-footer" onclick="openImpressum">
+          Impressum
+        </button></a
+      >
+      <p>
+        © 2025 El Pollo Loco. <br />
+        All rights reserved.
+      </p>
 
-            <button id="restart-game-button" class="button-footer" onclick="restartGame()">
-                Restart Game
-            </button>
+      <button
+        id="restart-game-button"
+        class="button-footer"
+        onclick="restartGame()"
+      >
+        Restart Game
+      </button>
 
-            <button id="music-toggle-button" class="button-footer" onclick="toggleSound()">
-                Sound: Off
-            </button>
-
+      <button
+        id="music-toggle-button"
+        class="button-footer"
+        onclick="toggleSound()"
+      >
+        Sound: Off
+      </button>
     </footer>
 
     <script src="models/drawable-object.class.js"></script>
@@ -145,9 +172,5 @@
     <script src="js/audio.js"></script>
     <script src="levels/fonts/particle-background.js"></script>
     <script src="models/fullscreen.js"></script>
-
-
-</body>
-
-
+  </body>
 </html>

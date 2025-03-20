@@ -5,11 +5,7 @@ let keyboard = new Keyboard();
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
-    if(!isGameMuted) {
-        playBackgroundMusic();
-     } else {
-        muteAllSounds();
-     }
+    toggleSound();
 }
 
 window.addEventListener("keydown", (e) => {
