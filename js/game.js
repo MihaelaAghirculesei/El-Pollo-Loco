@@ -86,6 +86,5 @@ function closeSettings() {
 }
 
 function restartGame() {
-    console.log("Spiel wird neu gestartet!");
     location.reload(); 
 }

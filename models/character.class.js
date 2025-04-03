@@ -182,7 +182,6 @@ class Character extends MovableObject {
     const enemyEndboss = this.world.enemies.find(
       (enemy) => enemy instanceof Endboss
     );
-    console.log(enemyEndboss);
     if (enemyEndboss) {
       return enemyEndboss.isEnemyDead();
     } else {

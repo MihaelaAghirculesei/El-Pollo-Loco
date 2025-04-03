@@ -89,13 +89,19 @@ class World {
           enemy.hit();
           this.character.jump();
           if (enemy instanceof SmallChicken) {
-            playSound("audio/small-chicken-hurt.mp3");
+            if (!isGameMuted) {
+              playSound("audio/small-chicken-hurt.mp3");
+            }
           } else {
-            playSound("audio/chicken-hurt.mp3");
+            if (!isGameMuted) {
+              playSound("audio/chicken-hurt.mp3");
+            }
           }
         } else {
           this.character.hit();
-          playSound("audio/character-hurt-sound.mp3");
+          if (!isGameMuted) {
+            playSound("audio/character-hurt-sound.mp3");
+          }
           if (this.character.health == 0) {
             this.character.life--;
           }
@@ -230,10 +236,11 @@ class World {
   checkCollection() {
     this.level.bottle.forEach((bottle, index) => {
       if (this.character.isColliding(bottle) && !bottle.isCollected) {
-        playSound("audio/bottle-collect-sound.mp3");
+        if (!isGameMuted) {
+          bottle.collect_sound.play();
+        }
         this.collectBottle();
         bottle.isCollected = true;
-        muteSingleBottleSounds(bottle);
         this.level.bottle.splice(index, 1);
       }
     });

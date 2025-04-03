@@ -5,8 +5,16 @@ class Endboss extends MovableObject {
   isDead = false;
   hurt_sound = new Audio("audio/endboss-hurt.mp3");
   atack_sound = new Audio("audio/endboss-atack.mp3");
+  walking = true;
 
   IMAGES_WALKING = [
+    "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G1.png",
+    "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G2.png",
+    "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G3.png",
+    "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G4.png",
+  ];
+
+  IMAGES_STAY = [
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G6.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G7.png",
@@ -27,18 +35,25 @@ class Endboss extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_STAY);
     this.x = 4000;
     this.animate();
     this.life = 1;
-    this.health = 15;
+    this.health = 300;
     this.speed = 1;
   }
 
   animate() {
     setInterval(() => {
-      if (!this.isDead) {
-        this.moveLeft();
+      this.moveLeft();
+    }, 1000 / 60);
+    setInterval(() => {
+      if(this.walking) {
         this.playAnimation(this.IMAGES_WALKING);
+        this.walking = false;
+      } else {
+        this.playAnimation(this.IMAGES_STAY);
+        this.walking = true;
       }
     }, 200);
   }

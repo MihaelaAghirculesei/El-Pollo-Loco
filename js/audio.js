@@ -97,7 +97,6 @@ function muteChickenSounds() {
   if (world && world.level && world.level.enemies) {
     world.level.enemies.forEach((enemy) => {
       if (enemy instanceof Chicken) {
-        endbossHurt.pause();
       }
     });
   }
@@ -122,8 +121,8 @@ function muteCoinSounds() {
 }
 
 function muteBottleSounds() {
-  if (world && world.level && world.level.bottles) {
-    world.level.bottles.forEach((bottle) => {
+  if (world && world.level && world.level.bottle) {
+    world.level.bottle.forEach((bottle) => {
       bottle.collect_sound.pause();
     });
   }

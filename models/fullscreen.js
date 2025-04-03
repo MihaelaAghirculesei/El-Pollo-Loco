@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", (event) => {
     if (document.fullscreenElement && event.code === "Space") {
       event.preventDefault();
-      console.log("Springen");
     }
   });
 });
