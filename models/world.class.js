@@ -299,7 +299,6 @@ class World {
     if (this.gameOver) return;
     this.gameOver = true;
     clearInterval(this.gameInterval);
-    toggleSound();
     this.character.muteSnoringSound();
     document.getElementById("canvas").style.display = "none";
     document.getElementById("titleCanvas").style.display = "none";

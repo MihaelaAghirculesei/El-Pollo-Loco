@@ -1,5 +1,5 @@
 class Character extends MovableObject {
-  height = 280;
+  height = 230;
   y = 80;
   speed = 10;
 
@@ -122,7 +122,7 @@ class Character extends MovableObject {
       }
 
       if (this.currentState !== previousState) {
-        if (this.currentState === "sleeping") {
+        if (this.currentState === "sleeping" && !isGameMuted) {
           this.playSnoringSound();
         } else {
           this.muteSnoringSound();

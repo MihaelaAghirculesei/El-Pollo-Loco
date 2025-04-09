@@ -54,6 +54,7 @@ function stopBackgroundMusic() {
 
 function toggleSound() {
   let musicToggleButton = document.getElementById("music-toggle-button");
+  console.log (isGameMuted)
   if (!isGameMuted) {
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
