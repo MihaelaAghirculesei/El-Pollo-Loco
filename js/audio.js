@@ -65,6 +65,9 @@ function toggleSound() {
   } else {
     if (!isMusicPlaying) {
       backgroundMusic.play();
+      if (world && world.character) {
+        world.character.playSnoringSound();
+      }
       isMusicPlaying = true;
     }
     musicToggleButton.innerText = "Sound: On";
