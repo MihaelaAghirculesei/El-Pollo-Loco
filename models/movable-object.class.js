@@ -28,9 +28,15 @@ class MovableObject extends DrawableObject {
   // Bessere Formel zur Kollisionsberechnung (Genauer)
   isColliding(mo) {
     return (
-      this.x + this.collisionOffsetLeft + (this.width - this.collisionOffsetLeft - this.collisionOffsetRight) >= mo.x &&
+      this.x +
+        this.collisionOffsetLeft +
+        (this.width - this.collisionOffsetLeft - this.collisionOffsetRight) >=
+        mo.x &&
       this.x + this.collisionOffsetLeft <= mo.x + mo.width &&
-      this.y + this.collisionOffsetTop + (this.height - this.collisionOffsetTop - this.collisionOffsetBottom) >= mo.y &&
+      this.y +
+        this.collisionOffsetTop +
+        (this.height - this.collisionOffsetTop - this.collisionOffsetBottom) >=
+        mo.y &&
       this.y + this.collisionOffsetTop <= mo.y + mo.height
     );
   }
@@ -65,7 +71,10 @@ class MovableObject extends DrawableObject {
   }
 
   moveRight() {
-    this.x += this.speed;
+    const canvasWidth = 720;
+    if (this.x + this.width < canvasWidth * 6) {
+      this.x += this.speed;
+    }
   }
 
   moveLeft() {

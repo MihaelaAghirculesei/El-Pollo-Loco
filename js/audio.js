@@ -54,7 +54,6 @@ function stopBackgroundMusic() {
 
 function toggleSound() {
   let musicToggleButton = document.getElementById("music-toggle-button");
-  console.log (isGameMuted)
   if (!isGameMuted) {
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
@@ -65,7 +64,8 @@ function toggleSound() {
   } else {
     if (!isMusicPlaying) {
       backgroundMusic.play();
-      if (world && world.character) {
+      isMusicPlaying = true;
+      if(world && world.character) {
         world.character.playSnoringSound();
       }
       isMusicPlaying = true;

@@ -9,7 +9,7 @@ class Bottle extends MovableObject {
   isCollected = false;
   collect_sound = new Audio("audio/bottle-collect-sound.mp3");
 
-  oftset = {
+  offset = {
     top: 16,
     left: 32,
     right: 25,
@@ -23,13 +23,17 @@ class Bottle extends MovableObject {
     this.loadImages(this.bottleImg);
     this.x = x;
     this.y = y;
-    this.collect_sound = new Audio("audio/bottle-collect-sound.mp3");
     this.animateBottle();
   }
 
   animateBottle() {
-    setInterval(() => {
+    const animationInterval = setInterval(() => {
       this.playAnimation(this.bottleImg);
     }, 300);
+    this.animationInterval = animationInterval;
+  }
+
+  playCollectSound() {
+    this.collect_sound.play();
   }
 }

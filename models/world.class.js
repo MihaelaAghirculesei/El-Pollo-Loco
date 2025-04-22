@@ -89,17 +89,17 @@ class World {
           enemy.hit();
           this.character.jump();
           if (enemy instanceof SmallChicken) {
-            if (!isGameMuted) {
+            if(!isGameMuted) {
               playSound("audio/small-chicken-hurt.mp3");
             }
           } else {
-            if (!isGameMuted) {
+            if(!isGameMuted) {
               playSound("audio/chicken-hurt.mp3");
             }
           }
         } else {
           this.character.hit();
-          if (!isGameMuted) {
+          if(!isGameMuted) {
             playSound("audio/character-hurt-sound.mp3");
           }
           if (this.character.health == 0) {
@@ -299,6 +299,7 @@ class World {
     if (this.gameOver) return;
     this.gameOver = true;
     clearInterval(this.gameInterval);
+    toggleSound();
     this.character.muteSnoringSound();
     document.getElementById("canvas").style.display = "none";
     document.getElementById("titleCanvas").style.display = "none";
