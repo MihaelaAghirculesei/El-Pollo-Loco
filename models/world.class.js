@@ -299,7 +299,9 @@ class World {
     if (this.gameOver) return;
     this.gameOver = true;
     clearInterval(this.gameInterval);
-    toggleSound();
+    if(!isGameMuted){
+      toggleSound();
+   }
     this.character.muteSnoringSound();
     document.getElementById("canvas").style.display = "none";
     document.getElementById("titleCanvas").style.display = "none";
@@ -328,7 +330,9 @@ class World {
   showGameWon() {
     let gameWonScreen = document.getElementById("game-won-screen");
     clearInterval(this.gameInterval);
-    toggleSound();
+    if(!isGameMuted){
+      toggleSound();
+   }
     if (this.character) {
       this.character.muteSnoringSound();
     }
