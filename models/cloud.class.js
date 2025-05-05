@@ -16,11 +16,18 @@ class Cloud extends MovableObject {
   animate() {
     setInterval(() => {
       this.moveLeft();
-      let canvas = document.getElementById("canvas");
-      if (this.x < -this.width) {
-        this.x = canvas.width + Math.random() * 500;
-        this.y = 20 + Math.random() * 50;
-      }
+      this.resetIfOutOfView();
     }, 1000 / 60);
+  }
+
+  resetIfOutOfView() {
+    if (this.x < -this.width) {
+      this.resetPosition();
+    }
+  }
+
+  resetPosition() {
+    this.x = this.canvas.width + Math.random() * 500;
+    this.y = 20 + Math.random() * 50;
   }
 }
