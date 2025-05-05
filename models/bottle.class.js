@@ -17,9 +17,8 @@ class Bottle extends MovableObject {
   };
 
   constructor(x, y) {
-    super().loadImage(
-      "img_pollo_locco/img/6_salsa_bottle/1_salsa_bottle_on_ground.png"
-    );
+    super().loadImage(this.bottleImg[0]);
+
     this.loadImages(this.bottleImg);
     this.x = x;
     this.y = y;
@@ -27,13 +26,19 @@ class Bottle extends MovableObject {
   }
 
   animateBottle() {
-    const animationInterval = setInterval(() => {
+    if (this.animationInterval) {
+      clearInterval(this.animationInterval); 
+    }
+
+    this.animationInterval = setInterval(() => {
       this.playAnimation(this.bottleImg);
     }, 300);
-    this.animationInterval = animationInterval;
   }
 
   playCollectSound() {
-    this.collect_sound.play();
+    if (this.collect_sound) {
+      this.collect_sound.currentTime = 0; 
+      this.collect_sound.play();
+    }
   }
 }
