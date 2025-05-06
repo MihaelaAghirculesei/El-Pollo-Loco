@@ -3,15 +3,8 @@ class SmallChicken extends MovableObject {
   height = 60;
   width = 60;
   isDead = false;
-  IMAGE_DEAD =
-    "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png";
-
-  offset = {
-    top: 5,
-    bottom: 10,
-    left: 10,
-    right: 5,
-  };
+  IMAGE_DEAD = "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png";
+  offset = { top: 5, bottom: 10, left: 10, right: 5 };
   IMAGES_WALKING = [
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
@@ -19,49 +12,64 @@ class SmallChicken extends MovableObject {
   ];
 
   constructor(world) {
-    super().loadImage(
-      "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png"
-    );
+    super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
     this.x = 600 + Math.random() * 4000;
     this.speed = 0.15 + Math.random() * 0.5;
-    this.animate();
     this.life = 1;
     this.health = 2;
     this.world = world;
+    this.animate();
   }
 
   animate() {
-    setInterval(() => {
-      this.moveLeft();
-    }, 1000 / 60);
+    this.startMoving();
+    this.startWalkingAnimation();
+  }
 
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
-    }, 200);
+  startMoving() {
+    setInterval(() => this.moveLeft(), 1000 / 60);
+  }
+
+  startWalkingAnimation() {
+    setInterval(() => this.playAnimation(this.IMAGES_WALKING), 200);
   }
 
   hit() {
+    this.decreaseHealth();
+    if (this.isEnemyDead()) this.die();
+  }
+
+  decreaseHealth() {
     this.health--;
-    if (this.health <= 0) {
-      this.die();
-    }
   }
 
   die() {
-    this.dead = true;
+    this.isDead = true;
     this.loadImage(this.IMAGE_DEAD);
-    if (this.world && this.world.character) {
-      this.world.character.speedY = 0;
-    }
+    this.stopCharacterVerticalMovement();
+    this.markForRemoval();
+    this.removeFromWorldAfterDelay();
+  }
+
+  stopCharacterVerticalMovement() {
+    if (this.world?.character) this.world.character.speedY = 0;
+  }
+
+  markForRemoval() {
     this.markedForRemoval = true;
-    setTimeout(() => {
-      if (this.world && this.world.level) {
-        this.world.level.enemies = this.world.level.enemies.filter(
-          (e) => e !== this
-        );
-      }
-    }, 500);
+  }
+
+  removeFromWorldAfterDelay() {
+    setTimeout(() => this.removeFromWorld(), 500);
+  }
+
+  removeFromWorld() {
+    const enemies = this.world?.level?.enemies;
+    if (enemies) {
+      const idx = enemies.indexOf(this);
+      if (idx !== -1) enemies.splice(idx, 1);
+    }
   }
 
   isEnemyDead() {

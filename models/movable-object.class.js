@@ -7,6 +7,7 @@ class MovableObject extends DrawableObject {
   hitCoolDown = 250;
   health = 10;
   life = 5;
+  markedForRemoval = false;
 
   applyGravity() {
     setInterval(() => {
@@ -18,48 +19,34 @@ class MovableObject extends DrawableObject {
   }
 
   isAboveGround() {
-    if (this instanceof ThrowableObject) {
-      return true;
-    } else {
-      return this.y < 180;
-    }
+    return this instanceof ThrowableObject || this.y < 180;
   }
 
-  // Bessere Formel zur Kollisionsberechnung (Genauer)
   isColliding(mo) {
     return (
-      this.x +
-        this.collisionOffsetLeft +
-        (this.width - this.collisionOffsetLeft - this.collisionOffsetRight) >=
-        mo.x &&
+      this.x + this.collisionOffsetLeft + (this.width - this.collisionOffsetLeft - this.collisionOffsetRight) >= mo.x &&
       this.x + this.collisionOffsetLeft <= mo.x + mo.width &&
-      this.y +
-        this.collisionOffsetTop +
-        (this.height - this.collisionOffsetTop - this.collisionOffsetBottom) >=
-        mo.y &&
+      this.y + this.collisionOffsetTop + (this.height - this.collisionOffsetTop - this.collisionOffsetBottom) >= mo.y &&
       this.y + this.collisionOffsetTop <= mo.y + mo.height
     );
   }
 
   hit() {
-    this.lastHitTime = new Date().getTime();
+    this.lastHitTime = Date.now();
     this.health -= 10;
-
-    if (this.health == 0) {
+    if (this.health === 0) {
       if (this.life > 0) {
         this.health = 100;
         this.life--;
       } else {
         this.removeFromWorld();
-        this.lastHitTime = new Date().getTime();
+        this.lastHitTime = Date.now();
       }
     }
   }
 
   isHurt() {
-    let timePassed = new Date().getTime() - this.lastHitTime; // Difference in ms
-    timePassed = timePassed / 1000; // diferenz in secunden
-    return timePassed < 1;
+    return (Date.now() - this.lastHitTime) / 1000 < 1;
   }
 
   isDead() {
@@ -71,10 +58,7 @@ class MovableObject extends DrawableObject {
   }
 
   moveRight() {
-    const canvasWidth = 720;
-    if (this.x + this.width < canvasWidth * 6) {
-      this.x += this.speed;
-    }
+    if (this.x + this.width < 720 * 6) this.x += this.speed;
   }
 
   moveLeft() {
@@ -82,11 +66,11 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    let i = this.currentImage % images.length;
-    let path = images[i];
-    this.img = this.imageCache[path];
+    const i = this.currentImage % images.length;
+    this.img = this.imageCache[images[i]];
     this.currentImage++;
   }
+
   jump() {
     this.speedY = 30;
   }
