@@ -148,6 +148,7 @@ class World {
         if (bottle.isColliding(enemy)) {
           if (enemy instanceof Endboss) {
             enemy.hit();
+            bottle.splash();
             // playSound('audio/endboss-atack.mp3'); später einbauen
             if (enemy.health <= 0) {
               enemy.die();

@@ -1,53 +1,53 @@
 class StatusBarHeart extends DrawableObject {
-  character;
-  percentage = 100;
-
-  IMAGES = [
-    "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png", //0
+  static IMAGES = [
+    "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png",
-    "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png", //5
+    "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png",
   ];
 
   constructor(character) {
     super();
+    this.character = character;
+    this.setPosition();
+    this.loadImages(StatusBarHeart.IMAGES);
+    this.setPercentage(100);
+  }
+
+  setPosition() {
     this.x = 40;
     this.y = 0;
     this.width = 200;
     this.height = 60;
-    this.loadImages(this.IMAGES);
-    this.setPercentage(this.percentage);
-    this.character = character;
   }
 
   setPercentage(percentage) {
-    this.percentage = percentage;
-    let path = this.IMAGES[this.resolveImageIndex()];
-    this.img = this.imageCache[path];
+    this.percentage = this.clampPercentage(percentage);
+    this.setImage();
   }
 
-  resolveImageIndex() {
-    if (this.percentage == 100) {
-      return 5;
-    } else if (this.percentage > 80) {
-      return 4;
-    } else if (this.percentage > 60) {
-      return 3;
-    } else if (this.percentage > 40) {
-      return 2;
-    } else if (this.percentage > 20) {
-      return 1;
-    } else {
-      return 0;
-    }
+  clampPercentage(percentage) {
+    return Math.max(0, Math.min(percentage, 100));
   }
+
+  setImage() {
+    this.img = this.imageCache[StatusBarHeart.IMAGES[this.getImageIndex()]];
+  }
+
+  getImageIndex() {
+    if (this.percentage === 100) return 5;
+    if (this.percentage > 80) return 4;
+    if (this.percentage > 60) return 3;
+    if (this.percentage > 40) return 2;
+    if (this.percentage > 20) return 1;
+    return 0;
+  }
+
   draw(ctx) {
     super.draw(ctx);
-    if (this.character.life > 0) {
-      this.drawHearts(ctx);
-    }
+    this.drawHearts(ctx);
   }
 
   drawHearts(ctx) {

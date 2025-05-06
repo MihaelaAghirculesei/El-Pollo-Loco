@@ -1,12 +1,12 @@
 class ThrowableObject extends MovableObject {
-  IMAGES_ROTATION = [
+  static IMAGES_ROTATION = [
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png",
   ];
 
-  IMAGES_SPLASH = [
+  static IMAGES_SPLASH = [
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png",
@@ -15,70 +15,78 @@ class ThrowableObject extends MovableObject {
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png",
   ];
 
-  markedForRemoval = false;
-
-  removeFromWorld() {
-    this.markedForRemoval = true;
-  }
-
   constructor(x, y) {
-    super().loadImage(this.IMAGES_ROTATION[0]);
-    this.loadImages(this.IMAGES_ROTATION);
-    this.loadImages(this.IMAGES_SPLASH);
+    super();
     this.x = x;
     this.y = y;
-    this.height = 60;
     this.width = 60;
-    this.throw();
-    this.animate();
+    this.height = 60;
+    this.splashed = false;
+    this.loadImages(ThrowableObject.IMAGES_ROTATION);
+    this.loadImages(ThrowableObject.IMAGES_SPLASH);
+    this.setInitialImage();
+    this.startThrow();
+    this.startRotationAnimation();
   }
 
-  throw() {
+  setInitialImage() {
+    this.img = this.imageCache[ThrowableObject.IMAGES_ROTATION[0]];
+  }
+
+  startThrow() {
     this.speedY = 30;
     this.applyGravity();
-    this.rotationInterval = setInterval(() => {
-      this.x += 10;
-    }, 25);
+    this.startMoving();
   }
 
-  animate() {
-    setInterval(() => {
-      if (!this.splashed) {
-        this.playAnimation(this.IMAGES_ROTATION);
-      }
+  startMoving() {
+    this.movementInterval = setInterval(() => this.x += 10, 25);
+  }
+
+  startRotationAnimation() {
+    this.rotationInterval = setInterval(() => {
+      if (!this.splashed) this.playAnimation(ThrowableObject.IMAGES_ROTATION);
     }, 100);
   }
 
   splash() {
-    this.splashed = true;
+    this.splashed = true; 
+    this.stopMoving();
+    this.stopRotationAnimation();
+    this.y -= 30;
+    this.playSplashAnimation().then(() => this.removeFromWorld());
+  }
+
+  stopMoving() {
+    clearInterval(this.movementInterval);
+  }
+
+  stopRotationAnimation() {
     clearInterval(this.rotationInterval);
-    this.y = this.y - 30;
-    this.playAnimationOnce(this.IMAGES_SPLASH).then(() => {
-      this.removeFromWorld();
+  }
+
+  playSplashAnimation() {
+    return this.playAnimationOnce(ThrowableObject.IMAGES_SPLASH);
+  }
+
+  playAnimationOnce(images) {
+    return new Promise((resolve) => {
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < images.length) {
+          this.img = this.imageCache[images[i++]];
+        } else {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 100);
     });
   }
 
   removeFromWorld() {
     if (this.world) {
       const index = this.world.level.enemies.indexOf(this);
-      if (index > -1) {
-        this.world.level.enemies.splice(index, 1);
-      }
+      if (index > -1) this.world.level.enemies.splice(index, 1);
     }
-  }
-
-  playAnimationOnce(images) {
-    return new Promise((resolve) => {
-      let i = 0;
-      const animationInterval = setInterval(() => {
-        if (i < images.length) {
-          this.img = this.imageCache[images[i]];
-          i++;
-        } else {
-          clearInterval(animationInterval);
-          resolve();
-        }
-      }, 100);
-    });
   }
 }
