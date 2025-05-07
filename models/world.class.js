@@ -168,12 +168,14 @@ class World {
               }, 1000);
               this.checkBottleSpawn();
             }
-
-            if (enemy instanceof SmallChicken) {
-              playSound("audio/small-chicken-hurt.mp3");
-            } else {
-              playSound("audio/chicken-hurt.mp3");
+            if (!isGameMuted) {
+              if (enemy instanceof SmallChicken) {
+                playSound("audio/small-chicken-hurt.mp3");
+              } else {
+                playSound("audio/chicken-hurt.mp3");
+              }
             }
+            
           }
         }
       });
