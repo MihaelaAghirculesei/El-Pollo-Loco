@@ -1,4 +1,6 @@
-class World {
+import { checkGameEnd } from "./game-utils.js";
+
+export class World {
   character;
   enemies = level1.enemies;
   clouds = level1.clouds;
@@ -41,7 +43,7 @@ class World {
         this.checkCollisions();
         this.checkThrowObjects();
         this.checkCollection();
-        this.checkGameEnd();
+        checkGameEnd(this);
       }
     }, 35);
   }
@@ -50,7 +52,6 @@ class World {
     if (this.gameOver) return;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
-
     this.addObjectsToMap(this.backgroundObjects);
     this.addObjectsToMap(this.clouds);
     this.addObjectsToMap(this.throwableObject);
@@ -58,12 +59,10 @@ class World {
     this.addObjectsToMap(this.level.enemies);
     this.addObjectsToMap(this.level.coins);
     this.addObjectsToMap(this.level.bottle);
-
     this.ctx.translate(-this.camera_x, 0);
     this.addToMap(this.statusBarHeart);
     this.addToMap(this.statusBarBottle);
     this.addToMap(this.statusBarCoins);
-
     if (!this.gameOver) {
       requestAnimationFrame(() => this.draw());
     }
@@ -71,57 +70,44 @@ class World {
 
   checkThrowObjects() {
     if (this.keyboard.D && this.statusBarBottle.percentageBottle > 0) {
-      let bottle = new ThrowableObject(
-        this.character.x + 100,
-        this.character.y + 100
+      this.throwableObject.push(
+        new ThrowableObject(this.character.x + 100, this.character.y + 100)
       );
-      this.throwableObject.push(bottle);
       this.statusBarBottle.setPercentageBottle(
-        this.statusBarBottle.percentageBottle - 1
+        --this.statusBarBottle.percentageBottle
       );
     }
   }
 
   checkCharacterCollisions() {
     this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy) && !this.character.isDead()) {
-        if (this.character.isAboveGround() && this.character.speedY <= 0) {
-          enemy.hit();
-          this.character.jump();
-          if (enemy instanceof SmallChicken) {
-            if(!isGameMuted) {
-              playSound("audio/small-chicken-hurt.mp3");
-            }
-          } else {
-            if(!isGameMuted) {
-              playSound("audio/chicken-hurt.mp3");
-            }
-          }
-        } else {
-          this.character.hit();
-          if(!isGameMuted) {
-            playSound("audio/character-hurt-sound.mp3");
-          }
-          if (this.character.health == 0) {
-            this.character.life--;
-          }
-        }
-        this.statusBarHeart.setPercentage(this.character.health);
+      if (!this.character.isColliding(enemy) || this.character.isDead()) return;
+
+      if (this.character.isAboveGround() && this.character.speedY <= 0) {
+        enemy.hit();
+        this.character.jump();
+        if (!isGameMuted)
+          playSound(
+            `audio/${
+              enemy instanceof SmallChicken
+                ? "small-chicken-hurt"
+                : "chicken-hurt"
+            }.mp3`
+          );
+      } else {
+        this.character.hit();
+        if (!isGameMuted) playSound("audio/character-hurt-sound.mp3");
+        if (this.character.health === 0) this.character.life--;
       }
+      this.statusBarHeart.setPercentage(this.character.health);
     });
   }
 
   addToMap(mo) {
-    if (mo.otherDirection) {
-      this.flipImage(mo);
-    }
-
+    if (mo.otherDirection) this.flipImage(mo);
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
-
-    if (mo.otherDirection) {
-      this.flipImageBack(mo);
-    }
+    if (mo.otherDirection) this.flipImageBack(mo);
   }
 
   flipImage(mo) {
@@ -145,55 +131,33 @@ class World {
   checkBottleCollisions() {
     this.throwableObject.forEach((bottle) => {
       this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy)) {
-          if (enemy instanceof Endboss) {
-            enemy.hit();
-            bottle.splash();
-            // playSound('audio/endboss-atack.mp3'); später einbauen
-            if (enemy.health <= 0) {
-              enemy.die();
-            }
-          } else if (
-            enemy instanceof Chicken ||
+        if (!bottle.isColliding(enemy)) return;
+          enemy.hit();
+          bottle.splash();
+        if (enemy instanceof Endboss && enemy.health <= 0) enemy.die();
+        else if (enemy.isEnemyDead()) {
+          setTimeout(() => {
+            this.level.enemies = this.level.enemies.filter((e) => e !== enemy);
+          }, 1000);
+          this.checkBottleSpawn();
+        }
+        if (!isGameMuted) {
+          const sound =
             enemy instanceof SmallChicken
-          ) {
-            enemy.hit();
-            bottle.splash();
-
-            if (enemy.isEnemyDead()) {
-              setTimeout(() => {
-                this.level.enemies = this.level.enemies.filter(
-                  (e) => e !== enemy
-                );
-              }, 1000);
-              this.checkBottleSpawn();
-            }
-            if (!isGameMuted) {
-              if (enemy instanceof SmallChicken) {
-                playSound("audio/small-chicken-hurt.mp3");
-              } else {
-                playSound("audio/chicken-hurt.mp3");
-              }
-            }
-            
-          }
+              ? "audio/small-chicken-hurt.mp3"
+              : "audio/chicken-hurt.mp3";
+          playSound(sound);
         }
       });
-
-      if (bottle.y > 360) {
-        bottle.splash();
-      }
+      if (bottle.y > 360) bottle.splash();
     });
-    this.throwableObject = this.throwableObject.filter(
-      (b) => !b.markedForRemoval
-    );
+
+    this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
   }
 
   addObjectsToMap(objects) {
     if (!objects || !Array.isArray(objects)) return;
-    objects
-      .filter((o) => !o.markedForRemoval)
-      .forEach((o) => {
+    objects.filter((o) => !o.markedForRemoval).forEach((o) => {
         this.addToMap(o);
       });
   }
@@ -262,22 +226,13 @@ class World {
     this.statusBarCoins.setPercentageCoins(
       this.statusBarCoins.percentageCoins + 1
     );
-
     if (this.statusBarCoins.percentageCoins === 30) {
       this.showCongratulations();
-
       this.character.life++;
     }
-
     if (this.statusBarCoins.percentageCoins > 100) {
       this.statusBarCoins.percentageCoins = 100;
     }
-  }
-
-  removeCollectedBottles() {
-    this.level.bottles = this.level.bottles.filter(
-      (bottle) => !bottle.isCollected
-    );
   }
 
   showCongratulations() {
@@ -287,82 +242,11 @@ class World {
         <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
         <button class="button-popup" onclick="this.parentElement.remove();">Close</button>
     `;
-
     document.body.appendChild(popup);
-
     const audio = new Audio("audio/new-life.mp3");
     audio.play();
-
     setTimeout(() => {
       document.body.removeChild(popup);
     }, 3000);
-  }
-
-  showGameOver() {
-    if (this.gameOver) return;
-    this.gameOver = true;
-    clearInterval(this.gameInterval);
-    if(!isGameMuted){
-      toggleSound();
-   }
-    this.character.muteSnoringSound();
-    document.getElementById("canvas").style.display = "none";
-    document.getElementById("titleCanvas").style.display = "none";
-    const gameOverScreen = document.createElement("div");
-    gameOverScreen.classList.add("game-over-screen");
-    const gameOverImage = document.createElement("img");
-    gameOverImage.src =
-      "img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png";
-    gameOverScreen.appendChild(gameOverImage);
-    document.body.appendChild(gameOverScreen);
-    document.querySelector("footer").style.display = "flex";
-    playSound("audio/lose-game-sound.mp3");
-  }
-
-  checkGameEnd() {
-    const endboss = this.level.enemies.find(
-      (enemy) => enemy instanceof Endboss
-    );
-    if (this.character.isDead()) {
-      this.showGameOver();
-    } else if (endboss && endboss.isEnemyDead()) {
-      this.showGameWon();
-    }
-  }
-
-  showGameWon() {
-    let gameWonScreen = document.getElementById("game-won-screen");
-    clearInterval(this.gameInterval);
-    if(!isGameMuted){
-      toggleSound();
-   }
-    if (this.character) {
-      this.character.muteSnoringSound();
-    }
-    if (!gameWonScreen) {
-      gameWonScreen = document.createElement("div");
-      gameWonScreen.id = "game-won-screen";
-      gameWonScreen.classList.add("game-won-screen");
-      const gameWonText = document.createElement("h1");
-      gameWonText.textContent = "You Won!";
-      gameWonScreen.appendChild(gameWonText);
-      document.body.appendChild(gameWonScreen);
-      playSound("audio/winning-game-sound.mp3");
-    }
-  }
-
-  restartGame() {
-    this.gameOver = false;
-    this.character = new Character();
-    this.level.enemies = level1.enemies;
-    this.level.bottle = level1.bottle;
-    this.level.coins = level1.coins;
-    this.statusBarHeart = new StatusBarHeart(this.character);
-    this.statusBarBottle = new StatusBarBottle(this);
-    this.statusBarBottle.percentageBottle = 0;
-    this.statusBarCoins = new StatusBarCoins(this);
-    this.run();
-    this.draw();
-    this.spawnChickens();
   }
 }

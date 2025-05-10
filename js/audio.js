@@ -52,14 +52,14 @@ function stopBackgroundMusic() {
   isMusicPlaying = false;
 }
 
-function toggleSound() {
+function toggleSound(world) {
   let musicToggleButton = document.getElementById("music-toggle-button");
   if (!isGameMuted) {
     backgroundMusic.pause();
     backgroundMusic.currentTime = 0;
     isMusicPlaying = false;
     musicToggleButton.innerText = "Sound: Off";
-    muteAllSounds();
+    muteAllSounds(world);
     isGameMuted = true;
   } else {
     if (!isMusicPlaying) {
@@ -88,16 +88,16 @@ function muteSounds() {
   });
 }
 
-function muteAllSounds() {
-  muteBottleSounds();
-  muteCharacterSounds();
-  muteChickenSounds();
-  muteEndbossSounds();
-  muteCoinSounds();
-  muteSnoringSound();
+function muteAllSounds(world) {
+  muteBottleSounds(world);
+  muteCharacterSounds(world);
+  muteChickenSounds(world);
+  muteEndbossSounds(world);
+  muteCoinSounds(world);
+  muteSnoringSound(world);
 }
 
-function muteChickenSounds() {
+function muteChickenSounds(world) {
   if (world && world.level && world.level.enemies) {
     world.level.enemies.forEach((enemy) => {
       if (enemy instanceof Chicken) {
@@ -106,7 +106,7 @@ function muteChickenSounds() {
   }
 }
 
-function muteEndbossSounds() {
+function muteEndbossSounds(world) {
   if (world && world.level && world.level.endboss) {
     world.level.endboss.forEach((endboss) => {
       endboss.alert_sound.pause();
@@ -116,7 +116,7 @@ function muteEndbossSounds() {
   }
 }
 
-function muteCoinSounds() {
+function muteCoinSounds(world) {
   if (world && world.level && world.level.coins) {
     world.level.coins.forEach((coin) => {
       coin.collect_sound.pause();
@@ -124,7 +124,7 @@ function muteCoinSounds() {
   }
 }
 
-function muteBottleSounds() {
+function muteBottleSounds(world) {
   if (world && world.level && world.level.bottle) {
     world.level.bottle.forEach((bottle) => {
       bottle.collect_sound.pause();
@@ -136,13 +136,13 @@ function muteSingleBottleSounds(bottle) {
   bottle.collect_sound.pause();
 }
 
-function muteCharacterSounds() {
+function muteCharacterSounds(world) {
   if (world && world.character) {
     world.character.hurt_sound.pause();
   }
 }
 
-function muteSnoringSound() {
+function muteSnoringSound(world) {
   if (world && world.character) {
     world.character.muteSnoringSound();
   }

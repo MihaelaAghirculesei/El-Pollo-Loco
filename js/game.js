@@ -1,3 +1,5 @@
+import { World } from "../models/world.class.js";
+
 let canvas;
 let world;
 let keyboard = new Keyboard();
@@ -5,7 +7,7 @@ let keyboard = new Keyboard();
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
-    toggleSound();
+    toggleSound(world);
 }
 
 window.addEventListener("keydown", (e) => {
@@ -50,41 +52,41 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
-function startGame() {
+window.startGame = function () {
     document.getElementById("startScreen").style.display = "none";
-    document.getElementById('content').style.display = 'block';
+    document.getElementById("content").style.display = "block";
     setTimeout(() => {
         init();
     }, 300);
-}
+};
 
-function openControls() {
+window.openControls = function () {
     document.getElementById("controlsScreen").style.display = "flex";
     document.getElementById("controlsScreen").style.backgroundColor = "white";
-}
+};
 
-function closeControls() {
+window.closeControls = function () {
     document.getElementById("controlsScreen").style.display = "none";
-}
+};
 
-function openStory() {
+window.openStory = function () {
     document.getElementById("storyScreen").style.display = "flex";
     document.getElementById("storyScreen").style.backgroundColor = "white";
-}
+};
 
-function closeStory() {
+window.closeStory = function () {
     document.getElementById("storyScreen").style.display = "none";
-}
+};
 
-function openSettings() {
+window.openSettings = function () {
     document.getElementById("settingsScreen").style.display = "flex";
     document.getElementById("settingsScreen").style.backgroundColor = "white";
-}
+};
 
-function closeSettings() {
+window.closeSettings = function () {
     document.getElementById("settingsScreen").style.display = "none";
-}
+};
 
-function restartGame() {
-    location.reload(); 
-}
+window.restartGame = function () {
+    location.reload();
+};
