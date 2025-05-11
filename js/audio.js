@@ -1,30 +1,21 @@
-let backgroundMusic = new Audio("audio/game.mp3");
+const backgroundMusic = new Audio("audio/game.mp3");
 backgroundMusic.loop = true;
 backgroundMusic.volume = 0.5;
-let gameWon = new Audio("audio/winning-game-sound.mp3");
-let gameLost = new Audio("audio/lose-game-sound.mp3");
-let endbossHurt = new Audio("audio/endboss-hurt.mp3");
-let bottleCollect = new Audio("audio/bottle-collect-sound.mp3");
-let coinsCollect = new Audio("audio/coin-collect-sound.mp3");
 
+const audioInstances = {};
 let isGameMuted = true;
 let backgroundMusicMuted = false;
-backgroundMusic.loop = true;
 let isMusicPlaying = false;
-let audioInstances = {};
 
-function gameWonSound() {
-  muteSnoringSound();
-  if (!isGameMuted) {
-    playSound("audio/winning-game-sound.mp3");
+function playAudioInstance(path, volume = 0.2) {
+  if (!audioInstances[path]) {
+    const audio = new Audio(path);
+    audio.volume = volume;
+    audioInstances[path] = audio;
   }
-}
-
-function gameLostSound() {
-  muteSnoringSound();
-  if (!isGameMuted) {
-    gameLost.play("audio/lose-game-sound.mp3");
-  }
+  const audio = audioInstances[path];
+  audio.currentTime = 0;
+  audio.play();
 }
 
 function playBackgroundMusic() {
@@ -35,42 +26,64 @@ function playBackgroundMusic() {
   isMusicPlaying = true;
 }
 
-function playSound(soundFilePath, volume = 0.2) {
-  if (!audioInstances[soundFilePath]) {
-    let audio = new Audio(soundFilePath);
-    audio.volume = volume;
-    audioInstances[soundFilePath] = audio;
-  }
-
-  audioInstances[soundFilePath].currentTime = 0;
-  audioInstances[soundFilePath].play();
-}
-
 function stopBackgroundMusic() {
   backgroundMusic.pause();
   backgroundMusic.currentTime = 0;
   isMusicPlaying = false;
 }
 
+function muteAllAudioElements() {
+  document.querySelectorAll("audio").forEach(a => a.pause());
+}
+
+function muteSound(obj, prop) {
+  obj?.[prop]?.pause();
+}
+
+function muteArraySounds(arr, prop) {
+  arr?.forEach(item => muteSound(item, prop));
+}
+
+function muteAllSounds(world) {
+  muteArraySounds(world?.level?.bottle, 'collect_sound');
+  muteSound(world?.character, 'hurt_sound');
+  muteArraySounds(world?.level?.enemies, 'chicken_sound');
+  world?.level?.endboss?.forEach(e => {
+    muteSound(e, 'alert_sound');
+    muteSound(e, 'hurt_sound');
+    muteSound(e, 'dead_sound');
+  });
+  muteArraySounds(world?.level?.coins, 'collect_sound');
+  world?.character?.muteSnoringSound();
+}
+
+function gameWonSound() {
+  muteSnoringSound();
+  if (!isGameMuted) playAudioInstance("audio/winning-game-sound.mp3");
+}
+
+function gameLostSound() {
+  muteSnoringSound();
+  if (!isGameMuted) playAudioInstance("audio/lose-game-sound.mp3");
+}
+
+function playSound(path, volume = 0.2) {
+  playAudioInstance(path, volume);
+}
+
 function toggleSound(world) {
-  let musicToggleButton = document.getElementById("music-toggle-button");
+  const btn = document.getElementById("music-toggle-button");
   if (!isGameMuted) {
-    backgroundMusic.pause();
-    backgroundMusic.currentTime = 0;
-    isMusicPlaying = false;
-    musicToggleButton.innerText = "Sound: Off";
+    stopBackgroundMusic();
+    btn.innerText = "Sound: Off";
     muteAllSounds(world);
     isGameMuted = true;
   } else {
     if (!isMusicPlaying) {
-      backgroundMusic.play();
-      isMusicPlaying = true;
-      if(world && world.character) {
-        world.character.playSnoringSound();
-      }
-      isMusicPlaying = true;
+      playBackgroundMusic();
+      world?.character?.playSnoringSound();
     }
-    musicToggleButton.innerText = "Sound: On";
+    btn.innerText = "Sound: On";
     isGameMuted = false;
   }
 }
@@ -78,80 +91,17 @@ function toggleSound(world) {
 function toggleSoundForBackgroundMusic() {
   isGameMuted = !isGameMuted;
   updateSoundStatus();
-  muteSounds();
-}
-
-function muteSounds() {
-  let allSounds = document.querySelectorAll("audio");
-  allSounds.forEach((sound) => {
-    sound.pause();
-  });
-}
-
-function muteAllSounds(world) {
-  muteBottleSounds(world);
-  muteCharacterSounds(world);
-  muteChickenSounds(world);
-  muteEndbossSounds(world);
-  muteCoinSounds(world);
-  muteSnoringSound(world);
-}
-
-function muteChickenSounds(world) {
-  if (world && world.level && world.level.enemies) {
-    world.level.enemies.forEach((enemy) => {
-      if (enemy instanceof Chicken) {
-      }
-    });
-  }
-}
-
-function muteEndbossSounds(world) {
-  if (world && world.level && world.level.endboss) {
-    world.level.endboss.forEach((endboss) => {
-      endboss.alert_sound.pause();
-      endboss.hurt_sound.pause();
-      endboss.dead_sound.pause();
-    });
-  }
-}
-
-function muteCoinSounds(world) {
-  if (world && world.level && world.level.coins) {
-    world.level.coins.forEach((coin) => {
-      coin.collect_sound.pause();
-    });
-  }
-}
-
-function muteBottleSounds(world) {
-  if (world && world.level && world.level.bottle) {
-    world.level.bottle.forEach((bottle) => {
-      bottle.collect_sound.pause();
-    });
-  }
-}
-
-function muteSingleBottleSounds(bottle) {
-  bottle.collect_sound.pause();
-}
-
-function muteCharacterSounds(world) {
-  if (world && world.character) {
-    world.character.hurt_sound.pause();
-  }
+  muteAllAudioElements();
 }
 
 function muteSnoringSound(world) {
-  if (world && world.character) {
-    world.character.muteSnoringSound();
-  }
+  world?.character?.muteSnoringSound();
 }
 
-document
-  .getElementById("music-toggle-button")
-  .addEventListener("keydown", function (e) {
-    if (e.code === "Space" || e.key === " ") {
-      e.preventDefault();
-    }
-  });
+function muteSingleBottleSounds(bottle) {
+  muteSound(bottle, 'collect_sound');
+}
+
+document.getElementById("music-toggle-button")?.addEventListener("keydown", e => {
+  if (e.code === "Space" || e.key === " ") e.preventDefault();
+});
