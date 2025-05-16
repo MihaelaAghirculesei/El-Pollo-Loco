@@ -28,7 +28,7 @@ class Endboss extends MovableObject {
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
     [this.IMAGES_WALKING, this.IMAGES_HURT, this.IMAGES_STAY].forEach(imgs => this.loadImages(imgs));
-    this.x = 4000; this.life = 1; this.health = 300; this.speed = 1;
+    this.x = 4000; this.life = 2; this.health = 200; this.speed = 1;
     this.animate();
   }
 

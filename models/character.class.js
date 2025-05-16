@@ -63,7 +63,10 @@ class Character extends MovableObject {
   }
 
   updateLastActionTime = () => this.lastActionTime = Date.now();
-  playSnoringSound = () => this.snoringSound.play();
+  playSnoringSound = () => {
+    if (isGameMuted)return;
+    this.snoringSound.play();
+  }
   muteSnoringSound = () => { this.snoringSound.pause(); this.snoringSound.currentTime=0; }
   jump = () => this.speedY=30;
 

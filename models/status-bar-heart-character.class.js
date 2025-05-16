@@ -1,4 +1,4 @@
-class StatusBarHeart extends DrawableObject {
+class StatusBarHeartCharacter extends DrawableObject {
   static IMAGES = [
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png",
@@ -12,7 +12,7 @@ class StatusBarHeart extends DrawableObject {
     super();
     this.character = character;
     this.setPosition();
-    this.loadImages(StatusBarHeart.IMAGES);
+    this.loadImages(StatusBarHeartCharacter.IMAGES);
     this.setPercentage(100);
   }
 
@@ -33,7 +33,7 @@ class StatusBarHeart extends DrawableObject {
   }
 
   setImage() {
-    this.img = this.imageCache[StatusBarHeart.IMAGES[this.getImageIndex()]];
+    this.img = this.imageCache[StatusBarHeartCharacter.IMAGES[this.getImageIndex()]];
   }
 
   getImageIndex() {
