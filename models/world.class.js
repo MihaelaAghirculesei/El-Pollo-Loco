@@ -6,14 +6,22 @@ export class World {
   statusBarHeart; statusBarBottle; statusBarCoins; throwableObject = [];
   gameOver = false; gameInterval; currentSounds = {};
 
-  constructor(c, k) {
-    this.canvas = c; this.ctx = c.getContext("2d"); this.keyboard = k;
+constructor(c, k) {
+    this.canvas = c; 
+    this.ctx = c.getContext("2d"); 
+    this.keyboard = k;
     this.character = new Character();
     this.statusBarHeart = new StatusBarHeart(this.character);
-    this.statusBarBottle = new StatusBarBottle(this); this.statusBarBottle.percentageBottle = 0;
+    this.statusBarBottle = new StatusBarBottle();
+    this.statusBarBottle.setBottlesCount(0);
     this.statusBarCoins = new StatusBarCoins(this);
-    this.draw(); this.setWorld(); this.run(); this.spawnChickens();
-  }
+    this.draw(); 
+    this.setWorld(); 
+    this.run(); 
+    this.spawnChickens();
+}
+
+
 
   setWorld = () => (this.character.world = this);
 
@@ -39,9 +47,9 @@ export class World {
   };
 
   checkThrowObjects = () => {
-    if (this.keyboard.D && this.statusBarBottle.percentageBottle > 0) {
-      this.throwableObject.push(new ThrowableObject(this.character.x + 100, this.character.y + 100));
-      this.statusBarBottle.setPercentageBottle(--this.statusBarBottle.percentageBottle);
+   if (this.keyboard.D && this.statusBarBottle.bottlesCount > 0) {
+    this.throwableObject.push(new ThrowableObject(this.character.x + 100, this.character.y + 100));
+    this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount - 1);
     }
   };
 
@@ -102,7 +110,7 @@ export class World {
   };
 
   checkBottleSpawn = () => {
-    if (this.level.enemies.length <= level1.enemies.length - 2) this.statusBarBottle.setPercentageBottle(10);
+    if (this.level.enemies.length <= level1.enemies.length - 2) this.statusBarBottle.setPercentageBottle(20);
   };
 
   spawnChickens = () => setInterval(() => {
@@ -123,7 +131,9 @@ export class World {
     s.onended = () => delete this.currentSounds[path];
   };
 
-  collectBottle = () => this.statusBarBottle.setPercentageBottle(Math.min(this.statusBarBottle.percentageBottle + 10, 100));
+ collectBottle = () => {
+  this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount + 1);
+};
 
   checkCollection = () => {
     const check = (arr, fn) => arr.forEach((item, i) => {

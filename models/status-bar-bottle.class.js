@@ -1,5 +1,5 @@
 class StatusBarBottle extends DrawableObject {
-  MAX_BOTTLES = 10;
+  MAX_BOTTLES = 27;
   IMAGES = [
     "img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/green/20.png",
@@ -8,14 +8,14 @@ class StatusBarBottle extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/green/80.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/3_statusbar_bottle/green/100.png",
   ];
-  percentageBottle = 0;
+  bottlesCount = 0;
 
   constructor() {
     super();
     this.loadImages(this.IMAGES);
     this.setPosition();
     this.setSize();
-    this.setPercentageBottle(0);
+    this.setBottlesCount(0);
   }
 
   setPosition() {
@@ -28,27 +28,14 @@ class StatusBarBottle extends DrawableObject {
     this.height = 60;
   }
 
-  setPercentageBottle(percentage) {
-    this.percentageBottle = this.calculatePercentage(percentage);
+  setBottlesCount(count) {
+    this.bottlesCount = Math.max(0, Math.min(count, this.MAX_BOTTLES)); // tra 0 e MAX_BOTTLES
     this.updateImage();
   }
 
-  calculatePercentage(percentage) {
-    if (percentage <= this.MAX_BOTTLES) return percentage * 10;
-    return Math.min(percentage, 100);
-  }
-
-  updateImage() {
-    this.img = this.imageCache[this.resolveImageIndex()];
-  }
-
-  resolveImageIndex() {
-    const p = this.percentageBottle;
-    if (p >= 100) return this.IMAGES[5];
-    if (p >= 80)  return this.IMAGES[4];
-    if (p >= 60)  return this.IMAGES[3];
-    if (p >= 40)  return this.IMAGES[2];
-    if (p >= 20)  return this.IMAGES[1];
-    return this.IMAGES[0];
-  }
+updateImage() {
+    let percent = this.bottlesCount / this.MAX_BOTTLES;
+    let idx = Math.floor(percent * (this.IMAGES.length - 1));
+    this.img = this.imageCache[this.IMAGES[idx]];
+}
 }
