@@ -1,9 +1,9 @@
 import { checkGameEnd } from "./game-utils.js";
 
 export class World {
-  character; enemies = level1.enemies; clouds = level1.clouds; level = level1;
+  character; endboss; enemies = level1.enemies; clouds = level1.clouds; level = level1;
   backgroundObjects = level1.backgroundObjects; canvas; ctx; keyboard; camera_x = 0;
-  statusBarHeart; statusBarBottle; statusBarCoins; throwableObject = [];
+  statusBarHeartCharacter; statusBarBottle; statusBarCoins; throwableObject = [];
   gameOver = false; gameInterval; currentSounds = {};
 
 constructor(c, k) {
@@ -11,7 +11,9 @@ constructor(c, k) {
     this.ctx = c.getContext("2d"); 
     this.keyboard = k;
     this.character = new Character();
-    this.statusBarHeart = new StatusBarHeart(this.character);
+    this.endboss = new Endboss();
+    this.statusBarHeartEndboss = new StatusBarHeartEndboss(this.endboss);
+    this.statusBarHeartCharacter = new StatusBarHeartCharacter(this.character);
     this.statusBarBottle = new StatusBarBottle();
     this.statusBarBottle.setBottlesCount(0);
     this.statusBarCoins = new StatusBarCoins(this);
@@ -20,8 +22,6 @@ constructor(c, k) {
     this.run(); 
     this.spawnChickens();
 }
-
-
 
   setWorld = () => (this.character.world = this);
 
@@ -42,7 +42,8 @@ constructor(c, k) {
       .forEach(arr => arr?.filter(o => !o.markedForRemoval).forEach(o => this.addToMap(o)));
     this.addToMap(this.character);
     this.ctx.translate(-this.camera_x, 0);
-    [this.statusBarHeart, this.statusBarBottle, this.statusBarCoins].forEach(bar => this.addToMap(bar));
+    this.statusBarHeartEndboss.updateHealth();
+    [this.statusBarHeartCharacter, this.statusBarBottle, this.statusBarCoins, this.statusBarHeartEndboss].forEach(bar => this.addToMap(bar));
     if (!this.gameOver) requestAnimationFrame(this.draw);
   };
 
@@ -63,7 +64,7 @@ constructor(c, k) {
         if (!isGameMuted) playSound("audio/character-hurt-sound.mp3");
         if (this.character.health === 0) this.character.life--;
       }
-      this.statusBarHeart.setPercentage(this.character.health);
+      this.statusBarHeartCharacter.setPercentage(this.character.health);
     }
   });
 
