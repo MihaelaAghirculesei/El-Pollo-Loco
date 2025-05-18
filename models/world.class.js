@@ -150,10 +150,12 @@ constructor(c, k) {
   };
 
   collectCoin = () => {
+    this.statusBarCoins.setPercentageCoins(this.statusBarCoins.percentageCoins + 1);
     this.statusBarCoins.percentageCoins++;
     if (this.statusBarCoins.percentageCoins === 30) {
       this.showCongratulations();
       this.character.life++;
+      this.statusBarCoins.setPercentageCoins(0);
     }
     if (this.statusBarCoins.percentageCoins > 100) this.statusBarCoins.percentageCoins = 100;
   };
