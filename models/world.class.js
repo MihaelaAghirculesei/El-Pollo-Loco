@@ -12,6 +12,8 @@ constructor(c, k) {
     this.keyboard = k;
     this.character = new Character();
     this.endboss = new Endboss();
+    this.endboss.world = this;
+    this.level.enemies.push(this.endboss);
     this.statusBarHeartEndboss = new StatusBarHeartEndboss(this.endboss);
     this.statusBarHeartCharacter = new StatusBarHeartCharacter(this.character);
     this.statusBarBottle = new StatusBarBottle();

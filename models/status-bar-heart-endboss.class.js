@@ -15,7 +15,7 @@ class StatusBarHeartEndboss extends DrawableObject {
     this.endboss = endboss;
     this.loadImages(this.IMAGES);
     this.setPosition();
-    this.setPercentage(this.endboss.health);
+    this.setPercentage(this.endboss.getHealthPercent());
   }
 
   setPosition() {
@@ -51,7 +51,7 @@ class StatusBarHeartEndboss extends DrawableObject {
   
   updateHealth() {
     if (this.endboss) {
-      this.setPercentage(this.endboss.health);
+      this.setPercentage(this.endboss.getHealthPercent());
     }
   }
 }

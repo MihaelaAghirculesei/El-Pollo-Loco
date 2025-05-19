@@ -28,7 +28,7 @@ class Endboss extends MovableObject {
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
     [this.IMAGES_WALKING, this.IMAGES_HURT, this.IMAGES_STAY].forEach(imgs => this.loadImages(imgs));
-    this.x = 4000; this.life = 2; this.health = 200; this.speed = 1;
+    this.x = 4000; this.health = 200; this.speed = 1;
     this.animate();
   }
 
@@ -56,9 +56,14 @@ class Endboss extends MovableObject {
   moveLeft = () => this.x -= this.speed;
   moveRight = () => this.x += this.speed;
 
+    getHealthPercent() {
+  return Math.max(0, Math.round((this.health / 200) * 100));
+}
+
   hit() {
     if (this.isDead) return;
-    this.health--;
+    this.health -= 1;
+    if (this.health < 0) this.health = 0;
     this.playSound(this.hurt_sound);
     this.health > 0 ? this.playAnimation(this.IMAGES_HURT) : this.die();
   }

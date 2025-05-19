@@ -57,7 +57,6 @@ const level1 = new Level(
   [
     ...createObjects(Chicken, chickenPositions),
     ...createObjects(SmallChicken, smallChickenPositions),
-    new Endboss(),
   ],
   createObjects(Cloud, cloudPositions),
   createObjects(Coin, coinPositions),
