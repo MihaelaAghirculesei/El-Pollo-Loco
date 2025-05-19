@@ -14,6 +14,8 @@ constructor(c, k) {
     this.endboss = new Endboss();
     this.endboss.world = this;
     this.level.enemies.push(this.endboss);
+    this.endbossAttackMusic = null;
+    this.endbossAttackStarted = false;
     this.statusBarHeartEndboss = new StatusBarHeartEndboss(this.endboss);
     this.statusBarHeartCharacter = new StatusBarHeartCharacter(this.character);
     this.statusBarBottle = new StatusBarBottle();
@@ -29,6 +31,16 @@ constructor(c, k) {
 
   run = () => this.gameInterval = setInterval(() => {
     if (!this.gameOver) {
+          if (Math.abs(this.character.x - this.endboss.x) < 500) {
+              this.endboss.startMoving();
+              if (!this.endbossAttackStarted) {
+                this.playEndbossAttackMusic();
+                this.endbossAttackStarted = true;
+              }
+            }
+            if (isGameMuted && this.endbossAttackStarted) {
+              stopEndbossAttackMusic(this);
+            }
       this.checkCollisions();
       this.checkThrowObjects();
       this.checkCollection();
@@ -58,7 +70,6 @@ constructor(c, k) {
 
  checkCharacterCollisions = () => {
   let jumpedOnEnemy = false; 
-
   this.level.enemies.forEach(e => {
     if (this.character.isColliding(e) && !this.character.isDead()) {
       if (!jumpedOnEnemy && this.character.isAboveGround() && this.character.speedY <= 0) {
@@ -75,7 +86,6 @@ constructor(c, k) {
     }
   });
 };
-
 
   addToMap = mo => {
     if (mo.otherDirection) this.flipImage(mo);
@@ -169,6 +179,14 @@ constructor(c, k) {
     if (this.statusBarCoins.percentageCoins > 100) this.statusBarCoins.percentageCoins = 100;
   };
 
+playEndbossAttackMusic() {
+  if (this.endbossAttackMusic || isGameMuted) return;
+  this.endbossAttackMusic = new Audio("audio/endboss-atack.mp3");
+  this.endbossAttackMusic.loop = true;
+  this.endbossAttackMusic.volume = 0.5;
+  this.endbossAttackMusic.play();
+}
+
   showCongratulations = () => {
     const popup = document.createElement("div");
     popup.classList.add("popup");
@@ -178,6 +196,6 @@ constructor(c, k) {
     `;
     document.body.appendChild(popup);
     new Audio("audio/new-life.mp3").play();
-    setTimeout(() => popup.remove(), 3000);
+    setTimeout(() => popup.remove(), 1000);
   };
 }

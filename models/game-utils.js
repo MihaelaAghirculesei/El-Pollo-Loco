@@ -6,6 +6,11 @@ export function showGameOver(world) {
       toggleSound();
     }
     world.character.muteSnoringSound();
+    if (world.endbossAttackMusic) {
+        world.endbossAttackMusic.pause();
+        world.endbossAttackMusic.currentTime = 0;
+        world.endbossAttackMusic = null;
+      }
     document.getElementById("canvas").style.display = "none";
     document.getElementById("titleCanvas").style.display = "none";
     const gameOverScreen = document.createElement("div");
@@ -28,6 +33,11 @@ export function showGameOver(world) {
     if (world.character) {
       world.character.muteSnoringSound();
     }
+    if (world.endbossAttackMusic) {
+      world.endbossAttackMusic.pause();
+      world.endbossAttackMusic.currentTime = 0;
+      world.endbossAttackMusic = null;
+}
     if (!gameWonScreen) {
       gameWonScreen = document.createElement("div");
       gameWonScreen.id = "game-won-screen";

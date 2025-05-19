@@ -13,7 +13,7 @@ class Character extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     [this.IMAGES_WALKING,this.IMAGES_JUMPING,this.IMAGES_DEAD,this.IMAGES_HURT,this.IMAGES_IDLE,this.IMAGES_SLEEPING].forEach(imgs=>this.loadImages(imgs));
     this.applyGravity();
-    this.health=100; this.life=5; this.lastActionTime=Date.now()-6000; this.currentState="sleeping";
+    this.health=100; this.life=1; this.lastActionTime=Date.now()-6000; this.currentState="sleeping";
     this.snoringSound.loop=true; this.snoringSound.volume=0.9;
     this.animate();
   }
@@ -69,7 +69,7 @@ class Character extends MovableObject {
   }
   muteSnoringSound = () => { this.snoringSound.pause(); this.snoringSound.currentTime=0; }
   jump = () => this.speedY=30;
-
+  
   endbossDead() {
     const eb=this.world.enemies.find(e=>e instanceof Endboss);
     return eb ? eb.isEnemyDead() : (console.warn("Endboss not found in enemies array."), false);

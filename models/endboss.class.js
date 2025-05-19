@@ -2,7 +2,7 @@ class Endboss extends MovableObject {
   height = 400; width = 250; y = 60; isDead = false; walking = true;
   hurt_sound = new Audio("audio/endboss-hurt.mp3");
   atack_sound = new Audio("audio/endboss-atack.mp3");
-
+  
   IMAGES_WALKING = [
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G1.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G2.png",
@@ -29,7 +29,14 @@ class Endboss extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     [this.IMAGES_WALKING, this.IMAGES_HURT, this.IMAGES_STAY].forEach(imgs => this.loadImages(imgs));
     this.x = 4000; this.health = 200; this.speed = 1;
-    this.animate();
+     this._isMoving = false;
+  }
+
+   startMoving() {
+    if (!this._isMoving) {
+      this._isMoving = true;
+      this.animate();
+    }
   }
 
   animate() {
@@ -80,7 +87,7 @@ class Endboss extends MovableObject {
       this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
     }
   }
-
+  
   playSound = sound => { if (!isGameMuted) sound.play(); }
   isEnemyDead = () => this.health <= 0;
 }

@@ -140,13 +140,7 @@
         Restart Game
       </button>
 
-      <button
-        id="music-toggle-button"
-        class="button-footer"
-        onclick="toggleSound()"
-      >
-        Sound: Off
-      </button>
+      <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">Sound: Off</button>
     </footer>
 
     <script src="models/drawable-object.class.js"></script>

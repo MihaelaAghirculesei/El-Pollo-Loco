@@ -7,6 +7,7 @@ let keyboard = new Keyboard();
 function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
+    window.world = world;
     toggleSound(world);
 }
 
@@ -39,7 +40,7 @@ window.addEventListener("keyup", (e) => {
         keyboard.LEFT = false;
     }
     if (e.keyCode == 38) {
-        keyboard.UP = true;
+        keyboard.UP = false;
     }
     if (e.keyCode == 40) {
         keyboard.DOWN = false;

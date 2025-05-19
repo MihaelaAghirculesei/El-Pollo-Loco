@@ -77,6 +77,7 @@ function toggleSound(world) {
     stopBackgroundMusic();
     btn.innerText = "Sound: Off";
     muteAllSounds(world);
+    stopEndbossAttackMusic(world);
     isGameMuted = true;
   } else {
     if (!isMusicPlaying) {
@@ -86,22 +87,15 @@ function toggleSound(world) {
     btn.innerText = "Sound: On";
     isGameMuted = false;
   }
+    btn.blur();
 }
 
-function toggleSoundForBackgroundMusic() {
-  isGameMuted = !isGameMuted;
-  updateSoundStatus();
-  muteAllAudioElements();
+function stopEndbossAttackMusic(world) {
+  if (world?.endbossAttackMusic) {
+    world.endbossAttackMusic.pause();
+    world.endbossAttackMusic.currentTime = 0;
+    world.endbossAttackMusic = null;
+    world.endbossAttackStarted = false; 
+  }
 }
 
-function muteSnoringSound(world) {
-  world?.character?.muteSnoringSound();
-}
-
-function muteSingleBottleSounds(bottle) {
-  muteSound(bottle, 'collect_sound');
-}
-
-document.getElementById("music-toggle-button")?.addEventListener("keydown", e => {
-  if (e.code === "Space" || e.key === " ") e.preventDefault();
-});
