@@ -54,19 +54,26 @@ constructor(c, k) {
     }
   };
 
-  checkCharacterCollisions = () => this.level.enemies.forEach(e => {
+ checkCharacterCollisions = () => {
+  let jumpedOnEnemy = false; 
+
+  this.level.enemies.forEach(e => {
     if (this.character.isColliding(e) && !this.character.isDead()) {
-      if (this.character.isAboveGround() && this.character.speedY <= 0) {
-        e.hit(); this.character.jump();
+      if (!jumpedOnEnemy && this.character.isAboveGround() && this.character.speedY <= 0) {
+        e.hit();
+        this.character.jump();
+        jumpedOnEnemy = true; 
         if (!isGameMuted) playSound(`audio/${e instanceof SmallChicken ? "small-chicken-hurt" : "chicken-hurt"}.mp3`);
-      } else {
+      } else if (!jumpedOnEnemy) { 
         this.character.hit();
         if (!isGameMuted) playSound("audio/character-hurt-sound.mp3");
         if (this.character.health === 0) this.character.life--;
+        this.statusBarHeartCharacter.setPercentage(this.character.health);
       }
-      this.statusBarHeartCharacter.setPercentage(this.character.health);
     }
   });
+};
+
 
   addToMap = mo => {
     if (mo.otherDirection) this.flipImage(mo);
