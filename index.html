@@ -16,9 +16,6 @@
     <div id="fullscreen">
       <h1>El Pollo Loco</h1>
       <canvas id="titleCanvas" width="720" height="100"></canvas>
-
-      <!-- Fullscreen-Button -->
-
       <canvas id="canvas" width="720" height="480"></canvas>
 
       <div id="controlsScreen" class="controls-screen" style="display: none">
@@ -60,6 +57,7 @@
           </div>
         </div>
       </div>
+
       <div id="storyScreen" class="story-container" style="display: none">
         <div class="button-container">
           <button class="button-start-screen" onclick="closeStory()">
@@ -82,30 +80,41 @@
           </div>
         </div>
       </div>
-      <div id="settingsScreen" class="settings-screen" style="display: none">
-        <div class="button-container">
-          <button class="button-start-screen" onclick="closeSettings()">
-            Back
-          </button>
-        </div>
-        <div class="fs-centered">
-          <div class="screen-title">
-            <h2>Settings</h2>
-          </div>
-          <div class="button-2-container">
-            <button id="fullscreen-btn" class="button-start-screen">
-              <span id="enter-text">Fullscreen</span>
-              <span id="exit-text" style="display: none">Leave Fullscreen</span>
-            </button>
-          </div>
-        </div>
-      </div>
+
       <div id="endScreen" class="end-screen" style="display: none">
         <button class="button-start-screen" onclick="returnToMenu()">
           Back to Menu
         </button>
       </div>
       <div id="content" class="content" style="display: none"></div>
+
+      <footer class="footer">
+        <a href="impressum.html">
+          <button class="button-footer" onclick="openImpressum">
+            Impressum
+          </button>
+        </a>
+
+        <button id="fullscreen-btn" class="button-footer">
+          <span id="fullscreen-enter-text">Fullscreen</span>
+          <span id="fullscreen-exit-text" style="display:none;">Leave Fullscreen</span>
+        </button>
+
+        <p>
+          © 2025 El Pollo Loco. <br />
+          All rights reserved.
+        </p>
+
+        <button
+          id="restart-game-button"
+          class="button-footer"
+          onclick="restartGame()"
+        >
+          Restart Game
+        </button>
+
+        <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">Sound: Off</button>
+      </footer>
     </div>
 
     <div id="startScreen" class="start-screen" style="display: flex">
@@ -115,33 +124,8 @@
           Controls
         </button>
         <button class="button-start-screen" onclick="openStory()">Story</button>
-        <button class="button-start-screen" onclick="openSettings()">
-          Settings
-        </button>
       </div>
     </div>
-
-    <footer class="footer">
-      <a href="impressum.html"
-        ><button class="button-footer" onclick="openImpressum">
-          Impressum
-        </button></a
-      >
-      <p>
-        © 2025 El Pollo Loco. <br />
-        All rights reserved.
-      </p>
-
-      <button
-        id="restart-game-button"
-        class="button-footer"
-        onclick="restartGame()"
-      >
-        Restart Game
-      </button>
-
-      <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">Sound: Off</button>
-    </footer>
 
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>

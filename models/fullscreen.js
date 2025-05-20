@@ -27,36 +27,50 @@ class Fullscreen {
 
   static resizeCanvas() {
     const canvas = document.getElementById("canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    if (canvas) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
   }
 
   static resetCanvas() {
     const canvas = document.getElementById("canvas");
-    canvas.width = 720;
-    canvas.height = 480;
+    if (canvas) {
+      canvas.width = 720;
+      canvas.height = 480;
+    }
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const fullscreenBtn = document.getElementById("fullscreen-btn");
-  const enterText = document.getElementById("enter-text");
-  const exitText = document.getElementById("exit-text");
+  const enterText = document.getElementById("fullscreen-enter-text");
+  const exitText = document.getElementById("fullscreen-exit-text");
   const fullscreenElement = document.getElementById("fullscreen");
+
+  // Aggiorna il testo del bottone in base allo stato fullscreen
+  function updateFullscreenButton() {
+    if (document.fullscreenElement) {
+      enterText.style.display = "none";
+      exitText.style.display = "inline";
+    } else {
+      enterText.style.display = "inline";
+      exitText.style.display = "none";
+    }
+  }
 
   fullscreenBtn.addEventListener("click", () => {
     if (!document.fullscreenElement) {
       Fullscreen.enterFullscreen(fullscreenElement);
-      enterText.style.display = "none";
-      exitText.style.display = "inline";
     } else {
       Fullscreen.exitFullscreen();
-      enterText.style.display = "inline";
-      exitText.style.display = "none";
     }
   });
 
-  document.addEventListener("resize", () => {
+  // Aggiorna il testo quando si entra/esce dal fullscreen
+  document.addEventListener("fullscreenchange", updateFullscreenButton);
+
+  window.addEventListener("resize", () => {
     if (document.fullscreenElement) {
       Fullscreen.resizeCanvas();
     }

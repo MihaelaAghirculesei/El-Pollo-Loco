@@ -111,15 +111,8 @@ canvas {
   transform: scale(1.1);
 }
 
-.button-2-container {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-}
-
 .controls-screen,
 .end-screen,
-.settings-screen,
 .story-container {
   position: absolute;
   top: 51%;
@@ -222,17 +215,36 @@ canvas {
 }
 
 footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  min-height: 60px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 100%;
   font-size: 24px;
   background-color: #0ff;
-  position: fixed;
-  bottom: 0;
   z-index: 1100;
+  box-sizing: border-box;
+}
+
+#fullscreen {
+  padding-bottom: 70px;
 }
 
 .button-footer {
   border: 3px solid rgb(5, 5, 5) !important;
+}
+
+@media (max-width: 600px) {
+  footer {
+    flex-direction: column;
+    font-size: 18px;
+    min-height: 100px;
+    padding: 10px 0;
+  }
+  .button-footer {
+    margin: 5px 0;
+  }
 }
