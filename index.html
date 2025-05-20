@@ -18,7 +18,7 @@
       <canvas id="titleCanvas" width="720" height="100"></canvas>
       <canvas id="canvas" width="720" height="480"></canvas>
 
-      <div id="controlsScreen" class="controls-screen" style="display: none">
+      <div id="controlsScreen" class="controls-screen">
         <div class="button-container">
           <button class="button-start-screen" onclick="closeControls()">
             Back
@@ -31,8 +31,8 @@
           <div class="controls">
             <div class="controls-container">
               <div class="box jc-center">
-                <img src="img_pollo_locco/img/10_buttons/LEFT_icon.png" />
-                <img src="img_pollo_locco/img/10_buttons/RIGHT_icon.png" />
+                <img src="img_pollo_locco/img/10_buttons/LEFT_icon.png" alt="Left" />
+                <img src="img_pollo_locco/img/10_buttons/RIGHT_icon.png" alt="Right" />
               </div>
               <div class="box jc-center">
                 <span>Use LEFT AND RIGHT Arrow Keys to move left or right</span>
@@ -40,7 +40,7 @@
             </div>
             <div class="controls-container">
               <div class="box jc-center">
-                <img src="img_pollo_locco/img/10_buttons/SPACE_icon.png" />
+                <img src="img_pollo_locco/img/10_buttons/SPACE_icon.png" alt="Space" />
               </div>
               <div class="box jc-center">
                 <span>Press <b>SPACE</b> to jump</span>
@@ -48,7 +48,7 @@
             </div>
             <div class="controls-container">
               <div class="box jc-center">
-                <img src="img_pollo_locco/img/10_buttons/D_icon.png" />
+                <img src="img_pollo_locco/img/10_buttons/D_icon.png" alt="D key" />
               </div>
               <div class="box jc-center">
                 <span>Press <b>D</b> to throw bottles at enemies</span>
@@ -56,9 +56,11 @@
             </div>
           </div>
         </div>
+
+
       </div>
 
-      <div id="storyScreen" class="story-container" style="display: none">
+      <div id="storyScreen" class="story-container">
         <div class="button-container">
           <button class="button-start-screen" onclick="closeStory()">
             Back
@@ -81,23 +83,22 @@
         </div>
       </div>
 
-      <div id="endScreen" class="end-screen" style="display: none">
+      <div id="endScreen" class="end-screen">
         <button class="button-start-screen" onclick="returnToMenu()">
           Back to Menu
         </button>
       </div>
-      <div id="content" class="content" style="display: none"></div>
+      
+      <div id="content" class="content"></div>
 
       <footer class="footer">
         <a href="impressum.html">
-          <button class="button-footer" onclick="openImpressum">
-            Impressum
-          </button>
+          <button class="button-footer">Impressum</button>
         </a>
 
         <button id="fullscreen-btn" class="button-footer">
           <span id="fullscreen-enter-text">Fullscreen</span>
-          <span id="fullscreen-exit-text" style="display:none;">Leave Fullscreen</span>
+          <span id="fullscreen-exit-text">Leave Fullscreen</span>
         </button>
 
         <p>
@@ -105,24 +106,20 @@
           All rights reserved.
         </p>
 
-        <button
-          id="restart-game-button"
-          class="button-footer"
-          onclick="restartGame()"
-        >
+        <button id="restart-game-button" class="button-footer" onclick="restartGame()">
           Restart Game
         </button>
 
-        <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">Sound: Off</button>
+        <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">
+          Sound: Off
+        </button>
       </footer>
     </div>
 
-    <div id="startScreen" class="start-screen" style="display: flex">
+    <div id="startScreen" class="start-screen">
       <div id="menu" class="menu">
         <button class="button-start-screen" onclick="startGame()">Play</button>
-        <button class="button-start-screen" onclick="openControls()">
-          Controls
-        </button>
+        <button class="button-start-screen" onclick="openControls()">Controls</button>
         <button class="button-start-screen" onclick="openStory()">Story</button>
       </div>
     </div>
@@ -147,7 +144,7 @@
     <script src="levels/level1.js"></script>
     <script src="models/throwable-object.class.js"></script>
     <script type="module" src="models/world.class.js"></script>
-    <script  type="module" src="js/game.js"></script>
+    <script type="module" src="js/game.js"></script>
     <script src="js/audio.js"></script>
     <script src="levels/fonts/particle-background.js"></script>
     <script src="models/fullscreen.js"></script>

@@ -39,22 +39,8 @@ canvas {
   height: 100px;
 }
 
-@media only screen and (max-width: 760px) {
-  h1 {
-    font-size: 40px;
-  }
-  canvas {
-    width: 100%;
-  }
-}
-
-@media only screen and (max-height: 480px) {
-  h1 {
-    font-size: 24px;
-  }
-  canvas {
-    height: 100vh;
-  }
+#fullscreen {
+  padding-bottom: 70px;
 }
 
 #content,
@@ -63,6 +49,11 @@ canvas {
   left: 50%;
   width: 720px;
   height: 480px;
+}
+
+#content {
+  top: 100px;
+  transform: translateX(-50%);
 }
 
 .menu,
@@ -79,12 +70,15 @@ canvas {
   top: 50%;
   transform: translate(-50%, -50%);
   align-items: flex-start;
+  display: flex;
 }
 
 .menu {
   align-items: center;
   width: 100%;
   padding-top: 20px;
+  justify-content: space-around;
+  
 }
 
 .button-start-screen,
@@ -93,22 +87,26 @@ canvas {
   background-color: #960b06;
   border: 3px solid #0ff;
   color: #0ff;
-  padding: 10px 20px;
+  padding: 8px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   border-radius: 20px;
-  margin: 0 10px;
+  margin: 0 8px;
   font-family: Arial, "nabla", Helvetica, sans-serif;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, font-size 0.3s ease, padding 0.3s ease;
 }
 
 .button-start-screen:hover,
 .button-footer:hover {
   background-color: #eb1111;
   transform: scale(1.1);
+}
+
+.button-footer {
+  border: 3px solid rgb(5, 5, 5) !important;
 }
 
 .controls-screen,
@@ -151,11 +149,6 @@ canvas {
 
 .controls-container img {
   margin: 0 10px;
-}
-
-#content {
-  top: 100px;
-  transform: translateX(-50%);
 }
 
 .popup {
@@ -223,18 +216,55 @@ footer {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: 24px;
+  /* font-size: 24px; */
   background-color: #0ff;
   z-index: 1100;
   box-sizing: border-box;
 }
 
-#fullscreen {
-  padding-bottom: 70px;
+#fullscreen-exit-text {
+  display: none;
 }
 
-.button-footer {
-  border: 3px solid rgb(5, 5, 5) !important;
+.box.jc-center {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 720px) {
+  #content,
+  .start-screen {
+    width: 95%; /* Statt fester 720px nehmen wir 95% der Bildschirmbreite */
+    max-width: 720px;
+    height: auto; /* Automatische Höhenanpassung */
+    max-height: 480px; /* Maximale Höhe begrenzen */
+    aspect-ratio: 3/2; /* Seitenverhältnis beibehalten (720:480 = 3:2) */
+  }
+  
+  canvas {
+    width: 100%;
+    height: 100%;
+    max-height: 480px;
+  }
+  
+  .controls-screen, 
+  .story-container, 
+  .end-screen {
+    width: 95%;
+    max-width: 720px;
+    height: auto;
+    max-height: 480px;
+    aspect-ratio: 3/2;
+    background-size: 100% 100%;
+  }
+  
+  h1 {
+    font-size: 40px;
+  }
+  
+  #fullscreen {
+    padding-bottom: 60px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -244,7 +274,59 @@ footer {
     min-height: 100px;
     padding: 10px 0;
   }
+  
   .button-footer {
     margin: 5px 0;
+    font-size: 14px;
+    padding: 7px 14px;
+  }
+  
+  .menu {
+    flex-direction: column;
+  }
+  
+  .button-start-screen {
+    margin: 5px 0;
+    font-size: 14px;
+    padding: 7px 14px;
+  }
+  
+  @media only screen and (max-height: 480px) {
+  h1 {
+    font-size: 24px;
+  }
+  
+  canvas {
+    height: 100vh;
+  }
+  
+  .controls-screen, 
+  .story-container, 
+  .end-screen {
+    height: 90vh;
+    max-height: 480px;
+  }
+  
+  /* Buttons noch kleiner machen */
+  .button-start-screen,
+  .button-popup,
+  .button-footer {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-width: 2px;
+    border-radius: 15px;
+  }
+}
+
+  /* Für sehr kleine Bildschirme */
+  @media (max-width: 400px) {
+    .button-start-screen,
+    .button-popup,
+    .button-footer {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-width: 2px;
+      border-radius: 12px;
+    }
   }
 }
