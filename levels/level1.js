@@ -1,8 +1,6 @@
-
 function createObjects(Constructor, positions) {
   return positions.map(pos => new Constructor(...(Array.isArray(pos) ? pos : [pos])));
 }
-
 const chickenPositions = [850, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500];
 const smallChickenPositions = [650, 1750, 1800, 2750, 3150, 3450, 3750, 4150, 4350, 4550];
 const cloudPositions = [100, 500, 900, 1300, 1700, 2100, 2500, 2900, 3300, 3700, 4100, 4500];
@@ -55,8 +53,15 @@ const backgroundPositions = [
   ["img_pollo_locco/img/5_background/layers/3_third_layer/1.png", 719 * 6],
   ["img_pollo_locco/img/5_background/layers/2_second_layer/1.png", 719 * 6],
   ["img_pollo_locco/img/5_background/layers/1_first_layer/1.png", 719 * 6],
+  ["img_pollo_locco/img/5_background/layers/air.png", 719 * 7],
+  ["img_pollo_locco/img/5_background/layers/3_third_layer/2.png", 719 * 7],
+  ["img_pollo_locco/img/5_background/layers/2_second_layer/2.png", 719 * 7],
+  ["img_pollo_locco/img/5_background/layers/1_first_layer/2.png", 719 * 7],
+  ["img_pollo_locco/img/5_background/layers/air.png", 719 * 8],
+  ["img_pollo_locco/img/5_background/layers/3_third_layer/1.png", 719 * 8],
+  ["img_pollo_locco/img/5_background/layers/2_second_layer/1.png", 719 * 8],
+  ["img_pollo_locco/img/5_background/layers/1_first_layer/1.png", 719 * 8],
 ];
-
 const level1 = new Level(
   [
     ...createObjects(Chicken, chickenPositions),
