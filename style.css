@@ -20,7 +20,7 @@ h1 {
   position: relative;
   color: #000;
   top: 0;
-  font-size: 60px;
+  font-size: clamp(24px, 5vw, 60px);
   letter-spacing: 3px;
   text-align: center;
   font-family: "nabla", Arial, Helvetica, sans-serif;
@@ -36,23 +36,25 @@ canvas {
 }
 
 #titleCanvas {
-  height: 100px;
+  height: clamp(60px, 10vh, 100px);
 }
 
 #fullscreen {
-  padding-bottom: 70px;
+  padding-bottom: clamp(50px, 7vh, 70px);
 }
 
 #content,
 .start-screen {
   position: absolute;
   left: 50%;
-  width: 720px;
-  height: 480px;
+  width: clamp(300px, 95%, 720px);
+  height: auto;
+  aspect-ratio: 3/2;
+  max-height: 480px;
 }
 
 #content {
-  top: 100px;
+  top: clamp(50px, 10vh, 100px);
   transform: translateX(-50%);
 }
 
@@ -76,24 +78,26 @@ canvas {
 .menu {
   align-items: center;
   width: 100%;
-  padding-top: 20px;
+  padding-top: clamp(10px, 2vh, 20px);
   justify-content: space-around;
-  
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .button-start-screen,
 .button-popup,
 .button-footer {
   background-color: #960b06;
-  border: 3px solid #0ff;
+  border: clamp(1px, 0.4vw, 3px) solid #0ff;
   color: #0ff;
-  padding: 8px 16px;
+  padding: clamp(5px, 1vw, 8px) clamp(10px, 2vw, 16px);
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
+  font-size: clamp(12px, 1.5vw, 14px);
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: clamp(12px, 2vw, 20px);
   margin: 0 8px;
   font-family: Arial, "nabla", Helvetica, sans-serif;
   transition: transform 0.3s ease, font-size 0.3s ease, padding 0.3s ease;
@@ -106,7 +110,7 @@ canvas {
 }
 
 .button-footer {
-  border: 3px solid rgb(5, 5, 5) !important;
+  border: clamp(1px, 0.4vw, 3px) solid rgb(5, 5, 5) !important;
 }
 
 .controls-screen,
@@ -118,15 +122,18 @@ canvas {
   transform: translate(-50%, -50%);
   background-image: url(img_pollo_locco/img/11_others/background-gamepad.png);
   background-repeat: no-repeat;
+  background-size: 100% 100%;
   color: rgb(13, 14, 14);
-  padding: 20px;
-  font-size: 15px;
+  padding: clamp(10px, 2vw, 20px);
+  font-size: clamp(12px, 1.5vw, 15px);
   border-radius: 10px;
   text-align: center;
   display: none;
   z-index: 3;
-  width: 720px;
-  height: 480px;
+  width: clamp(300px, 95%, 720px);
+  height: auto;
+  aspect-ratio: 3/2;
+  max-height: 480px;
 }
 
 .controls,
@@ -144,11 +151,11 @@ canvas {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: clamp(5px, 1vh, 10px);
 }
 
 .controls-container img {
-  margin: 0 10px;
+  margin: 0 clamp(5px, 1vw, 10px);
 }
 
 .popup {
@@ -157,12 +164,12 @@ canvas {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(14, 163, 233, 0.699);
-  padding: 20px;
-  border: 3px solid #0ff;
+  padding: clamp(10px, 2vw, 20px);
+  border: clamp(1px, 0.4vw, 3px) solid #0ff;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   z-index: 1000;
-  font-size: 18px;
+  font-size: clamp(14px, 2vw, 18px);
   text-align: center;
 }
 
@@ -182,7 +189,7 @@ canvas {
 }
 
 .game-over-screen img {
-  max-width: 50%;
+  max-width: clamp(30%, 50%, 60%);
   height: auto;
 }
 
@@ -203,7 +210,7 @@ canvas {
 
 .game-won-screen h1 {
   color: white;
-  font-size: 68px;
+  font-size: clamp(30px, 6vw, 68px);
   text-align: center;
 }
 
@@ -211,15 +218,31 @@ footer {
   position: fixed;
   left: 0;
   bottom: 0;
-  width: 100vw;
-  min-height: 60px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  /* font-size: 24px; */
+  width: 100%;
+  min-height: 40px;
   background-color: #0ff;
   z-index: 1100;
   box-sizing: border-box;
+  padding: 5px 10px;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-left, .footer-right {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-center {
+  font-size: clamp(14px, 3vw, 17px);
+  text-align: center;
 }
 
 #fullscreen-exit-text {
@@ -231,71 +254,33 @@ footer {
   justify-content: center;
 }
 
-@media (max-width: 720px) {
-  #content,
-  .start-screen {
-    width: 95%; /* Statt fester 720px nehmen wir 95% der Bildschirmbreite */
-    max-width: 720px;
-    height: auto; /* Automatische Höhenanpassung */
-    max-height: 480px; /* Maximale Höhe begrenzen */
-    aspect-ratio: 3/2; /* Seitenverhältnis beibehalten (720:480 = 3:2) */
-  }
-  
-  canvas {
-    width: 100%;
-    height: 100%;
-    max-height: 480px;
-  }
-  
-  .controls-screen, 
-  .story-container, 
-  .end-screen {
-    width: 95%;
-    max-width: 720px;
-    height: auto;
-    max-height: 480px;
-    aspect-ratio: 3/2;
-    background-size: 100% 100%;
-  }
-  
-  h1 {
-    font-size: 40px;
-  }
-  
-  #fullscreen {
-    padding-bottom: 60px;
-  }
-}
-
 @media (max-width: 600px) {
-  footer {
-    flex-direction: column;
-    font-size: 18px;
-    min-height: 100px;
-    padding: 10px 0;
+  .footer-content {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .footer-center {
+    order: -1;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size: 10px;
   }
   
   .button-footer {
-    margin: 5px 0;
-    font-size: 14px;
-    padding: 7px 14px;
+    padding: 3px 6px;
+    font-size: 10px;
+    border-width: 1px;
   }
   
-  .menu {
-    flex-direction: column;
+  footer {
+    padding: 5px;
   }
-  
-  .button-start-screen {
-    margin: 5px 0;
-    font-size: 14px;
-    padding: 7px 14px;
-  }
-  
-  @media only screen and (max-height: 480px) {
-  h1 {
-    font-size: 24px;
-  }
-  
+}
+
+@media only screen and (max-height: 480px) {
   canvas {
     height: 100vh;
   }
@@ -304,29 +289,5 @@ footer {
   .story-container, 
   .end-screen {
     height: 90vh;
-    max-height: 480px;
-  }
-  
-  /* Buttons noch kleiner machen */
-  .button-start-screen,
-  .button-popup,
-  .button-footer {
-    font-size: 12px;
-    padding: 6px 12px;
-    border-width: 2px;
-    border-radius: 15px;
-  }
-}
-
-  /* Für sehr kleine Bildschirme */
-  @media (max-width: 400px) {
-    .button-start-screen,
-    .button-popup,
-    .button-footer {
-      font-size: 12px;
-      padding: 5px 10px;
-      border-width: 2px;
-      border-radius: 12px;
-    }
   }
 }

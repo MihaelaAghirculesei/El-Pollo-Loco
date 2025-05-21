@@ -91,28 +91,31 @@
       
       <div id="content" class="content"></div>
 
-      <footer class="footer">
-        <a href="impressum.html">
-          <button class="button-footer">Impressum</button>
-        </a>
 
-        <button id="fullscreen-btn" class="button-footer">
-          <span id="fullscreen-enter-text">Fullscreen</span>
-          <span id="fullscreen-exit-text">Leave Fullscreen</span>
-        </button>
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-left">
+      <a href="impressum.html">
+        <button class="button-footer">Impressum</button>
+      </a>
+      <button id="fullscreen-btn" class="button-footer">
+        <span id="fullscreen-enter-text">Fullscreen</span>
+        <span id="fullscreen-exit-text">Leave Fullscreen</span>
+      </button>
+    </div>
+    
+    <div class="footer-center">
+      © 2025 El Pollo Loco.
+        All rights reserved.
+    </div>
 
-        <p>
-          © 2025 El Pollo Loco. <br />
-          All rights reserved.
-        </p>
+    <div class="footer-right">
+      <button id="restart-game-button" class="button-footer" onclick="restartGame()">
+        Restart Game
+      </button>
 
-        <button id="restart-game-button" class="button-footer" onclick="restartGame()">
-          Restart Game
-        </button>
-
-        <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">
-          Sound: Off
-        </button>
+      <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">
+        Sound: Off
       </footer>
     </div>
 
