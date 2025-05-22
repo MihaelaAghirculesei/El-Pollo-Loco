@@ -15,13 +15,14 @@ class ThrowableObject extends MovableObject {
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png",
   ];
 
-  constructor(x, y) {
+  constructor(x, y, direction = 1) {
     super();
     this.x = x;
     this.y = y;
     this.width = 60;
     this.height = 60;
     this.splashed = false;
+    this.direction = direction;
     this.loadImages(ThrowableObject.IMAGES_ROTATION);
     this.loadImages(ThrowableObject.IMAGES_SPLASH);
     this.setInitialImage();
@@ -40,7 +41,8 @@ class ThrowableObject extends MovableObject {
   }
 
   startMoving() {
-    this.movementInterval = setInterval(() => this.x += 10, 25);
+    let speed = this.direction === -1 ? 5 : 10;
+    this.movementInterval = setInterval(() => this.x += speed * this.direction, 30);
   }
 
   startRotationAnimation() {

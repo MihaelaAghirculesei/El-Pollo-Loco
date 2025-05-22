@@ -29,7 +29,7 @@ class Character extends MovableObject {
       if(this.world.keyboard.RIGHT) this.move("right");
       if(this.world.keyboard.LEFT) this.move("left");
       if(this.world.keyboard.SPACE && !this.isAboveGround()) { this.jump(); this.updateLastActionTime(); }
-      this.world.camera_x = -this.x + 100;
+      this.world.camera_x = -this.x + 300;
     }, 1000/60);
   }
 

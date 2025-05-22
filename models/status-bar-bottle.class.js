@@ -29,7 +29,7 @@ class StatusBarBottle extends DrawableObject {
   }
 
   setBottlesCount(count) {
-    this.bottlesCount = Math.max(0, Math.min(count, this.MAX_BOTTLES)); // tra 0 e MAX_BOTTLES
+    this.bottlesCount = Math.max(0, Math.min(count, this.MAX_BOTTLES)); 
     this.updateImage();
   }
 

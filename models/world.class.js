@@ -63,7 +63,14 @@ constructor(c, k) {
 
   checkThrowObjects = () => {
    if (this.keyboard.D && this.statusBarBottle.bottlesCount > 0) {
-    this.throwableObject.push(new ThrowableObject(this.character.x + 100, this.character.y + 100));
+    let direction = this.character.otherDirection ? -1 : 1;
+         this.throwableObject.push(
+        new ThrowableObject(
+          this.character.x + 10* direction,
+          this.character.y + 10,
+          direction
+        )
+      );     
     this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount - 1);
     }
   };

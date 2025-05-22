@@ -51,6 +51,5 @@ class DrawableObject {
       this.width - this.collisionOffsetLeft - this.collisionOffsetRight,
       this.height - this.collisionOffsetTop - this.collisionOffsetBottom
     );
-    // ctx.stroke();
   }
 }
