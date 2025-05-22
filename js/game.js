@@ -60,7 +60,11 @@ window.startGame = function () {
     document.getElementById("content").style.display = "block";
     setTimeout(() => {
         init();
-    }, 300);
+        // Footer auf Mobilgeräten nach 3 Sekunden ausblenden
+        if (isMobile()) {
+            document.querySelector('footer').style.display = 'none';
+        }
+    }, 3000); // 3 Sekunden warten
 };
 
 window.openControls = function () {
@@ -117,3 +121,43 @@ window.showFullscreenButton = showFullscreenButton;
 document.addEventListener("DOMContentLoaded", function() {
     hideFullscreenButton();
 });
+
+function isMobile() {
+  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+}
+
+function showMobileControls() {
+  if (isMobile()) {
+    document.getElementById('mobile-controls').style.display = '';
+
+    // Event Listener für Buttons
+    document.getElementById('btn-left').ontouchstart = () => keyboard.LEFT = true;
+    document.getElementById('btn-left').ontouchend = () => keyboard.LEFT = false;
+    document.getElementById('btn-right').ontouchstart = () => keyboard.RIGHT = true;
+    document.getElementById('btn-right').ontouchend = () => keyboard.RIGHT = false;
+    document.getElementById('btn-jump').ontouchstart = () => keyboard.SPACE = true;
+    document.getElementById('btn-jump').ontouchend = () => keyboard.SPACE = false;
+    document.getElementById('btn-throw').ontouchstart = () => keyboard.D = true; 
+    document.getElementById('btn-throw').ontouchend = () => keyboard.D = false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  showMobileControls();
+  checkOrientation();
+});
+
+function checkOrientation() {
+  const overlay = document.getElementById('rotate-device-overlay');
+  // Overlay zeigen, wenn Fenster höher als breit ist (Portrait)
+  if (window.innerHeight > window.innerWidth) {
+     if (!overlay) return;
+    overlay.style.display = 'flex';
+  } else {
+    overlay.style.display = 'none';
+  }
+}
+
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
+document.addEventListener('DOMContentLoaded', checkOrientation);

@@ -199,7 +199,8 @@ button:hover {
   height: 100%;
   background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
   background-repeat: no-repeat;
-  background-size: cover;
+   background-size: contain; 
+  /* background-size: cover; */
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -296,6 +297,120 @@ margin-bottom: 30px;
   font-weight: bold;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.55);
   margin-right: 7px;
+}
+
+#mobile-controls {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100vw;
+  text-align: center;
+  z-index: 1000;
+}
+#mobile-controls button {
+  font-size: 2em;
+  margin: 0 10px;
+}
+
+#rotate-device-overlay {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url(img_pollo_locco/img/5_background/layers/background-mesico.jpeg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  display: flex; /* Flexbox per centrare tutto */
+}
+
+.rotate-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.rotate-arrow {
+  font-size: 5rem;
+  color: #000000;
+  text-shadow: 2px 2px 6px #fdfdfd;
+  font-weight: bold;
+  margin-bottom: 20px;
+    margin-top: -20px; 
+  animation: arrowMove 2s infinite alternate;
+  text-align: center;
+}
+
+@keyframes arrowMove {
+  0% { transform: translateY(0); opacity: 0.5; }
+  100% { transform: translateY(20px); opacity: 1; }
+}
+
+#rotate-phone-img {
+  width: 120px;
+  transition: transform 1s;
+  animation: rotatePhone 2s infinite alternate;
+}
+
+@keyframes rotatePhone {
+  0% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(90deg) scale(1.1); }
+}
+
+.rotate-text {
+  font-size: 1.2em;
+  color: #fff;
+  text-align: center;
+  text-shadow: 2px 2px 6px #000;
+  font-weight: bold;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.699);
+  border-radius: 12px;
+  margin-top: 20px;
+}
+
+@media (max-width: 900px), (max-height: 600px) {
+  #content,
+  .start-screen {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    transform: none;
+    aspect-ratio: unset;
+    background: none;
+    box-shadow: none;
+  }
+  #titleCanvas {
+    display: none !important;
+  }
+  #canvas {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    display: block;
+  }
+  body {
+    overflow: hidden;
+  }
+
+     #titleCanvas,
+  h1 {
+    display: none !important;
+  }
 }
 
 @media (max-width: 600px) {

@@ -26,11 +26,17 @@ class Fullscreen {
   }
 
   static resizeCanvas() {
-    const canvas = document.getElementById("canvas");
-    if (canvas) {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    if (!canvas) return;
+    const aspect = 720 / 480;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    if (width / height > aspect) {
+      width = height * aspect;
+    } else {
+      height = width / aspect;
     }
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
   }
 
   static resetCanvas() {

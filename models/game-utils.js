@@ -1,4 +1,6 @@
 export function showGameOver(world) {
+    document.querySelectorAll('.game-over-screen').forEach(e => e.remove());
+
     if (world.gameOver) return;
     hideFooterButtonsAtEnd();
     world.gameOver = true;
@@ -21,9 +23,11 @@ export function showGameOver(world) {
     document.body.appendChild(gameOverScreen);
     document.querySelector("footer").style.display = "flex";
     if (!isGameMuted) playSound("audio/lose-game-sound.mp3");
-  }
+}
+
   
   export function showGameWon(world) {
+    document.querySelectorAll('.game-over-screen').forEach(e => e.remove());
     hideFooterButtonsAtEnd();
     let gameWonScreen = document.getElementById("game-won-screen");
     clearInterval(world.gameInterval);
