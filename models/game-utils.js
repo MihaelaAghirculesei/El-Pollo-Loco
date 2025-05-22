@@ -2,22 +2,20 @@ export function showGameOver(world) {
     if (world.gameOver) return;
     world.gameOver = true;
     clearInterval(world.gameInterval);
-    if (!isGameMuted) {
-      toggleSound();
-    }
     world.character.muteSnoringSound();
     if (world.endbossAttackMusic) {
         world.endbossAttackMusic.pause();
         world.endbossAttackMusic.currentTime = 0;
         world.endbossAttackMusic = null;
-      }
+    }
+    stopBackgroundMusic();
     document.getElementById("canvas").style.display = "none";
     document.getElementById("titleCanvas").style.display = "none";
     const gameOverScreen = document.createElement("div");
     gameOverScreen.classList.add("game-over-screen");
     const gameOverImage = document.createElement("img");
     gameOverImage.src =
-      "img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png";
+    "img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png";
     gameOverScreen.appendChild(gameOverImage);
     document.body.appendChild(gameOverScreen);
     document.querySelector("footer").style.display = "flex";
@@ -27,9 +25,6 @@ export function showGameOver(world) {
   export function showGameWon(world) {
     let gameWonScreen = document.getElementById("game-won-screen");
     clearInterval(world.gameInterval);
-    if (!isGameMuted) {
-      toggleSound();
-    }
     if (world.character) {
       world.character.muteSnoringSound();
     }
@@ -37,7 +32,8 @@ export function showGameOver(world) {
       world.endbossAttackMusic.pause();
       world.endbossAttackMusic.currentTime = 0;
       world.endbossAttackMusic = null;
-}
+    }
+    stopBackgroundMusic();
     if (!gameWonScreen) {
       gameWonScreen = document.createElement("div");
       gameWonScreen.id = "game-won-screen";
