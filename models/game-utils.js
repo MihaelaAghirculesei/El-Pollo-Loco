@@ -21,7 +21,7 @@ export function showGameOver(world) {
     gameOverScreen.appendChild(gameOverImage);
     document.body.appendChild(gameOverScreen);
     document.querySelector("footer").style.display = "flex";
-    playSound("audio/lose-game-sound.mp3");
+    if (!isGameMuted) playSound("audio/lose-game-sound.mp3");
   }
   
   export function showGameWon(world) {
@@ -46,7 +46,7 @@ export function showGameOver(world) {
       gameWonText.textContent = "You Won!";
       gameWonScreen.appendChild(gameWonText);
       document.body.appendChild(gameWonScreen);
-      playSound("audio/winning-game-sound.mp3");
+     if (!isGameMuted) playSound("audio/winning-game-sound.mp3");
     }
   }
   

@@ -195,7 +195,9 @@ playEndbossAttackMusic() {
       <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
     `;
     document.body.appendChild(popup);
+     if (!isGameMuted) {
     new Audio("audio/new-life.mp3").play();
+     }
     setTimeout(() => popup.remove(), 1000);
   };
 }
