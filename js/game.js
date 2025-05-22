@@ -3,6 +3,7 @@ import { World } from "../models/world.class.js";
 let canvas;
 let world;
 let keyboard = new Keyboard();
+window.hideFooterButtonsAtEnd = hideFooterButtonsAtEnd;
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -54,6 +55,7 @@ window.addEventListener("keyup", (e) => {
 });
 
 window.startGame = function () {
+    showFullscreenButton();
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("content").style.display = "block";
     setTimeout(() => {
@@ -91,3 +93,27 @@ window.closeSettings = function () {
 window.restartGame = function () {
     location.reload();
 };
+
+function hideFooterButtonsAtEnd() {
+  document.getElementById('fullscreen-btn').style.display = 'none';
+  document.getElementById('music-toggle-button').style.display = 'none';
+}
+
+function showFooterButtons() {
+  document.getElementById('fullscreen-btn').style.display = '';
+  document.getElementById('music-toggle-button').style.display = '';
+}
+
+function hideFullscreenButton() {
+  document.getElementById('fullscreen-btn').style.display = 'none';
+}
+
+function showFullscreenButton() {
+  document.getElementById('fullscreen-btn').style.display = '';
+}
+window.hideFullscreenButton = hideFullscreenButton;
+window.showFullscreenButton = showFullscreenButton;
+
+document.addEventListener("DOMContentLoaded", function() {
+    hideFullscreenButton();
+});

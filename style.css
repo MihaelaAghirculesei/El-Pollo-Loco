@@ -87,9 +87,10 @@ canvas {
 
 .button-start-screen,
 .button-popup,
-.button-footer {
+.button-footer,
+button  {
   background-color: #960b06;
-  border: clamp(1px, 0.4vw, 3px) solid #0ff;
+   border: clamp(1px, 0.5vw, 4px) solid #222 !important;
   color: #0ff;
   padding: clamp(5px, 1vw, 8px) clamp(10px, 2vw, 16px);
   text-align: center;
@@ -100,17 +101,16 @@ canvas {
   border-radius: clamp(12px, 2vw, 20px);
   margin: 0 8px;
   font-family: Arial, "nabla", Helvetica, sans-serif;
-  transition: transform 0.3s ease, font-size 0.3s ease, padding 0.3s ease;
+   transition: transform 0.3s ease, font-size 0.3s ease, padding 0.3s ease, box-shadow 0.3s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1.5px 0 #000;
 }
 
 .button-start-screen:hover,
-.button-footer:hover {
+.button-footer:hover,
+.button-popup:hover,
+button:hover {
   background-color: #eb1111;
   transform: scale(1.1);
-}
-
-.button-footer {
-  border: clamp(1px, 0.4vw, 3px) solid rgb(5, 5, 5) !important;
 }
 
 .controls-screen,
@@ -183,7 +183,7 @@ canvas {
   transform: translate(-50%, -50%);
   background-color: rgba(14, 163, 233, 0.699);
   padding: clamp(10px, 2vw, 20px);
-  border: clamp(1px, 0.4vw, 3px) solid #0ff;
+  border: clamp(2px, 0.5vw, 4px) solid #222;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   z-index: 1000;

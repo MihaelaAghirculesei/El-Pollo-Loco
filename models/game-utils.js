@@ -1,5 +1,6 @@
 export function showGameOver(world) {
     if (world.gameOver) return;
+    hideFooterButtonsAtEnd();
     world.gameOver = true;
     clearInterval(world.gameInterval);
     world.character.muteSnoringSound();
@@ -23,6 +24,7 @@ export function showGameOver(world) {
   }
   
   export function showGameWon(world) {
+    hideFooterButtonsAtEnd();
     let gameWonScreen = document.getElementById("game-won-screen");
     clearInterval(world.gameInterval);
     if (world.character) {
