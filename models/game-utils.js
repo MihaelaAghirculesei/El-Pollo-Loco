@@ -49,6 +49,7 @@ export function showGameOver(world) {
       gameWonScreen.appendChild(gameWonText);
       document.body.appendChild(gameWonScreen);
      if (!isGameMuted) playSound("audio/winning-game-sound.mp3");
+     gameWonScreen.style.display = "flex";
     }
   }
   
