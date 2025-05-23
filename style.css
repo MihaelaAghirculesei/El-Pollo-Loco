@@ -85,6 +85,10 @@ canvas {
   gap: 10px;
 }
 
+footer.footer {
+  display: flex;
+}
+
 .button-start-screen,
 .button-popup,
 .button-footer,
@@ -218,7 +222,7 @@ button:hover {
   width: 100%;
   height: 100%;
   background-size: cover !important;
-  background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
+  background-image: url("img_pollo_locco/img/11_others/Designer.png");
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -303,13 +307,27 @@ margin-bottom: 30px;
   position: fixed;
   bottom: 20px;
   left: 0;
-  width: 100vw;
+  width: 100%;
   text-align: center;
   z-index: 1000;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
-#mobile-controls button {
-  font-size: 2em;
-  margin: 0 10px;
+
+.mobile-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0 5px;
+  touch-action: manipulation;
+}
+
+.mobile-btn img {
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
 }
 
 #rotate-device-overlay {

@@ -60,11 +60,21 @@ window.startGame = function () {
     document.getElementById("content").style.display = "block";
     setTimeout(() => {
         init();
-        // Footer auf Mobilgeräten nach 3 Sekunden ausblenden
         if (isMobile()) {
             document.querySelector('footer').style.display = 'none';
+            document.getElementById('mobile-controls').style.display = 'flex';
         }
-    }, 3000); // 3 Sekunden warten
+    }, 1000); 
+};
+
+window.returnToMenu = function() {
+    document.getElementById("startScreen").style.display = "flex";
+    document.getElementById("content").style.display = "none";
+    if (isMobile()) {
+        document.getElementById('footer').style.display = 'flex';
+        document.getElementById('mobile-controls').style.display = 'none';
+    }
+    location.reload();
 };
 
 window.openControls = function () {
@@ -128,9 +138,10 @@ function isMobile() {
 
 function showMobileControls() {
   if (isMobile()) {
-    document.getElementById('mobile-controls').style.display = '';
-
-    // Event Listener für Buttons
+    document.getElementById('mobile-controls').style.display = 'flex';
+    document.getElementById('btn-restart').ontouchstart = () => {
+      window.restartGame();
+    };
     document.getElementById('btn-left').ontouchstart = () => keyboard.LEFT = true;
     document.getElementById('btn-left').ontouchend = () => keyboard.LEFT = false;
     document.getElementById('btn-right').ontouchstart = () => keyboard.RIGHT = true;
@@ -149,7 +160,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function checkOrientation() {
   const overlay = document.getElementById('rotate-device-overlay');
-  // Overlay zeigen, wenn Fenster höher als breit ist (Portrait)
   if (window.innerHeight > window.innerWidth) {
      if (!overlay) return;
     overlay.style.display = 'flex';
