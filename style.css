@@ -201,6 +201,7 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
+   background-size: cover !important;
   background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
   background-repeat: no-repeat;
    background-size: contain; 
@@ -303,18 +304,41 @@ margin-bottom: 30px;
 }
 
 #mobile-controls {
-  display: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 10px;
   position: fixed;
-  bottom: 5px;
+  bottom: 0;
   left: 0;
-  width: 100%;
-  text-align: center;
+  width: 100vw;
   z-index: 1000;
- justify-content: space-around;
-  padding: 0 10px;
   box-sizing: border-box;
+  pointer-events: none;
 }
 
+.mobile-button-container-bottom-left,
+.mobile-button-container-bottom-right,
+.mobile-button-container-bottom-settings {
+  display: flex;
+  gap: 10px;
+  pointer-events: auto; 
+}
+
+.mobile-button-container-bottom-left {
+  justify-content: flex-start;
+}
+
+.mobile-button-container-bottom-right {
+  justify-content: flex-end;
+}
+
+.mobile-button-container-bottom-settings {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .mobile-btn {
   background-color: #0ff;
   border: 2px solid #222;
@@ -322,6 +346,7 @@ margin-bottom: 30px;
   padding: 3px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1.5px 0 #000;;
   touch-action: manipulation;
+  display: flex;
 }
 
 .mobile-btn img {

@@ -21,16 +21,11 @@ export function showGameOver(world) {
     "img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png";
     gameOverScreen.appendChild(gameOverImage);
     document.body.appendChild(gameOverScreen);
-
-    if (isMobile()) {
-        document.getElementById('mobile-controls').style.display = 'none';
-        document.getElementById('footer').style.display = 'flex';
-    } else {
-        document.getElementById('footer').style.display = 'flex';
-    }
+    document.querySelector("footer").style.display = "flex";
     if (!isGameMuted) playSound("audio/lose-game-sound.mp3");
 }
 
+  
   export function showGameWon(world) {
     document.querySelectorAll('.game-over-screen').forEach(e => e.remove());
     hideFooterButtonsAtEnd();
@@ -53,18 +48,11 @@ export function showGameOver(world) {
       gameWonText.textContent = "You Won!";
       gameWonScreen.appendChild(gameWonText);
       document.body.appendChild(gameWonScreen);
-      if (!isGameMuted) playSound("audio/winning-game-sound.mp3");
-      gameWonScreen.style.display = "flex";
+     if (!isGameMuted) playSound("audio/winning-game-sound.mp3");
+     gameWonScreen.style.display = "flex";
     }
-
-    if (isMobile()) {
-        document.getElementById('mobile-controls').style.display = 'none';
-        document.querySelector('footer').style.display = '';
-    } else {
-        document.querySelector("footer").style.display = "flex";
-    }
-}
-
+  }
+  
   export function checkGameEnd(world) {
     const endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
     if (world.character.isDead()) {
