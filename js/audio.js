@@ -45,16 +45,13 @@ function muteArraySounds(arr, prop) {
 }
 
 function muteAllSounds(world) {
-  muteArraySounds(world?.level?.bottle, 'collect_sound');
-  muteSound(world?.character, 'hurt_sound');
-  muteArraySounds(world?.level?.enemies, 'chicken_sound');
-  world?.level?.endboss?.forEach(e => {
-    muteSound(e, 'alert_sound');
-    muteSound(e, 'hurt_sound');
-    muteSound(e, 'dead_sound');
-  });
-  muteArraySounds(world?.level?.coins, 'collect_sound');
-  world?.character?.muteSnoringSound();
+  const { level, character } = world || {};
+  muteArraySounds(level?.bottle, 'collect_sound');
+  muteSound(character, 'hurt_sound');
+  muteArraySounds(level?.enemies, 'chicken_sound');
+  level?.endboss?.forEach(e => ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(s => muteSound(e, s)));
+  muteArraySounds(level?.coins, 'collect_sound');
+  character?.muteSnoringSound();
 }
 
 function gameWonSound() {
@@ -75,19 +72,18 @@ function toggleSound(world) {
   const btn = document.getElementById("music-toggle-button");
   if (!isGameMuted) {
     stopBackgroundMusic();
-    btn.innerText = "Sound: Off";
     muteAllSounds(world);
     stopEndbossAttackMusic(world);
-    isGameMuted = true;
+    btn.innerText = "Sound: Off";
   } else {
     if (!isMusicPlaying) {
       playBackgroundMusic();
       world?.character?.playSnoringSound();
     }
     btn.innerText = "Sound: On";
-    isGameMuted = false;
   }
-    btn.blur();
+  isGameMuted = !isGameMuted;
+  btn.blur();
 }
 
 function stopEndbossAttackMusic(world) {
@@ -98,4 +94,3 @@ function stopEndbossAttackMusic(world) {
     world.endbossAttackStarted = false; 
   }
 }
-
