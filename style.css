@@ -61,6 +61,8 @@ canvas {
 #content {
   top: clamp(50px, 10vh, 100px);
   transform: translateX(-50%);
+  pointer-events: none !important;
+  z-index: 0 !important;
 }
 
 .menu,
