@@ -9,6 +9,7 @@ function init() {
     canvas = document.getElementById("canvas");
     world = new World(canvas, keyboard);
     window.world = world;
+    world.startEnemiesAnimation(); 
     toggleSound(world);
 }
 

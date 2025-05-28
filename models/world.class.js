@@ -61,6 +61,14 @@ constructor(c, k) {
     if (!this.gameOver) requestAnimationFrame(this.draw);
   };
 
+startEnemiesAnimation() {
+  this.level.enemies.forEach(e => {
+    if ((e instanceof Chicken || e instanceof SmallChicken) && typeof e.animate === "function") {
+      e.animate();
+    }
+  });
+}
+
   checkThrowObjects = () => {
    if (this.keyboard.D && this.statusBarBottle.bottlesCount > 0) {
     let direction = this.character.otherDirection ? -1 : 1;
@@ -145,6 +153,7 @@ constructor(c, k) {
       const enemy = Math.random() < 0.5 ? new Chicken(this) : new SmallChicken(this);
       enemy.x = this.character.x + 800 + Math.random() * 300;
       enemy.world = this;
+      enemy.animate();
       this.level.enemies.push(enemy);
     }
   }, 5000);
