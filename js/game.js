@@ -56,7 +56,7 @@ window.addEventListener("keyup", (e) => {
 });
 
 window.startGame = function () {
-    showFullscreenButton();
+    showExpandScreenButton();
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("content").style.display = "block";
     setTimeout(() => {
@@ -110,27 +110,27 @@ window.restartGame = function () {
 };
 
 function hideFooterButtonsAtEnd() {
-  document.getElementById('fullscreen-btn').style.display = 'none';
+  document.getElementById('expand-screen-btn').style.display = 'none';
   document.getElementById('music-toggle-button').style.display = 'none';
 }
 
 function showFooterButtons() {
-  document.getElementById('fullscreen-btn').style.display = '';
+  document.getElementById('expand-screen-btn').style.display = '';
   document.getElementById('music-toggle-button').style.display = '';
 }
 
-function hideFullscreenButton() {
-  document.getElementById('fullscreen-btn').style.display = 'none';
+function hideExpandScreenButton() {
+  document.getElementById('expand-screen-btn').style.display = 'none';
 }
 
-function showFullscreenButton() {
-  document.getElementById('fullscreen-btn').style.display = '';
+function showExpandScreenButton() {
+  document.getElementById('expand-screen-btn').style.display = '';
 }
-window.hideFullscreenButton = hideFullscreenButton;
-window.showFullscreenButton = showFullscreenButton;
+window.hideExpandScreenButton = hideExpandScreenButton;
+window.showExpandScreenButton = showExpandScreenButton;
 
 document.addEventListener("DOMContentLoaded", function() {
-    hideFullscreenButton();
+    hideExpandScreenButton();
 });
 
 function isMobile() {

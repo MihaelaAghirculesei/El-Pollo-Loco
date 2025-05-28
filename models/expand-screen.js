@@ -1,5 +1,5 @@
-class Fullscreen {
-  static enterFullscreen(element) {
+class ExpandScreen  {
+  static enterExpandScreen(element) {
     if (element.requestFullscreen) {
       element.requestFullscreen();
     } else if (element.msRequestFullscreen) {
@@ -12,7 +12,7 @@ class Fullscreen {
     this.resizeCanvas();
   }
 
-  static exitFullscreen() {
+  static exitExpandScreen() {
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {
@@ -26,17 +26,19 @@ class Fullscreen {
   }
 
   static resizeCanvas() {
-    if (!canvas) return;
-    const aspect = 720 / 480;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    if (width / height > aspect) {
-      width = height * aspect;
-    } else {
-      height = width / aspect;
+const canvas = document.getElementById("canvas");
+  if (!canvas) return;
+  if (document.fullscreenElement) {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.width = '100vw';
+    canvas.style.height = '100dvh'; 
+  } else {
+    canvas.width = 720;
+    canvas.height = 480;
+    canvas.style.width = '';
+    canvas.style.height = '';
     }
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
   }
 
   static resetCanvas() {
@@ -49,13 +51,12 @@ class Fullscreen {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const fullscreenBtn = document.getElementById("fullscreen-btn");
-  const enterText = document.getElementById("fullscreen-enter-text");
-  const exitText = document.getElementById("fullscreen-exit-text");
-  const fullscreenElement = document.getElementById("fullscreen");
+  const expandScreenBtn = document.getElementById("expand-screen-btn");
+  const enterText = document.getElementById("expand-screen-enter-text");
+  const exitText = document.getElementById("expand-screen-exit-text");
+  const expandScreenElement = document.getElementById("expand-screen");
 
-  // Aggiorna il testo del bottone in base allo stato fullscreen
-  function updateFullscreenButton() {
+  function updateExpandScreenButton() {
     if (document.fullscreenElement) {
       enterText.style.display = "none";
       exitText.style.display = "inline";
@@ -65,20 +66,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  fullscreenBtn.addEventListener("click", () => {
+  expandScreenBtn.addEventListener("click", () => {
     if (!document.fullscreenElement) {
-      Fullscreen.enterFullscreen(fullscreenElement);
+      ExpandScreen.enterExpandScreen(expandScreenElement);
     } else {
-      Fullscreen.exitFullscreen();
+      ExpandScreen.exitExpandScreen();
     }
   });
 
-  // Aggiorna il testo quando si entra/esce dal fullscreen
-  document.addEventListener("fullscreenchange", updateFullscreenButton);
+  document.addEventListener("fullscreenchange", () => {
+    updateExpandScreenButton();
+    ExpandScreen.resizeCanvas();
+  });
 
   window.addEventListener("resize", () => {
     if (document.fullscreenElement) {
-      Fullscreen.resizeCanvas();
+      ExpandScreen.resizeCanvas();
     }
   });
 
@@ -88,3 +91,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
