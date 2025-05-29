@@ -4,6 +4,7 @@ let canvas;
 let world;
 let keyboard = new Keyboard();
 window.hideFooterButtonsAtEnd = hideFooterButtonsAtEnd;
+window.showFooterOnGameEnd = showFooterOnGameEnd;
 
 function init() {
     canvas = document.getElementById("canvas");
@@ -112,6 +113,13 @@ window.restartGame = function () {
 function hideFooterButtonsAtEnd() {
   document.getElementById('expand-screen-btn').style.display = 'none';
   document.getElementById('music-toggle-button').style.display = 'none';
+}
+
+function showFooterOnGameEnd() {
+  if (isMobile()) {
+    document.querySelector('footer').style.display = 'flex';
+    document.getElementById('mobile-controls').style.display = 'none';
+  }
 }
 
 function showFooterButtons() {
