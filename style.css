@@ -101,7 +101,7 @@ footer.footer {
 .button-footer,
 button  {
   background-color: #960b06;
-   border: clamp(1px, 0.5vw, 4px) solid #222 !important;
+  border: clamp(1px, 0.5vw, 4px) solid #222 !important;
   color: #0ff;
   padding: clamp(5px, 1vw, 8px) clamp(10px, 2vw, 16px);
   text-align: center;
@@ -112,7 +112,7 @@ button  {
   border-radius: clamp(12px, 2vw, 20px);
   margin: 0 8px;
   font-family: Arial, "nabla", Helvetica, sans-serif;
-   transition: transform 0.3s ease, font-size 0.3s ease, padding 0.3s ease, box-shadow 0.3s;
+  transition: transform 0.3s ease, font-size 0.3s ease, padding 0.3s ease, box-shadow 0.3s;
   box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1.5px 0 #000;
 }
 
@@ -178,7 +178,7 @@ button:hover {
 }
 
 .controls-container img {
-   margin-left: 0;
+  margin-left: 0;
   margin-right: clamp(5px, 1vw, 10px);
   max-width: 40px;
   width: 20vw;
@@ -208,10 +208,9 @@ button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-   background-size: cover !important;
+  background-size: cover !important;
   background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
   background-repeat: no-repeat;
-   background-size: contain; 
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -370,7 +369,7 @@ margin-bottom: 30px;
   left: 0;
   width: 100vw;
   height: 100vh;
-   background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
+  background-image: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -394,7 +393,7 @@ margin-bottom: 30px;
   text-shadow: 2px 2px 6px #fdfdfd;
   font-weight: bold;
   margin-bottom: 20px;
-    margin-top: -20px; 
+  margin-top: -20px; 
   animation: arrowMove 2s infinite alternate;
   text-align: center;
 }
@@ -446,12 +445,7 @@ margin-bottom: 30px;
   position: relative;
 }
 
-/* #expand-screen:fullscreen h1,
-#expand-screen:fullscreen #titleCanvas  {
-  display: none !important;
-} */
-
-@media (max-width: 900px), (max-height: 600px) {
+@media (max-width: 1370px) {
   #content,
   .start-screen {
     position: fixed !important;
@@ -473,16 +467,6 @@ margin-bottom: 30px;
     flex-direction: column !important;
   }
 
-  .start-screen {
-  z-index: 2;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  align-items: flex-start;
-  display: flex;
-}
-
   #titleCanvas,
   h1 {
     display: none !important;
@@ -498,11 +482,6 @@ margin-bottom: 30px;
     overflow: hidden;
   }
 
-     #titleCanvas,
-  h1 {
-    display: none !important;
-  }
-
   .game-over-screen {
     background-image: none !important;
   }
@@ -514,9 +493,8 @@ margin-bottom: 30px;
     background-position: center !important;
   }
   footer {
-      flex: 0 0 auto;
-  min-height: 60px;
-    /* position: fixed; */
+    flex: 0 0 auto;
+    min-height: 60px;
     left: 0;
     bottom: 0;
     width: 100vw;
@@ -524,7 +502,7 @@ margin-bottom: 30px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1370px) {
  .controls-screen {
     width: 95vw;
     max-width: 99vw;
@@ -573,7 +551,7 @@ margin-bottom: 30px;
   }
 }
 
-@media only screen and (max-height: 480px) {
+@media only screen and (max-height: 920px) {
   canvas {
     height: 100vh;
   }

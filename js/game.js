@@ -134,14 +134,14 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function isMobile() {
-  return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
 
 function showMobileControls() {
   if (isMobile()) {
     document.getElementById('mobile-controls').style.display = 'flex';
     document.getElementById('btn-restart').ontouchstart = () => {
-      window.restartGame();
+    window.restartGame();
     };
     document.getElementById('btn-left').ontouchstart = () => keyboard.LEFT = true;
     document.getElementById('btn-left').ontouchend = () => keyboard.LEFT = false;
