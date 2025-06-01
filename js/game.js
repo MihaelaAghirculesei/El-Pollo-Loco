@@ -3,6 +3,7 @@ import { World } from "../models/world.class.js";
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let isMuted = false; 
 window.hideFooterButtonsAtEnd = hideFooterButtonsAtEnd;
 window.showFooterOnGameEnd = showFooterOnGameEnd;
 
@@ -145,6 +146,23 @@ function isMobile() {
   return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
 
+function toggleMobileAudio() {
+    const audioIcon = document.getElementById('audio-icon');
+    
+    if (window.world) {
+        toggleSound(world);
+        const isMuted = world.soundMuted || (world.character && world.character.world && world.character.world.soundMuted);
+        audioIcon.src = isMuted 
+            ? 'img_pollo_locco/img/10_buttons/sound-icon-off.png'
+            : 'img_pollo_locco/img/10_buttons/sound-icon-on.png';
+    } else {
+        isMuted = !isMuted;
+        audioIcon.src = isMuted
+            ? 'img_pollo_locco/img/10_buttons/sound-icon-off.png'
+            : 'img_pollo_locco/img/10_buttons/sound-icon-on.png';
+    }
+}
+
 function showMobileControls() {
   if (isMobile()) {
     document.getElementById('mobile-controls').style.display = 'flex';
@@ -158,7 +176,12 @@ function showMobileControls() {
     document.getElementById('btn-jump').ontouchstart = () => keyboard.SPACE = true;
     document.getElementById('btn-jump').ontouchend = () => keyboard.SPACE = false;
     document.getElementById('btn-throw').ontouchstart = () => keyboard.D = true; 
-    document.getElementById('btn-throw').ontouchend = () => keyboard.D = false;
+    document.getElementById('btn-throw').ontouchend = () => keyboard.D = false;   
+
+    document.getElementById('btn-audio').ontouchstart = (e) => {
+        e.preventDefault();
+        toggleMobileAudio();
+    };
   }
 }
 
