@@ -1,136 +1,155 @@
-header {
-  background-color: aqua;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  margin-top: auto;
-  
-  h1 {
-    display: block;
-    position: relative;
-      color: #000;
-      font-size: 4vw;
-      letter-spacing: 3px;
-      text-align: center;
-      font-family: "nabla", Arial, Helvetica, sans-serif;
-      text-shadow: 2px 2px 0 #661515, -6px -6px 0 #661515, 2px -2px 0 #661515, -2px 2px 0 #661515;
-  }
-}
-
 @font-face {
   font-family: "nabla";
   src: url(levels/fonts/nabla-regular-variable-font.ttf) format("truetype");
 }
 
-.main-impressum {
+html {
+  font-size: clamp(16px, 1.2vw + 1rem, 18px);
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
   font-size: 1rem;
-  padding: 20px;
+  line-height: 1.6;
+  background-image: url(img_pollo_locco/img/11_others/background-water.jpg);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 50px;
+}
+
+/* ===================================
+   HEADER 
+=================================== */
+header {
+  width: 100%;
+  background-color: aqua;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+header h1 {
+  margin: 0;
+  color: #000;
+  font-size: clamp(2.2rem, 4vw + 1rem, 3rem);
+  letter-spacing: 0.05em;
+  text-align: center;
+  font-family: "nabla", Arial, Helvetica, sans-serif;
+  text-shadow: 1px 1px 0 #661515, -3px -3px 0 #661515, 1px -1px 0 #661515, -1px 1px 0 #661515;
+  line-height: 1.1;
+}
+
+/* ===================================
+   MAIN CONTENT 
+=================================== */
+.main-impressum {
+  font-size: 1.1rem;
+  padding: 1.5rem;
   max-width: 800px;
   margin: 0 auto;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
-  background-image: url(img_pollo_locco/img/11_others/background-water.jpg);
-  background-size: cover;
-  background-position: center;
-}
-
+/* ===================================
+   FOOTER 
+=================================== */
 footer {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  background-color: #0ff;
   position: fixed;
+  left: 0;
   bottom: 0;
+  width: 100%;
+  min-width: 0;
+  background-color: #0ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
   z-index: 1100;
-  padding: 5px 10px;
-
-  .button-footer {
-    background-color: #960b06;
-    border: 3px solid #222 !important;
-    color: #0ff;
-    padding: 10px 20px;
-    text-align: center;
-    border-radius: 20px;
-    margin: 5px 10px;
-    font-family: Arial, "nabla", Helvetica, sans-serif;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1.5px 0 #000;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .button-footer:hover {
-    background-color: #eb1111;
-    transform: scale(1.1);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 2px 0 #000;
-  }
-
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  box-sizing: border-box;
+  min-height: 40px;
+}
+footer p {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+footer .button-footer {
+  background-color: #960b06;
+  border: 2px solid #222;
+  color: #0ff;
+  padding: 0.5em 1.2em;
+  border-radius: 20px;
+  font-family: Arial, "nabla", Helvetica, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1.5px 0 #000;
+  transition: transform 0.3s, box-shadow 0.3s;
+  font-size: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+footer .button-footer:hover {
+  background-color: #eb1111;
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 2px 0 #000;
 }
 
-@media screen and (max-width: 768px) {
-  .main-impressum {
-      padding: 10px;
-  }
-
+/* ===================================
+   RESPONSIVE 
+=================================== */
+@media (max-width: 600px) {
   header {
-      padding: 10px;
+    padding: 0.3rem 0.5rem;
   }
-
+  header h1 {
+    font-size: clamp(1.5rem, 8vw, 2.2rem);
+    letter-spacing: 0.02em;
+  }
+  .main-impressum {
+    font-size: 1rem;
+    padding: 0.8rem;
+    margin-bottom: 40px;
+  }
   footer {
-      flex-direction: column;
-      text-align: center;
-      font-size: 4vw;
-
-      .button-footer {
-          padding: 10px;
-      }
-    p {
-      margin: 0%;
-      max-width: 260px;
-    }
+    font-size: clamp(0.85rem, 4vw, 1rem);
+    gap: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    min-height: 34px;
+  }
+  footer .button-footer {
+    padding: 0.3em 0.8em;
+    border-radius: 10px;
+    font-size: inherit;
   }
 }
-
-@media screen and (max-width: 480px) {
-  body {
-      font-size: 4vw;
+@media (max-width: 360px) {
+  header h1 {
+    font-size: clamp(1.1rem, 9vw, 1.5rem);
+    letter-spacing: 0;
   }
-
-  .main-impressum {
-      font-size: 4vw;
-  }
-
-  .ul {
-    padding-left: 15px;
-  }
-
   footer {
-    flex-direction: column;
-    padding: 4px 8px;
-    gap: 4px;
-    font-size: 12px;
-
-      .button-footer {
-          font-size: 12px; 
-          padding: 8px 12px;
-          width: 100%;
-          max-width: 260px;
-      }
+    font-size: 0.75rem;
+    min-height: 28px;
+    gap: 0.3rem;
+  }
+  footer .button-footer {
+    padding: 0.2em 0.6em;
+    border-radius: 6px;
   }
 
-  img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 0 auto;
+   .main-impressum {
+    font-size: clamp(0.7rem, 3vw, 0.95rem);
   }
 }
