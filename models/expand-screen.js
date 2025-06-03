@@ -1,4 +1,4 @@
-class ExpandScreen  {
+class ExpandScreen {
   static enterExpandScreen(element) {
     if (element.requestFullscreen) {
       element.requestFullscreen();
@@ -26,18 +26,18 @@ class ExpandScreen  {
   }
 
   static resizeCanvas() {
-const canvas = document.getElementById("canvas");
-  if (!canvas) return;
-  if (document.fullscreenElement) {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.style.width = '100vw';
-    canvas.style.height = '100dvh'; 
-  } else {
-    canvas.width = 720;
-    canvas.height = 480;
-    canvas.style.width = '';
-    canvas.style.height = '';
+    const canvas = document.getElementById("canvas");
+    if (!canvas) return;
+    if (document.fullscreenElement) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.width = "100vw";
+      canvas.style.height = "100dvh";
+    } else {
+      canvas.width = 720;
+      canvas.height = 480;
+      canvas.style.width = "";
+      canvas.style.height = "";
     }
   }
 
@@ -91,4 +91,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-

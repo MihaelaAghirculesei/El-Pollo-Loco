@@ -23,7 +23,7 @@ class DrawableObject {
   }
 
   loadImages(paths) {
-    paths.forEach(path => this.addImageToCache(path));
+    paths.forEach((path) => this.addImageToCache(path));
   }
 
   addImageToCache(path) {

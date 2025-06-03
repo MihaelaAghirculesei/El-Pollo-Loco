@@ -7,7 +7,9 @@ html {
   font-size: clamp(16px, 1.2vw + 1rem, 18px);
   box-sizing: border-box;
 }
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 body {
@@ -42,7 +44,8 @@ header h1 {
   letter-spacing: 0.05em;
   text-align: center;
   font-family: "nabla", Arial, Helvetica, sans-serif;
-  text-shadow: 1px 1px 0 #661515, -3px -3px 0 #661515, 1px -1px 0 #661515, -1px 1px 0 #661515;
+  text-shadow: 1px 1px 0 #661515, -3px -3px 0 #661515, 1px -1px 0 #661515,
+    -1px 1px 0 #661515;
   line-height: 1.1;
 }
 
@@ -90,7 +93,7 @@ footer .button-footer {
   border-radius: 20px;
   font-family: Arial, "nabla", Helvetica, sans-serif;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25), 0 1.5px 0 #000;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), 0 1.5px 0 #000;
   transition: transform 0.3s, box-shadow 0.3s;
   font-size: inherit;
   white-space: nowrap;
@@ -103,7 +106,7 @@ footer .button-footer {
 footer .button-footer:hover {
   background-color: #eb1111;
   transform: scale(1.1);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 2px 0 #000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 2px 0 #000;
 }
 
 /* ===================================
@@ -149,7 +152,7 @@ footer .button-footer:hover {
     border-radius: 6px;
   }
 
-   .main-impressum {
+  .main-impressum {
     font-size: clamp(0.7rem, 3vw, 0.95rem);
   }
 }

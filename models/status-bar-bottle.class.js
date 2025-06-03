@@ -29,13 +29,13 @@ class StatusBarBottle extends DrawableObject {
   }
 
   setBottlesCount(count) {
-    this.bottlesCount = Math.max(0, Math.min(count, this.MAX_BOTTLES)); 
+    this.bottlesCount = Math.max(0, Math.min(count, this.MAX_BOTTLES));
     this.updateImage();
   }
 
-updateImage() {
+  updateImage() {
     let percent = this.bottlesCount / this.MAX_BOTTLES;
     let idx = Math.floor(percent * (this.IMAGES.length - 1));
     this.img = this.imageCache[this.IMAGES[idx]];
-}
+  }
 }

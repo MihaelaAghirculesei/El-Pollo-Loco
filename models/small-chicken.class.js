@@ -3,7 +3,8 @@ class SmallChicken extends MovableObject {
   height = 60;
   width = 60;
   isDead = false;
-  IMAGE_DEAD = "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png";
+  IMAGE_DEAD =
+    "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png";
   offset = { top: 5, bottom: 10, left: 10, right: 5 };
   IMAGES_WALKING = [
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",

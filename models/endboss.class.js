@@ -1,5 +1,4 @@
 class Endboss extends MovableObject {
-  
   IMAGES_WALKING = [
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G1.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G2.png",
@@ -21,10 +20,12 @@ class Endboss extends MovableObject {
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G11.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G12.png",
   ];
-  
- constructor() {
+
+  constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
-    [this.IMAGES_WALKING, this.IMAGES_HURT, this.IMAGES_STAY].forEach(imgs => this.loadImages(imgs));
+    [this.IMAGES_WALKING, this.IMAGES_HURT, this.IMAGES_STAY].forEach((imgs) =>
+      this.loadImages(imgs)
+    );
     this.height = 400;
     this.width = 250;
     this.y = 60;
@@ -39,19 +40,19 @@ class Endboss extends MovableObject {
     this.atack_sound = new Audio("audio/endboss-atack.mp3");
   }
 
-   startMoving() {
+  startMoving() {
     if (!this._isMoving) {
       this._isMoving = true;
       this.animate();
     }
   }
 
- animate() {
+  animate() {
     if (this._moveInterval) return;
     this._moveInterval = setInterval(() => {
       this.move();
       this.playAnimation(this.IMAGES_WALKING);
-    }, 1000/10);
+    }, 1000 / 10);
   }
 
   move() {
@@ -67,7 +68,7 @@ class Endboss extends MovableObject {
     }
   }
 
- getHealthPercent() {
+  getHealthPercent() {
     return Math.max(0, Math.round((this.health / 200) * 100));
   }
 
@@ -96,10 +97,14 @@ class Endboss extends MovableObject {
 
   removeFromWorld() {
     if (this.world?.level?.enemies) {
-      this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
+      this.world.level.enemies = this.world.level.enemies.filter(
+        (e) => e !== this
+      );
     }
   }
-  
-  playSound = sound => { if (!isGameMuted) sound.play(); }
+
+  playSound = (sound) => {
+    if (!isGameMuted) sound.play();
+  };
   isEnemyDead = () => this.health <= 0;
 }

@@ -27,7 +27,7 @@ class Bottle extends MovableObject {
 
   animateBottle() {
     if (this.animationInterval) {
-      clearInterval(this.animationInterval); 
+      clearInterval(this.animationInterval);
     }
 
     this.animationInterval = setInterval(() => {
@@ -37,7 +37,7 @@ class Bottle extends MovableObject {
 
   playCollectSound() {
     if (this.collect_sound) {
-      this.collect_sound.currentTime = 0; 
+      this.collect_sound.currentTime = 0;
       this.collect_sound.play();
     }
   }

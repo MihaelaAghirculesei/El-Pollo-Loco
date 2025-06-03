@@ -33,7 +33,7 @@ function stopBackgroundMusic() {
 }
 
 function muteAllAudioElements() {
-  document.querySelectorAll("audio").forEach(a => a.pause());
+  document.querySelectorAll("audio").forEach((a) => a.pause());
 }
 
 function muteSound(obj, prop) {
@@ -41,16 +41,18 @@ function muteSound(obj, prop) {
 }
 
 function muteArraySounds(arr, prop) {
-  arr?.forEach(item => muteSound(item, prop));
+  arr?.forEach((item) => muteSound(item, prop));
 }
 
 function muteAllSounds(world) {
   const { level, character } = world || {};
-  muteArraySounds(level?.bottle, 'collect_sound');
-  muteSound(character, 'hurt_sound');
-  muteArraySounds(level?.enemies, 'chicken_sound');
-  level?.endboss?.forEach(e => ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(s => muteSound(e, s)));
-  muteArraySounds(level?.coins, 'collect_sound');
+  muteArraySounds(level?.bottle, "collect_sound");
+  muteSound(character, "hurt_sound");
+  muteArraySounds(level?.enemies, "chicken_sound");
+  level?.endboss?.forEach((e) =>
+    ["alert_sound", "hurt_sound", "dead_sound"].forEach((s) => muteSound(e, s))
+  );
+  muteArraySounds(level?.coins, "collect_sound");
   character?.muteSnoringSound();
 }
 
@@ -91,6 +93,6 @@ function stopEndbossAttackMusic(world) {
     world.endbossAttackMusic.pause();
     world.endbossAttackMusic.currentTime = 0;
     world.endbossAttackMusic = null;
-    world.endbossAttackStarted = false; 
+    world.endbossAttackStarted = false;
   }
 }

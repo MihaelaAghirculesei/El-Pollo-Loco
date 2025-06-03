@@ -5,7 +5,7 @@ class StatusBarHeartEndboss extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/40.png",
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/60.png",
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/80.png",
-    "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/100.png"
+    "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/100.png",
   ];
   percentage = 100;
   constructor(endboss) {
@@ -16,8 +16,8 @@ class StatusBarHeartEndboss extends DrawableObject {
     this.setPercentage(this.endboss.getHealthPercent());
   }
   setPosition() {
-    this.x = 495;  
-    this.y = 0;    
+    this.x = 495;
+    this.y = 0;
     this.width = 200;
     this.height = 60;
   }
@@ -29,12 +29,12 @@ class StatusBarHeartEndboss extends DrawableObject {
     return Math.max(0, Math.min(percentage, 100));
   }
   getImageIndex() {
-    if (this.percentage == 100) return 5; 
-    if (this.percentage >= 80) return 4;  
-    if (this.percentage >= 60) return 3;  
-    if (this.percentage >= 40) return 2; 
-    if (this.percentage >= 20) return 1; 
-    return 0;                           
+    if (this.percentage == 100) return 5;
+    if (this.percentage >= 80) return 4;
+    if (this.percentage >= 60) return 3;
+    if (this.percentage >= 40) return 2;
+    if (this.percentage >= 20) return 1;
+    return 0;
   }
   draw(ctx) {
     this.x = ctx.canvas.width - this.width - 20;
@@ -42,7 +42,7 @@ class StatusBarHeartEndboss extends DrawableObject {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
   }
-  
+
   updateHealth() {
     if (this.endboss) {
       this.setPercentage(this.endboss.getHealthPercent());

@@ -42,7 +42,10 @@ class ThrowableObject extends MovableObject {
 
   startMoving() {
     let speed = this.direction === -1 ? 5 : 10;
-    this.movementInterval = setInterval(() => this.x += speed * this.direction, 30);
+    this.movementInterval = setInterval(
+      () => (this.x += speed * this.direction),
+      30
+    );
   }
 
   startRotationAnimation() {
@@ -52,7 +55,7 @@ class ThrowableObject extends MovableObject {
   }
 
   splash() {
-    this.splashed = true; 
+    this.splashed = true;
     this.stopMoving();
     this.stopRotationAnimation();
     this.y -= 30;

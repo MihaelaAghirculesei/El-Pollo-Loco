@@ -33,7 +33,8 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   setImage() {
-    this.img = this.imageCache[StatusBarHeartCharacter.IMAGES[this.getImageIndex()]];
+    this.img =
+      this.imageCache[StatusBarHeartCharacter.IMAGES[this.getImageIndex()]];
   }
 
   getImageIndex() {
