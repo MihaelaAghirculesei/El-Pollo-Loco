@@ -191,17 +191,19 @@ button:hover {
 
 .popup {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 47%;
+  left: 65%;
   transform: translate(-50%, -50%);
   background-color: rgba(14, 163, 233, 0.699);
-  padding: clamp(10px, 2vw, 20px);
-  border: clamp(2px, 0.5vw, 4px) solid #222;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  padding: clamp(1px, 0.5vw, 4px);
+  border: clamp(1px, 0.3vw, 2px) solid #222;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
   z-index: 1000;
-  font-size: clamp(14px, 2vw, 18px);
+  font-size: clamp(10px, 1vw, 14px);
   text-align: center;
+  max-width: 200px;
+  width: auto;
 }
 
 .game-over-screen {
@@ -501,7 +503,7 @@ footer {
   }
 }
 
-/* ===================================
+/* =================================== 
    TABLET AND SMALL DESKTOP (768px - 1370px)
    =================================== */
 @media (min-width: 768px) and (max-width: 1370px) {
@@ -521,6 +523,13 @@ footer {
   .button-start-screen {
     z-index: 5002 !important;
     position: relative;
+  }
+  .popup {
+    width: clamp(100px, 30vw, 150px) !important;
+    top: 87% !important;
+    left: 75% !important;
+    transform: translate(-50%, -50%) !important;
+    font-size: clamp(16px, 1vw, px);
   }
 }
 /* ===================================
@@ -632,7 +641,7 @@ footer {
   #mobile-controls {
     z-index: 150 !important;
   }
-  /* Mobile controls and story screens */
+  /* Mobile controls, story screens and popup*/
   .controls-screen,
   .story-container {
     width: 95vw;
@@ -643,6 +652,13 @@ footer {
     background-position: center;
     font-size: 12px;
     z-index: 7000 !important;
+  }
+
+    .popup {
+    width: clamp(100px, 30vw, 150px) !important;
+    top: 27% !important;
+    left: 83% !important;
+    transform: translate(-50%, -50%) !important;
   }
 
   /* Mobile controls - images and text */

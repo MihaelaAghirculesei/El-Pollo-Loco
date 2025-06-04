@@ -279,6 +279,6 @@ export class World {
     if (!isGameMuted) {
       new Audio("audio/new-life.mp3").play();
     }
-    setTimeout(() => popup.remove(), 1000);
+    setTimeout(() => popup.remove(), 2000);
   };
 }
