@@ -3,8 +3,9 @@ class SmallChicken extends MovableObject {
   height = 60;
   width = 60;
   isDead = false;
-  IMAGE_DEAD =
-    "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png";
+  IMAGES_DEAD = [
+    "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png",
+  ];
   offset = { top: 5, bottom: 10, left: 10, right: 5 };
   IMAGES_WALKING = [
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
@@ -15,6 +16,8 @@ class SmallChicken extends MovableObject {
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImage(this.IMAGES_DEAD[0]);
+    this.loadImages(this.IMAGES_DEAD);
     this.x = 600 + Math.random() * 4000;
     this.speed = 0.15 + Math.random() * 0.5;
     this.life = 1;
@@ -27,12 +30,20 @@ class SmallChicken extends MovableObject {
     this.startWalkingAnimation();
   }
 
+  stopMovementAndAnimation() {
+    clearInterval(this.movementInterval);
+    clearInterval(this.walkingInterval);
+  }
+
   startMoving() {
-    setInterval(() => this.moveLeft(), 1000 / 60);
+    this.movementInterval = setInterval(() => this.moveLeft(), 1000 / 60);
   }
 
   startWalkingAnimation() {
-    setInterval(() => this.playAnimation(this.IMAGES_WALKING), 200);
+    this.walkingInterval = setInterval(
+      () => this.playAnimation(this.IMAGES_WALKING),
+      200
+    );
   }
 
   hit() {
@@ -46,9 +57,10 @@ class SmallChicken extends MovableObject {
 
   die() {
     this.isDead = true;
-    this.loadImage(this.IMAGE_DEAD);
+    this.stopMovementAndAnimation();
+    this.loadImages(this.IMAGES_DEAD);
+    this.playAnimation(this.IMAGES_DEAD);
     this.stopCharacterVerticalMovement();
-    this.markForRemoval();
     this.removeFromWorldAfterDelay();
   }
 
@@ -61,7 +73,10 @@ class SmallChicken extends MovableObject {
   }
 
   removeFromWorldAfterDelay() {
-    setTimeout(() => this.removeFromWorld(), 500);
+    setTimeout(() => {
+      this.removeFromWorld();
+      this.markForRemoval();
+    }, 110);
   }
 
   removeFromWorld() {

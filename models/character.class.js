@@ -42,7 +42,7 @@ class Character extends MovableObject {
     ].forEach((imgs) => this.loadImages(imgs));
     this.applyGravity();
     this.health = 100;
-    this.life = 1;
+    this.life = 2;
     this.lastActionTime = Date.now() - 6000;
     this.currentState = "sleeping";
     this.snoringSound.loop = true;
