@@ -279,12 +279,22 @@ footer {
   text-align: center;
 }
 
-#expand-screen-exit-text {
+
+#expand-screen-exit-text, #restart-game-button,
+#music-toggle-button {
   display: none;
 }
 
-.start-screen-active #music-toggle-button {
-  display: none !important;
+
+.start-screen-active .footer-content {
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.start-screen-active .footer-right {
+
+  display: none;
 }
 
 .box.jc-center {
@@ -678,21 +688,17 @@ footer {
   }
   /* Mobile footer content */
   .footer-content {
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     justify-content: center;
     gap: 5px;
   }
 
   .footer-center {
-    order: -1;
-    width: 100%;
-    text-align: center;
-    margin-bottom: 5px;
-    font-size: 10px;
+    font-size: 12px;
   }
   .button-footer {
     padding: 3px 6px;
-    font-size: 10px;
+    font-size: 12px;
     border-width: 1px;
     z-index: 5501 !important;
     position: relative;

@@ -34,9 +34,10 @@ window.addEventListener("keyup", (e) => {
 });
 
 window.startGame = function () {
-  showExpandScreenButton();
+  showGameButtons();
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("content").style.display = "block";
+  document.body.classList.remove('start-screen-active');
   setTimeout(() => {
     init();
     if (isMobile()) {
@@ -49,6 +50,7 @@ window.startGame = function () {
 window.returnToMenu = function () {
   document.getElementById("startScreen").style.display = "flex";
   document.getElementById("content").style.display = "none";
+  document.body.classList.add('start-screen-active');
   if (isMobile()) {
     document.getElementById("footer").style.display = "flex";
     document.getElementById("mobile-controls").style.display = "none";
@@ -99,24 +101,32 @@ function showFooterOnGameEnd() {
   }
 }
 
-function showFooterButtons() {
-  document.getElementById("expand-screen-btn").style.display = "";
-  document.getElementById("music-toggle-button").style.display = "";
+function hideGameButtons() { 
+  document.getElementById("expand-screen-btn").style.display = "none";
+  document.getElementById('restart-game-button').style.display = 'none';
+  document.getElementById('music-toggle-button').style.display = 'none';
 }
 
-function hideExpandScreenButton() {
-  document.getElementById("expand-screen-btn").style.display = "none";
+function showGameButtons() {
+  document.getElementById("expand-screen-btn").style.display = "";
+  document.getElementById('restart-game-button').style.display = 'inline-block';
+  document.getElementById('music-toggle-button').style.display = 'inline-block';
 }
 
 function showExpandScreenButton() {
   document.getElementById("expand-screen-btn").style.display = "";
 }
 
+
+function hideExpandScreenButton() {
+  document.getElementById("expand-screen-btn").style.display = "none";
+}
+
 window.hideExpandScreenButton = hideExpandScreenButton;
 window.showExpandScreenButton = showExpandScreenButton;
 
 document.addEventListener("DOMContentLoaded", function () {
-  hideExpandScreenButton();
+  hideGameButtons();
 }, { passive: true });
 
 function isMobile() {

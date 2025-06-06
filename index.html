@@ -12,7 +12,7 @@
     <title>El Pollo Loco</title>
   </head>
 
-  <body>
+  <body class="start-screen-active">
     <div id="expand-screen">
       <h1>El Pollo Loco</h1>
       <canvas id="titleCanvas" width="720" height="100"></canvas>
@@ -86,103 +86,102 @@
           Back to Menu
         </button>
       </div>
-      
+
       <div id="content" class="content"></div>
 
+        <footer class="footer">
+          <div class="footer-content">
+            <div class="footer-left">
+              <a href="impressum.html">
+                <button class="button-footer">Privacy Policy</button>
+              </a>
+              <button id="expand-screen-btn" class="button-footer">
+                <span id="expand-screen-enter-text">Expand Screen</span>
+                <span id="expand-screen-exit-text">Leave Expand Screen</span>
+              </button>
+            </div>
+            <div class="footer-center">
+              © 2025 El Pollo Loco.
+                All rights reserved.
+            </div>
+            <div class="footer-right">
+              <button id="restart-game-button" class="button-footer" onclick="restartGame()">
+                Restart Game
+              </button>
+              <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">
+                Sound: Off
+              </button>
+            </div>
+          </div>
+        </footer>   
 
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-left">
-      <a href="impressum.html">
-        <button class="button-footer">Privacy Policy</button>
-      </a>
-      <button id="expand-screen-btn" class="button-footer">
-        <span id="expand-screen-enter-text">Expand Screen</span>
-        <span id="expand-screen-exit-text">Leave Expand Screen</span>
-      </button>
-    </div>
-    
-    <div class="footer-center">
-      © 2025 El Pollo Loco.
-        All rights reserved.
-    </div>
-
-    <div class="footer-right">
-      <button id="restart-game-button" class="button-footer" onclick="restartGame()">
-        Restart Game
-      </button>
-
-      <button id="music-toggle-button" class="button-footer" onclick="if(window.world) toggleSound(world)">
-        Sound: Off
-      </footer>
-    </div>
-
-    <div id="startScreen" class="start-screen">
-      <div id="menu" class="menu">
-        <button class="button-start-screen" onclick="startGame()">Play</button>
-        <button class="button-start-screen" onclick="openControls()">Controls</button>
-        <button class="button-start-screen" onclick="openStory()">Story</button>
+      <div id="startScreen" class="start-screen">
+        <div id="menu" class="menu">
+          <button class="button-start-screen" onclick="startGame()">Play</button>
+          <button class="button-start-screen" onclick="openControls()">Controls</button>
+          <button class="button-start-screen" onclick="openStory()">Story</button>
+        </div>
       </div>
     </div>
 
-    <script src="models/drawable-object.class.js"></script>
-    <script src="models/movable-object.class.js"></script>
-    <script src="models/character.class.js"></script>
-    <script src="models/bottle.class.js"></script>
-    <script src="models/chicken.class.js"></script>
-    <script src="models/cloud.class.js"></script>
-    <script src="models/background-object.class.js"></script>
-    <script src="models/keyboard.class.js"></script>
-    <script src="models/level.class.js"></script>
-    <script src="models/endboss.class.js"></script>
-    <script src="models/collectable-object.class.js"></script>
-    <script src="models/status-bar-heart-character.class.js"></script>
-    <script src="models/status-bar-heart-endboss.class.js"></script>
-    <script src="models/status-bar-bottle.class.js"></script>
-    <script src="models/status-bar-coins.class.js"></script>
-    <script src="models/coins.class.js"></script>
-    <script src="models/small-chicken.class.js"></script>
-    <script src="levels/level1.js"></script>
-    <script src="models/throwable-object.class.js"></script>
-    <script type="module" src="models/world.class.js"></script>
-    <script src="js/audio.js"></script>
-    <script src="levels/fonts/particle-background.js"></script>
-    <script src="models/expand-screen.js"></script>
-    <script type="module" src="js/game.js"></script>
+      <script src="models/drawable-object.class.js"></script>
+      <script src="models/movable-object.class.js"></script>
+      <script src="models/character.class.js"></script>
+      <script src="models/bottle.class.js"></script>
+      <script src="models/chicken.class.js"></script>
+      <script src="models/cloud.class.js"></script>
+      <script src="models/background-object.class.js"></script>
+      <script src="models/keyboard.class.js"></script>
+      <script src="models/level.class.js"></script>
+      <script src="models/endboss.class.js"></script>
+      <script src="models/collectable-object.class.js"></script>
+      <script src="models/status-bar-heart-character.class.js"></script>
+      <script src="models/status-bar-heart-endboss.class.js"></script>
+      <script src="models/status-bar-bottle.class.js"></script>
+      <script src="models/status-bar-coins.class.js"></script>
+      <script src="models/coins.class.js"></script>
+      <script src="models/small-chicken.class.js"></script>
+      <script src="levels/level1.js"></script>
+      <script src="models/throwable-object.class.js"></script>
+      <script type="module" src="models/world.class.js"></script>
+      <script src="js/audio.js"></script>
+      <script src="levels/fonts/particle-background.js"></script>
+      <script src="models/expand-screen.js"></script>
+      <script type="module" src="js/game.js"></script>
   </body>
+
   <div id="rotate-device-overlay">
-  <div class="rotate-container">
-    <img id="rotate-phone-img" src="img_pollo_locco/img/11_others/smartphone-img.png" alt="Rotate phone">
-    <span class="rotate-arrow">→</span>
+    <div class="rotate-container">
+      <img id="rotate-phone-img" src="img_pollo_locco/img/11_others/smartphone-img.png" alt="Rotate phone">
+      <span class="rotate-arrow">→</span>
+    </div>
+    <div class="rotate-text">Please rotate your device to landscape to play!</div>
   </div>
-  <div class="rotate-text">Please rotate your device to landscape to play!</div>
-</div>
 
-<div id="mobile-controls">
-  <div class="mobile-button-container-bottom-left">
-    <button id="btn-left" class="mobile-btn">
-      <img src="img_pollo_locco/img/10_buttons/button-arrow-right-left.png" alt="Left">
-    </button>
-    <button id="btn-right" class="mobile-btn">
-      <img src="img_pollo_locco/img/10_buttons/button-arrow-right.png" alt="Right">
-    </button>
+  <div id="mobile-controls">
+    <div class="mobile-button-container-bottom-left">
+      <button id="btn-left" class="mobile-btn">
+        <img src="img_pollo_locco/img/10_buttons/button-arrow-right-left.png" alt="Left">
+      </button>
+      <button id="btn-right" class="mobile-btn">
+        <img src="img_pollo_locco/img/10_buttons/button-arrow-right.png" alt="Right">
+      </button>
+    </div>
+    <div class="mobile-button-container-bottom-right">
+      <button id="btn-jump" class="mobile-btn">
+        <img src="img_pollo_locco/img/10_buttons/button-jump.png" alt="Jump">
+      </button>
+      <button id="btn-throw" class="mobile-btn">
+        <img src="img_pollo_locco/img/10_buttons/button-botle.png" alt="Throw">
+      </button>
+    </div>
+    <div class="mobile-button-container-bottom-settings">
+      <button id="btn-restart" class="mobile-btn">
+        <img src="img_pollo_locco/img/10_buttons/refresh.png" alt="Restart">
+      </button>
+      <button id="btn-audio" class="mobile-btn">
+        <img id="audio-icon" src="img_pollo_locco/img/10_buttons/sound-icon-on.png" alt="Audio">
+      </button>
+    </div>
   </div>
-  <div class="mobile-button-container-bottom-right">
-    <button id="btn-jump" class="mobile-btn">
-      <img src="img_pollo_locco/img/10_buttons/button-jump.png" alt="Jump">
-    </button>
-    <button id="btn-throw" class="mobile-btn">
-      <img src="img_pollo_locco/img/10_buttons/button-botle.png" alt="Throw">
-    </button>
-  </div>
-  <div class="mobile-button-container-bottom-settings">
-    <button id="btn-restart" class="mobile-btn">
-      <img src="img_pollo_locco/img/10_buttons/refresh.png" alt="Restart">
-    </button>
-     <button id="btn-audio" class="mobile-btn">
-      <img id="audio-icon" src="img_pollo_locco/img/10_buttons/sound-icon-on.png" alt="Audio">
-    </button>
-
-  </div>
-</div>
 </html>
