@@ -273,12 +273,12 @@ export class World {
     popup.classList.add("popup");
     popup.innerHTML = `
       <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-      <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
+      <button class="button-popup" onclick="this.parentElement.remove(); document.getElementById('content').style.pointerEvents='none'">Close</button>
     `;
-    document.body.appendChild(popup);
-    if (!isGameMuted) {
-      new Audio("audio/new-life.mp3").play();
-    }
-    setTimeout(() => popup.remove(), 2000);
+    const contentContainer = document.getElementById('content') || document.body;
+    contentContainer.appendChild(popup);
+    contentContainer.style.pointerEvents = 'auto';
+    if (!isGameMuted) new Audio("audio/new-life.mp3").play();
+    setTimeout(() => { popup.remove(); contentContainer.style.pointerEvents = 'none'; }, 200000);
   };
 }

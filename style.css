@@ -59,6 +59,7 @@ canvas {
 }
 
 #content {
+  position: relative; 
   top: clamp(50px, 10vh, 100px);
   transform: translateX(-50%);
   pointer-events: none !important;
@@ -190,9 +191,10 @@ button:hover {
 }
 
 .popup {
-  position: fixed;
-  top: 47%;
-  left: 65%;
+  position: absolute; 
+  top: -100%;
+  right:-13%; 
+  transform: translateY(-50%);
   transform: translate(-50%, -50%);
   background-color: rgba(14, 163, 233, 0.699);
   padding: clamp(1px, 0.5vw, 4px);
