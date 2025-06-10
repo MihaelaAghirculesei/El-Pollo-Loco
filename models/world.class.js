@@ -48,7 +48,7 @@ export class World {
         if (Math.abs(this.character.x - this.endboss.x) < 500) {
           this.endboss.startMoving();
           if (!this.endbossAttackStarted) {
-            this.playEndbossAttackMusic();
+            playEndbossAttackMusic(this);
             this.endbossAttackStarted = true;
           }
         }
@@ -127,17 +127,10 @@ export class World {
           e.hit();
           this.character.jump();
           jumpedOnEnemy = true;
-          if (!isGameMuted)
-            playSound(
-              `audio/${
-                e instanceof SmallChicken
-                  ? "small-chicken-hurt"
-                  : "chicken-hurt"
-              }.mp3`
-            );
+          playEnemyHurtSound(e);
         } else if (!jumpedOnEnemy) {
           this.character.hit();
-          if (!isGameMuted) playSound("audio/character-hurt-sound.mp3");
+          playCharacterHurtSound();
           if (this.character.health === 0) this.character.life--;
           this.statusBarHeartCharacter.setPercentage(this.character.health);
         }
@@ -188,12 +181,7 @@ export class World {
             );
             this.checkBottleSpawn();
           }
-          if (!isGameMuted)
-            playSound(
-              enemy instanceof SmallChicken
-                ? "audio/small-chicken-hurt.mp3"
-                : "audio/chicken-hurt.mp3"
-            );
+          playEnemyHurtSound(enemy);
         }
       });
     });
@@ -218,15 +206,6 @@ export class World {
         this.level.enemies.push(enemy);
       }
     }, 5000);
-
-  playSound = (path, vol = 0.2) => {
-    if (this.currentSounds[path]) return;
-    const s = new Audio(path);
-    s.volume = vol;
-    s.play();
-    this.currentSounds[path] = s;
-    s.onended = () => delete this.currentSounds[path];
-  };
 
   collectBottle = () => {
     this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount + 1);
@@ -260,14 +239,6 @@ export class World {
       this.statusBarCoins.percentageCoins = 100;
   };
 
-  playEndbossAttackMusic() {
-    if (this.endbossAttackMusic || isGameMuted) return;
-    this.endbossAttackMusic = new Audio("audio/endboss-atack.mp3");
-    this.endbossAttackMusic.loop = true;
-    this.endbossAttackMusic.volume = 0.5;
-    this.endbossAttackMusic.play();
-  }
-
   showCongratulations = () => {
     const popup = document.createElement("div");
     popup.classList.add("popup");
@@ -278,7 +249,7 @@ export class World {
     const contentContainer = document.getElementById('content') || document.body;
     contentContainer.appendChild(popup);
     contentContainer.style.pointerEvents = 'auto';
-    if (!isGameMuted) new Audio("audio/new-life.mp3").play();
+    playNewLifeSound();
     setTimeout(() => { popup.remove(); contentContainer.style.pointerEvents = 'none'; }, 2000);
   };
 }

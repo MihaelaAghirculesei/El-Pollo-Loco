@@ -117,7 +117,6 @@ function showExpandScreenButton() {
   document.getElementById("expand-screen-btn").style.display = "";
 }
 
-
 function hideExpandScreenButton() {
   document.getElementById("expand-screen-btn").style.display = "none";
 }

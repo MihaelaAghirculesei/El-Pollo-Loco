@@ -34,11 +34,4 @@ class Bottle extends MovableObject {
       this.playAnimation(this.bottleImg);
     }, 300);
   }
-
-  playCollectSound() {
-    if (this.collect_sound) {
-      this.collect_sound.currentTime = 0;
-      this.collect_sound.play();
-    }
-  }
 }
