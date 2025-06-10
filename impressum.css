@@ -88,7 +88,9 @@ footer p {
 footer .button-footer {
   background-color: #960b06;
   border: 2px solid #222;
+  border: clamp(1px, 0.5vw, 4px) solid #222;
   color: #0ff;
+  padding: clamp(5px, 1vw, 8px) clamp(10px, 2vw, 16px);
   padding: 0.5em 1.2em;
   border-radius: 20px;
   font-family: Arial, "nabla", Helvetica, sans-serif;

@@ -279,6 +279,6 @@ export class World {
     contentContainer.appendChild(popup);
     contentContainer.style.pointerEvents = 'auto';
     if (!isGameMuted) new Audio("audio/new-life.mp3").play();
-    setTimeout(() => { popup.remove(); contentContainer.style.pointerEvents = 'none'; }, 200000);
+    setTimeout(() => { popup.remove(); contentContainer.style.pointerEvents = 'none'; }, 2000);
   };
 }

@@ -13,6 +13,7 @@ body {
   background-image: url(img_pollo_locco/img/5_background/layers/background-mesico.jpeg);
   background-size: cover;
   background-position: center;
+  overflow: hidden;
 }
 
 h1 {
@@ -528,7 +529,7 @@ footer {
   }
 
   .menu {
-    padding-top: clamp(10px, 18vh, 55px) !important;
+    padding-top: clamp(10px, 18vh, 15px) !important;
     z-index: 5001 !important;
   }
 
@@ -628,7 +629,6 @@ footer {
   }
   /* Mobile game end screens */
   .game-over-screen {
-    background-image: none !important;
     z-index: 5400 !important;
   }
   .game-won-screen {
@@ -647,6 +647,7 @@ footer {
     bottom: 0;
     width: 100vw;
     z-index: 5500 !important;
+    min-height: 25px;
   }
 
   /* Mobile controls */
