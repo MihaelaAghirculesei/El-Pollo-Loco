@@ -2,7 +2,17 @@ let isGameMuted = true;
 
 class AudioManager {
   constructor() {
-    this.AUDIO_PATHS = {
+    this.AUDIO_PATHS = this.defineAudioPaths();
+    this.isGameMuted = true;
+    this.isMusicPlaying = false;
+    this.audioPool = {};
+    this.backgroundMusic = this.createBackgroundMusic();
+    this.characterSnoringSound = null;
+    this.preloadFrequentSounds();
+  }
+
+  defineAudioPaths() {
+    return {
       BACKGROUND: "audio/game.mp3",
       CHARACTER_HURT: "audio/character-hurt-sound.mp3",
       CHARACTER_SNORING: "audio/character-snoring-sound.mp3",
@@ -11,41 +21,58 @@ class AudioManager {
       NEW_LIFE: "audio/new-life.mp3",
       ENDBOSS_ATTACK: "audio/endboss-atack.mp3",
       LOSE_GAME: "audio/lose-game-sound.mp3",
-      WIN_GAME: "audio/winning-game-sound.mp3"
+      WIN_GAME: "audio/winning-game-sound.mp3",
+      COIN_COLLECT: "audio/coin-collect-sound.mp3",
+      BOTTLE_COLLECT: "audio/bottle-collect-sound.mp3"
     };
+  }
 
-    this.isGameMuted = true;
-    this.isMusicPlaying = false;
-    this.audioInstances = {};
-    this.backgroundMusic = this.createBackgroundMusic();
-    this.characterSnoringSound = null;
-    this.currentSounds = {};
+  preloadFrequentSounds() {
+    const frequentSounds = [
+      this.AUDIO_PATHS.COIN_COLLECT,
+      this.AUDIO_PATHS.BOTTLE_COLLECT,
+      this.AUDIO_PATHS.CHARACTER_HURT,
+      this.AUDIO_PATHS.CHICKEN_HURT,
+      this.AUDIO_PATHS.SMALL_CHICKEN_HURT
+    ];
+
+    frequentSounds.forEach(path => this.createAudioPool(path, 3));
+  }
+
+  createAudioPool(path, poolSize = 3) {
+    if (this.audioPool[path]) return;
+
+    const pool = { instances: [], currentIndex: 0 };
+    for (let i = 0; i < poolSize; i++) {
+      pool.instances.push(this.createAudioInstance(path, 0.2));
+    }
+    this.audioPool[path] = pool;
+  }
+
+  createAudioInstance(path, volume) {
+    const audio = new Audio(path);
+    audio.volume = volume;
+    audio.preload = 'auto';
+    return audio;
   }
 
   createBackgroundMusic() {
-    const music = new Audio(this.AUDIO_PATHS.BACKGROUND);
-    music.loop = true;
-    music.volume = 0.1;
-    return music;
-  }
-
-  createAudioInstance(path, volume = 0.2) {
-    if (!this.audioInstances[path]) {
-      this.audioInstances[path] = new Audio(path);
-      this.audioInstances[path].volume = volume;
-    }
-    return this.audioInstances[path];
+    return this.createAudioInstance(this.AUDIO_PATHS.BACKGROUND, 0.1);
   }
 
   playSound(path, volume = 0.2) {
     if (this.isGameMuted) return;
-    const audio = this.createAudioInstance(path, volume);
-    this.restartAndPlay(audio);
-  }
-
-  restartAndPlay(audio) {
-    audio.currentTime = 0;
-    audio.play().catch(() => {});
+    const pool = this.audioPool[path];
+    if (pool) {
+      const audio = pool.instances[pool.currentIndex];
+      audio.volume = volume;
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+      pool.currentIndex = (pool.currentIndex + 1) % pool.instances.length;
+    } else {
+      const audio = this.createAudioInstance(path, volume);
+      audio.play().catch(() => {});
+    }
   }
 
   stopAudio(audio) {
@@ -66,9 +93,11 @@ class AudioManager {
 
   initCharacterSnoring() {
     if (!this.characterSnoringSound) {
-      this.characterSnoringSound = new Audio(this.AUDIO_PATHS.CHARACTER_SNORING);
+      this.characterSnoringSound = this.createAudioInstance(
+        this.AUDIO_PATHS.CHARACTER_SNORING,
+        0.9
+      );
       this.characterSnoringSound.loop = true;
-      this.characterSnoringSound.volume = 0.9;
     }
   }
 
@@ -83,9 +112,8 @@ class AudioManager {
   }
 
   createEndbossMusic() {
-    const music = new Audio(this.AUDIO_PATHS.ENDBOSS_ATTACK);
+    const music = this.createAudioInstance(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.5);
     music.loop = true;
-    music.volume = 0.5;
     return music;
   }
 
@@ -102,31 +130,21 @@ class AudioManager {
     world.endbossAttackStarted = false;
   }
 
-  playNewLifeSound() {
-    this.playSound(this.AUDIO_PATHS.NEW_LIFE);
-  }
-
-  playCharacterHurtSound() {
-    this.playSound(this.AUDIO_PATHS.CHARACTER_HURT);
-  }
+  playNewLifeSound() { this.playSound(this.AUDIO_PATHS.NEW_LIFE); }
+  playCharacterHurtSound() { this.playSound(this.AUDIO_PATHS.CHARACTER_HURT); }
+  playCoinCollectSound() { this.playSound(this.AUDIO_PATHS.COIN_COLLECT); }
+  playBottleCollectSound() { this.playSound(this.AUDIO_PATHS.BOTTLE_COLLECT); }
+  playGameOverSound() { this.playSound(this.AUDIO_PATHS.LOSE_GAME); }
+  playGameWonSound() { this.playSound(this.AUDIO_PATHS.WIN_GAME); }
 
   playEnemyHurtSound(enemy) {
-    const soundPath = this.getEnemyHurtSoundPath(enemy);
-    this.playSound(soundPath);
+    this.playSound(this.getEnemyHurtSoundPath(enemy));
   }
 
   getEnemyHurtSoundPath(enemy) {
     return enemy.constructor.name === 'SmallChicken'
       ? this.AUDIO_PATHS.SMALL_CHICKEN_HURT
       : this.AUDIO_PATHS.CHICKEN_HURT;
-  }
-
-  playGameOverSound() {
-    this.playSound(this.AUDIO_PATHS.LOSE_GAME);
-  }
-
-  playGameWonSound() {
-    this.playSound(this.AUDIO_PATHS.WIN_GAME);
   }
 
   muteEntitySound(entity, soundProperty) {
@@ -138,9 +156,9 @@ class AudioManager {
   }
 
   muteEndbossSounds(endboss) {
-    ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(sound => {
-      this.muteEntitySound(endboss, sound);
-    });
+    ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(sound =>
+      this.muteEntitySound(endboss, sound)
+    );
   }
 
   muteAllEndbosses(endbossArray) {
@@ -150,8 +168,6 @@ class AudioManager {
   muteGameSounds(world) {
     if (!world?.level) return;
     const { level, character } = world;
-    this.muteArraySounds(level.bottle, "collect_sound");
-    this.muteArraySounds(level.coins, "collect_sound");
     this.muteEntitySound(character, "hurt_sound");
     this.stopCharacterSnoring();
     this.muteArraySounds(level.enemies, "chicken_sound");
@@ -213,6 +229,8 @@ const playEnemyHurtSound = (enemy) => audioManager.playEnemyHurtSound(enemy);
 const playCharacterHurtSound = () => audioManager.playCharacterHurtSound();
 const playGameOverSound = () => audioManager.playGameOverSound();
 const playGameWonSound = () => audioManager.playGameWonSound();
+const playCoinCollectSound = () => audioManager.playCoinCollectSound();
+const playBottleCollectSound = () => audioManager.playBottleCollectSound();
 const stopAllGameEndSounds = (world) => audioManager.stopAllGameEndSounds(world);
 const toggleSound = (world) => audioManager.toggleSound(world);
 const enableAllSounds = (world) => audioManager.enableAllSounds(world);

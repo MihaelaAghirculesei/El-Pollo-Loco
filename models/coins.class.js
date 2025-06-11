@@ -7,7 +7,7 @@ class Coin extends CollectableObject {
   height = 150;
   width = 150;
   oftset = { top: 50, left: 50, right: 50, bottom: 50 };
-  collect_sound = new Audio("audio/coin-collect-sound.mp3");
+  animationInterval;
 
   constructor(x, y) {
     super().loadImage(this.coinImg[0]);
@@ -18,23 +18,37 @@ class Coin extends CollectableObject {
   }
 
   animateCoins() {
-    setInterval(() => this.playCoinAnimation(), 100);
+    this.lastTime = 0;
+    this.animationInterval = requestAnimationFrame(this.animateFrame.bind(this));
+  }
+
+  animateFrame(currentTime) {
+    if (this.shouldAnimate(currentTime)) {
+      this.playCoinAnimation();
+      this.lastTime = currentTime;
+    }
+    if (!this.isCollected) {
+      this.animationInterval = requestAnimationFrame(this.animateFrame.bind(this));
+    }
+  }
+
+  shouldAnimate(currentTime) {
+    return currentTime - this.lastTime >= 200;
   }
 
   playCoinAnimation() {
     this.playAnimation(this.coinImg);
   }
 
-  collectItem(item) {
-    this.markAsCollected();
-    this.playCollectSound();
+  stopAnimation() {
+    if (this.animationInterval) {
+      cancelAnimationFrame(this.animationInterval);
+      this.animationInterval = null;
+    }
   }
 
-  markAsCollected() {
+  collect() {
     this.isCollected = true;
-  }
-
-  playCollectSound() {
-    if (!isGameMuted) this.collect_sound.play();
+    this.stopAnimation();
   }
 }

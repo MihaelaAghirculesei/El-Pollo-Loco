@@ -17,7 +17,6 @@ export class World {
   throwableObject = [];
   gameOver = false;
   gameInterval;
-  currentSounds = {};
 
   constructor(c, k) {
     this.canvas = c;
@@ -172,13 +171,9 @@ export class World {
           bottle.splash();
           if (enemy instanceof Endboss && enemy.health <= 0) enemy.die();
           else if (enemy.isEnemyDead()) {
-            setTimeout(
-              () =>
-                (this.level.enemies = this.level.enemies.filter(
-                  (e) => e !== enemy
-                )),
-              1000
-            );
+            requestAnimationFrame(() => {
+              this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+            });
             this.checkBottleSpawn();
           }
           playEnemyHurtSound(enemy);
@@ -212,17 +207,17 @@ export class World {
   };
 
   checkCollection = () => {
-    const check = (arr, fn) =>
+    const check = (arr, fn, soundFn) =>
       arr.forEach((item, i) => {
         if (this.character.isColliding(item) && !item.isCollected) {
-          if (!isGameMuted && item.collect_sound) item.collect_sound.play();
+          soundFn(); 
           fn.call(this);
           item.isCollected = true;
           arr.splice(i, 1);
         }
       });
-    check(this.level.bottle, this.collectBottle);
-    check(this.level.coins, this.collectCoin);
+    check(this.level.bottle, this.collectBottle, playBottleCollectSound);
+    check(this.level.coins, this.collectCoin, playCoinCollectSound);
   };
 
   collectCoin = () => {
@@ -250,6 +245,14 @@ export class World {
     contentContainer.appendChild(popup);
     contentContainer.style.pointerEvents = 'auto';
     playNewLifeSound();
-    setTimeout(() => { popup.remove(); contentContainer.style.pointerEvents = 'none'; }, 2000);
+    
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        if (popup.parentNode) {
+          popup.remove();
+          contentContainer.style.pointerEvents = 'none';
+        }
+      }, 2000);
+    });
   };
 }
