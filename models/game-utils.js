@@ -1,63 +1,100 @@
-export function showGameOver(world) {
-  document.querySelectorAll(".game-over-screen").forEach((e) => e.remove());
+const SELECTORS = {
+  GAME_OVER_SCREEN: '.game-over-screen',
+  CANVAS: '#canvas',
+  TITLE_CANVAS: '#titleCanvas',
+  FOOTER: 'footer',
+  GAME_WON_SCREEN: '#game-won-screen'
+};
 
-  if (world.gameOver) return;
+const GAME_OVER_IMAGE_PATH = 'img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png';
+
+function handleGameEnd(world) {
+  if (world.gameOver) return false;
   hideFooterButtonsAtEnd();
   world.gameOver = true;
   clearInterval(world.gameInterval);
-  world.character.muteSnoringSound();
-  if (world.endbossAttackMusic) {
-    world.endbossAttackMusic.pause();
-    world.endbossAttackMusic.currentTime = 0;
-    world.endbossAttackMusic = null;
+  stopAllGameEndSounds(world);
+  return true;
+}
+
+function hideCanvases() {
+  document.getElementById('canvas').style.display = 'none';
+  document.getElementById('titleCanvas').style.display = 'none';
+}
+
+function removeExistingScreens() {
+  document.querySelectorAll(SELECTORS.GAME_OVER_SCREEN).forEach(screen => screen.remove());
+}
+
+function showFooter() {
+  document.querySelector(SELECTORS.FOOTER).style.display = 'flex';
+}
+
+function createScreenElement(className, id = null) {
+  const screen = document.createElement('div');
+  screen.classList.add(className);
+  if (id) screen.id = id;
+  return screen;
+}
+
+function createGameOverImage() {
+  const image = document.createElement('img');
+  image.src = GAME_OVER_IMAGE_PATH;
+  image.alt = 'Game Over';
+  return image;
+}
+
+function displayGameOverScreen() {
+  const screen = createScreenElement('game-over-screen');
+  const image = createGameOverImage();
+  screen.appendChild(image);
+  document.body.appendChild(screen);
+}
+
+function displayGameWonScreen() {
+  let screen = document.querySelector(SELECTORS.GAME_WON_SCREEN);
+
+  if (!screen) {
+    screen = createScreenElement('game-won-screen', 'game-won-screen');
+    const text = document.createElement('h1');
+    text.textContent = 'You Won!';
+    screen.appendChild(text);
+    document.body.appendChild(screen);
+    playGameWonSound();
   }
-  stopBackgroundMusic();
-  document.getElementById("canvas").style.display = "none";
-  document.getElementById("titleCanvas").style.display = "none";
-  const gameOverScreen = document.createElement("div");
-  gameOverScreen.classList.add("game-over-screen");
-  const gameOverImage = document.createElement("img");
-  gameOverImage.src =
-    "img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png";
-  gameOverScreen.appendChild(gameOverImage);
-  document.body.appendChild(gameOverScreen);
-  document.querySelector("footer").style.display = "flex";
-  if (!isGameMuted) playSound("audio/lose-game-sound.mp3");
+
+  screen.style.display = 'flex';
+}
+
+function prepareGameEndUI() {
+  removeExistingScreens();
+  hideCanvases();
+  showFooter();
+}
+
+export function showGameOver(world) {
+  removeExistingScreens();
+  if (!handleGameEnd(world)) return;
+  hideCanvases();
+  displayGameOverScreen();
+  showFooter();
+  playGameOverSound();
 }
 
 export function showGameWon(world) {
-  document.querySelectorAll(".game-over-screen").forEach((e) => e.remove());
+  removeExistingScreens();
   hideFooterButtonsAtEnd();
   window.showFooterOnGameEnd();
-  let gameWonScreen = document.getElementById("game-won-screen");
   clearInterval(world.gameInterval);
-  if (world.character) {
-    world.character.muteSnoringSound();
-  }
-  if (world.endbossAttackMusic) {
-    world.endbossAttackMusic.pause();
-    world.endbossAttackMusic.currentTime = 0;
-    world.endbossAttackMusic = null;
-  }
-  stopBackgroundMusic();
-  if (!gameWonScreen) {
-    gameWonScreen = document.createElement("div");
-    gameWonScreen.id = "game-won-screen";
-    gameWonScreen.classList.add("game-won-screen");
-    const gameWonText = document.createElement("h1");
-    gameWonText.textContent = "You Won!";
-    gameWonScreen.appendChild(gameWonText);
-    document.body.appendChild(gameWonScreen);
-    if (!isGameMuted) playSound("audio/winning-game-sound.mp3");
-    gameWonScreen.style.display = "flex";
-  }
+  stopAllGameEndSounds(world);
+  displayGameWonScreen();
 }
 
 export function checkGameEnd(world) {
-  const endboss = world.level.enemies.find((enemy) => enemy instanceof Endboss);
+  const endboss = world.level.enemies.find(enemy => enemy instanceof Endboss);
   if (world.character.isDead()) {
     showGameOver(world);
-  } else if (endboss && endboss.isEnemyDead()) {
+  } else if (endboss?.isEnemyDead()) {
     showGameWon(world);
   }
 }

@@ -1,180 +1,220 @@
-const backgroundMusic = new Audio("audio/game.mp3");
-backgroundMusic.loop = true;
-backgroundMusic.volume = 0.5;
-
-const audioInstances = {};
 let isGameMuted = true;
-let backgroundMusicMuted = false;
-let isMusicPlaying = false;
 
-const AUDIO_PATHS = {
-  CHARACTER_HURT: "audio/character-hurt-sound.mp3",
-  CHICKEN_HURT: "audio/chicken-hurt.mp3",
-  SMALL_CHICKEN_HURT: "audio/small-chicken-hurt.mp3",
-  NEW_LIFE: "audio/new-life.mp3",
-  ENDBOSS_ATTACK: "audio/endboss-atack.mp3"
-};
+class AudioManager {
+  constructor() {
+    this.AUDIO_PATHS = {
+      BACKGROUND: "audio/game.mp3",
+      CHARACTER_HURT: "audio/character-hurt-sound.mp3",
+      CHARACTER_SNORING: "audio/character-snoring-sound.mp3",
+      CHICKEN_HURT: "audio/chicken-hurt.mp3",
+      SMALL_CHICKEN_HURT: "audio/small-chicken-hurt.mp3",
+      NEW_LIFE: "audio/new-life.mp3",
+      ENDBOSS_ATTACK: "audio/endboss-atack.mp3",
+      LOSE_GAME: "audio/lose-game-sound.mp3",
+      WIN_GAME: "audio/winning-game-sound.mp3"
+    };
 
-function createAudioInstance(path, volume = 0.2) {
-  if (!audioInstances[path]) {
-    audioInstances[path] = new Audio(path);
-    audioInstances[path].volume = volume;
+    this.isGameMuted = true;
+    this.isMusicPlaying = false;
+    this.audioInstances = {};
+    this.backgroundMusic = this.createBackgroundMusic();
+    this.characterSnoringSound = null;
+    this.currentSounds = {};
   }
-  return audioInstances[path];
-}
 
-function playAudioInstance(path, volume = 0.2) {
-  const audio = createAudioInstance(path, volume);
-  audio.currentTime = 0;
-  audio.play();
-}
-
-function playSound(path, volume = 0.2) {
-  if (!isGameMuted) {
-    playAudioInstance(path, volume);
+  createBackgroundMusic() {
+    const music = new Audio(this.AUDIO_PATHS.BACKGROUND);
+    music.loop = true;
+    music.volume = 0.1;
+    return music;
   }
-}
 
-function playBackgroundMusic() {
-  backgroundMusic.volume = 0.1;
-  backgroundMusic.muted = backgroundMusicMuted;
-  backgroundMusic.loop = true;
-  backgroundMusic.play();
-  isMusicPlaying = true;
-}
+  createAudioInstance(path, volume = 0.2) {
+    if (!this.audioInstances[path]) {
+      this.audioInstances[path] = new Audio(path);
+      this.audioInstances[path].volume = volume;
+    }
+    return this.audioInstances[path];
+  }
 
-function stopBackgroundMusic() {
-  backgroundMusic.pause();
-  backgroundMusic.currentTime = 0;
-  isMusicPlaying = false;
-}
+  playSound(path, volume = 0.2) {
+    if (this.isGameMuted) return;
+    const audio = this.createAudioInstance(path, volume);
+    this.restartAndPlay(audio);
+  }
 
-function stopAudio(audio) {
-  if (audio) {
+  restartAndPlay(audio) {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+
+  stopAudio(audio) {
+    if (!audio) return;
     audio.pause();
     audio.currentTime = 0;
   }
-}
 
-function muteSound(object, property) {
-  if (object && object[property]) {
-    object[property].pause();
+  playBackgroundMusic() {
+    this.backgroundMusic.play().catch(() => {});
+    this.isMusicPlaying = true;
   }
-}
 
-function muteArraySounds(array, property) {
-  if (array) {
-    array.forEach(function(item) {
-      muteSound(item, property);
-    });
+  stopBackgroundMusic() {
+    this.stopAudio(this.backgroundMusic);
+    this.isMusicPlaying = false;
   }
-}
 
-function muteGameSounds(world) {
-  const level = world ? world.level : null;
-  const character = world ? world.character : null;
-  
-  muteArraySounds(level?.bottle, "collect_sound");
-  muteArraySounds(level?.coins, "collect_sound");
-  muteSound(character, "hurt_sound");
-  
-  if (character && character.muteSnoringSound) {
-    character.muteSnoringSound();
+  initCharacterSnoring() {
+    if (!this.characterSnoringSound) {
+      this.characterSnoringSound = new Audio(this.AUDIO_PATHS.CHARACTER_SNORING);
+      this.characterSnoringSound.loop = true;
+      this.characterSnoringSound.volume = 0.9;
+    }
   }
-  
-  muteArraySounds(level?.enemies, "chicken_sound");
-  
-  if (level && level.endboss) {
-    level.endboss.forEach(function(endboss) {
-      muteSound(endboss, "alert_sound");
-      muteSound(endboss, "hurt_sound");
-      muteSound(endboss, "dead_sound");
-    });
+
+  playCharacterSnoring() {
+    if (this.isGameMuted) return;
+    this.initCharacterSnoring();
+    this.characterSnoringSound.play().catch(() => {});
   }
-}
 
-function muteAllSounds(world) {
-  muteGameSounds(world);
-}
+  stopCharacterSnoring() {
+    this.stopAudio(this.characterSnoringSound);
+  }
 
-function playEndbossAttackMusic(world) {
-  if (world.endbossAttackMusic || isGameMuted) return;
-  
-  world.endbossAttackMusic = new Audio(AUDIO_PATHS.ENDBOSS_ATTACK);
-  world.endbossAttackMusic.loop = true;
-  world.endbossAttackMusic.volume = 0.5;
-  world.endbossAttackMusic.play();
-}
+  createEndbossMusic() {
+    const music = new Audio(this.AUDIO_PATHS.ENDBOSS_ATTACK);
+    music.loop = true;
+    music.volume = 0.5;
+    return music;
+  }
 
-function stopEndbossAttackMusic(world) {
-  if (world && world.endbossAttackMusic) {
-    stopAudio(world.endbossAttackMusic);
+  playEndbossAttackMusic(world) {
+    if (world.endbossAttackMusic || this.isGameMuted) return;
+    world.endbossAttackMusic = this.createEndbossMusic();
+    world.endbossAttackMusic.play().catch(() => {});
+  }
+
+  stopEndbossAttackMusic(world) {
+    if (!world?.endbossAttackMusic) return;
+    this.stopAudio(world.endbossAttackMusic);
     world.endbossAttackMusic = null;
     world.endbossAttackStarted = false;
   }
-}
 
-function playWorldSound(path, volume = 0.2, currentSounds = {}) {
-  if (isGameMuted || currentSounds[path]) return;
-  
-  const sound = new Audio(path);
-  sound.volume = volume;
-  sound.play();
-  currentSounds[path] = sound;
-  
-  sound.onended = function() {
-    delete currentSounds[path];
-  };
-}
+  playNewLifeSound() {
+    this.playSound(this.AUDIO_PATHS.NEW_LIFE);
+  }
 
-function playNewLifeSound() {
-  playSound(AUDIO_PATHS.NEW_LIFE);
-}
+  playCharacterHurtSound() {
+    this.playSound(this.AUDIO_PATHS.CHARACTER_HURT);
+  }
 
-function getEnemyHurtSound(enemy) {
-  const enemyType = enemy.constructor.name;
-  return enemyType === 'SmallChicken' ? AUDIO_PATHS.SMALL_CHICKEN_HURT : AUDIO_PATHS.CHICKEN_HURT;
-}
+  playEnemyHurtSound(enemy) {
+    const soundPath = this.getEnemyHurtSoundPath(enemy);
+    this.playSound(soundPath);
+  }
 
-function playEnemyHurtSound(enemy) {
-  const soundPath = getEnemyHurtSound(enemy);
-  playSound(soundPath);
-}
+  getEnemyHurtSoundPath(enemy) {
+    return enemy.constructor.name === 'SmallChicken'
+      ? this.AUDIO_PATHS.SMALL_CHICKEN_HURT
+      : this.AUDIO_PATHS.CHICKEN_HURT;
+  }
 
-function playCharacterHurtSound() {
-  playSound(AUDIO_PATHS.CHARACTER_HURT);
-}
+  playGameOverSound() {
+    this.playSound(this.AUDIO_PATHS.LOSE_GAME);
+  }
 
-function enableAllSounds(world) {
-  if (!isMusicPlaying) {
-    playBackgroundMusic();
-    if (world && world.character && world.character.playSnoringSound) {
-      world.character.playSnoringSound();
+  playGameWonSound() {
+    this.playSound(this.AUDIO_PATHS.WIN_GAME);
+  }
+
+  muteEntitySound(entity, soundProperty) {
+    if (entity?.[soundProperty]) entity[soundProperty].pause();
+  }
+
+  muteArraySounds(array, soundProperty) {
+    array?.forEach(item => this.muteEntitySound(item, soundProperty));
+  }
+
+  muteEndbossSounds(endboss) {
+    ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(sound => {
+      this.muteEntitySound(endboss, sound);
+    });
+  }
+
+  muteAllEndbosses(endbossArray) {
+    endbossArray?.forEach(endboss => this.muteEndbossSounds(endboss));
+  }
+
+  muteGameSounds(world) {
+    if (!world?.level) return;
+    const { level, character } = world;
+    this.muteArraySounds(level.bottle, "collect_sound");
+    this.muteArraySounds(level.coins, "collect_sound");
+    this.muteEntitySound(character, "hurt_sound");
+    this.stopCharacterSnoring();
+    this.muteArraySounds(level.enemies, "chicken_sound");
+    this.muteAllEndbosses(level.endboss);
+  }
+
+  enableAllSounds(world) {
+    if (!this.isMusicPlaying) {
+      this.playBackgroundMusic();
+      this.playSnoringIfSleeping(world);
+    }
+  }
+
+  playSnoringIfSleeping(world) {
+    if (world?.character?.currentState === "sleeping") {
+      this.playCharacterSnoring();
+    }
+  }
+
+  disableAllSounds(world) {
+    this.stopBackgroundMusic();
+    this.muteGameSounds(world);
+    this.stopEndbossAttackMusic(world);
+  }
+
+  stopAllGameEndSounds(world) {
+    this.stopCharacterSnoring();
+    this.stopEndbossAttackMusic(world);
+    this.stopBackgroundMusic();
+  }
+
+  toggleSound(world) {
+    this.isGameMuted ? this.enableAllSounds(world) : this.disableAllSounds(world);
+    this.isGameMuted = !this.isGameMuted;
+    isGameMuted = this.isGameMuted;
+    this.updateSoundButton();
+  }
+
+  updateSoundButton() {
+    const button = document.getElementById("music-toggle-button");
+    if (button) {
+      button.innerText = this.isGameMuted ? "Sound: Off" : "Sound: On";
+      button.blur();
     }
   }
 }
 
-function disableAllSounds(world) {
-  stopBackgroundMusic();
-  muteAllSounds(world);
-  stopEndbossAttackMusic(world);
-}
+const audioManager = new AudioManager();
 
-function updateSoundButton(isEnabled) {
-  const button = document.getElementById("music-toggle-button");
-  if (button) {
-    button.innerText = isEnabled ? "Sound: On" : "Sound: Off";
-    button.blur();
-  }
-}
-
-function toggleSound(world) {
-  if (!isGameMuted) {
-    disableAllSounds(world);
-  } else {
-    enableAllSounds(world);
-  }
-  
-  isGameMuted = !isGameMuted;
-  updateSoundButton(!isGameMuted);
-}
+const playSound = (path, volume) => audioManager.playSound(path, volume);
+const playCharacterSnoringSound = () => audioManager.playCharacterSnoring();
+const stopCharacterSnoringSound = () => audioManager.stopCharacterSnoring();
+const playBackgroundMusic = () => audioManager.playBackgroundMusic();
+const stopBackgroundMusic = () => audioManager.stopBackgroundMusic();
+const playEndbossAttackMusic = (world) => audioManager.playEndbossAttackMusic(world);
+const stopEndbossAttackMusic = (world) => audioManager.stopEndbossAttackMusic(world);
+const playNewLifeSound = () => audioManager.playNewLifeSound();
+const playEnemyHurtSound = (enemy) => audioManager.playEnemyHurtSound(enemy);
+const playCharacterHurtSound = () => audioManager.playCharacterHurtSound();
+const playGameOverSound = () => audioManager.playGameOverSound();
+const playGameWonSound = () => audioManager.playGameWonSound();
+const stopAllGameEndSounds = (world) => audioManager.stopAllGameEndSounds(world);
+const toggleSound = (world) => audioManager.toggleSound(world);
+const enableAllSounds = (world) => audioManager.enableAllSounds(world);
+const disableAllSounds = (world) => audioManager.disableAllSounds(world);
+const muteAllSounds = (world) => audioManager.muteGameSounds(world);
