@@ -1,16 +1,25 @@
 class DrawableObject {
-  x = 120;
-  y = 250;
-  height = 200;
-  width = 100;
-  img;
-  imageCache = {};
-  currentImage = 0;
+  constructor() {
+    this.initProperties();
+    this.initImageCache();
+  }
 
-  collisionOffsetTop = 80;
-  collisionOffsetBottom = 5;
-  collisionOffsetLeft = 10;
-  collisionOffsetRight = 10;
+  initProperties() {
+    this.x = 120;
+    this.y = 250;
+    this.height = 200;
+    this.width = 100;
+    this.img;
+    this.currentImage = 0;
+    this.collisionOffsetTop = 80;
+    this.collisionOffsetBottom = 5;
+    this.collisionOffsetLeft = 10;
+    this.collisionOffsetRight = 10;
+  }
+
+  initImageCache() {
+    this.imageCache = {};
+  }
 
   loadImage(path) {
     this.img = this.createImage(path);
@@ -32,24 +41,34 @@ class DrawableObject {
   }
 
   setImageStyle(img) {
-    img.style = "transform: scaleX(-1)";
+    img.style.transform = "scaleX(-1)";
   }
 
   draw(ctx) {
+    if (!this.img) return;
+    this.drawImageToCanvas(ctx);
+  }
+
+  drawImageToCanvas(ctx) {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
   drawFrame(ctx) {
-    if (this instanceof Character) this.drawCollisionRect(ctx);
+    if (this instanceof Character) {
+      this.drawCollisionRect(ctx);
+    }
   }
 
   drawCollisionRect(ctx) {
     ctx.beginPath();
-    ctx.rect(
-      this.x + this.collisionOffsetLeft,
-      this.y + this.collisionOffsetTop,
-      this.width - this.collisionOffsetLeft - this.collisionOffsetRight,
-      this.height - this.collisionOffsetTop - this.collisionOffsetBottom
-    );
+    this.drawCollisionRectPath(ctx);
+  }
+
+  drawCollisionRectPath(ctx) {
+    const x = this.x + this.collisionOffsetLeft;
+    const y = this.y + this.collisionOffsetTop;
+    const width = this.width - this.collisionOffsetLeft - this.collisionOffsetRight;
+    const height = this.height - this.collisionOffsetTop - this.collisionOffsetBottom;
+    ctx.rect(x, y, width, height);
   }
 }

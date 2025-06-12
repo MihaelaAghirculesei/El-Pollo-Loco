@@ -20,6 +20,7 @@ class AudioManager {
       SMALL_CHICKEN_HURT: "audio/small-chicken-hurt.mp3",
       NEW_LIFE: "audio/new-life.mp3",
       ENDBOSS_ATTACK: "audio/endboss-atack.mp3",
+      ENDBOSS_HURT: "audio/endboss-hurt.mp3", 
       LOSE_GAME: "audio/lose-game-sound.mp3",
       WIN_GAME: "audio/winning-game-sound.mp3",
       COIN_COLLECT: "audio/coin-collect-sound.mp3",
@@ -33,7 +34,8 @@ class AudioManager {
       this.AUDIO_PATHS.BOTTLE_COLLECT,
       this.AUDIO_PATHS.CHARACTER_HURT,
       this.AUDIO_PATHS.CHICKEN_HURT,
-      this.AUDIO_PATHS.SMALL_CHICKEN_HURT
+      this.AUDIO_PATHS.SMALL_CHICKEN_HURT,
+      this.AUDIO_PATHS.ENDBOSS_HURT
     ];
 
     frequentSounds.forEach(path => this.createAudioPool(path, 3));
@@ -137,6 +139,14 @@ class AudioManager {
   playGameOverSound() { this.playSound(this.AUDIO_PATHS.LOSE_GAME); }
   playGameWonSound() { this.playSound(this.AUDIO_PATHS.WIN_GAME); }
 
+  playEndbossHurtSound() { 
+    this.playSound(this.AUDIO_PATHS.ENDBOSS_HURT, 0.3); 
+  }
+  
+  playEndbossAttackSound() { 
+    this.playSound(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.4); 
+  }
+
   playEnemyHurtSound(enemy) {
     this.playSound(this.getEnemyHurtSoundPath(enemy));
   }
@@ -236,3 +246,5 @@ const toggleSound = (world) => audioManager.toggleSound(world);
 const enableAllSounds = (world) => audioManager.enableAllSounds(world);
 const disableAllSounds = (world) => audioManager.disableAllSounds(world);
 const muteAllSounds = (world) => audioManager.muteGameSounds(world);
+const playEndbossHurtSound = () => audioManager.playEndbossHurtSound();
+const playEndbossAttackSound = () => audioManager.playEndbossAttackSound();

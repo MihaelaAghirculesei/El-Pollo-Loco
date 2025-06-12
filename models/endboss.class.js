@@ -36,8 +36,6 @@ class Endboss extends MovableObject {
     this.walking = true;
     this._isMoving = false;
     this._moveInterval = null;
-    this.hurt_sound = new Audio("audio/endboss-hurt.mp3");
-    this.atack_sound = new Audio("audio/endboss-atack.mp3");
   }
 
   startMoving() {
@@ -76,7 +74,8 @@ class Endboss extends MovableObject {
     if (this.isDead) return;
     this.health -= 1;
     if (this.health < 0) this.health = 0;
-    this.playSound(this.hurt_sound);
+    playEndbossHurtSound();
+
     if (this.health > 0) {
       this.playAnimation(this.IMAGES_HURT);
     } else {
@@ -87,12 +86,18 @@ class Endboss extends MovableObject {
   die() {
     this.isDead = true;
     this.playAnimation(this.IMAGES_HURT);
-    this.playSound(this.hurt_sound);
+    
+    playEndbossHurtSound();
+    
     if (this._moveInterval) {
       clearInterval(this._moveInterval);
       this._moveInterval = null;
     }
     setTimeout(() => this.removeFromWorld(), 1000);
+  }
+
+  attack() {
+    playEndbossAttackSound();
   }
 
   removeFromWorld() {
@@ -103,8 +108,5 @@ class Endboss extends MovableObject {
     }
   }
 
-  playSound = (sound) => {
-    if (!isGameMuted) sound.play();
-  };
   isEnemyDead = () => this.health <= 0;
 }
