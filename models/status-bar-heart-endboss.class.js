@@ -17,9 +17,9 @@ class StatusBarHeartEndboss extends DrawableObject {
   }
   setPosition() {
     this.x = 495;
-    this.y = 0;
+    this.y = 5;
     this.width = 200;
-    this.height = 60;
+    this.height = 67;
   }
   setPercentage(percentage) {
     this.percentage = this.clampPercentage(percentage);
