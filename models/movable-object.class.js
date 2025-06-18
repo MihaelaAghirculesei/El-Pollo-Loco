@@ -8,51 +8,121 @@ class MovableObject extends DrawableObject {
   health = 10;
   life = 5;
   markedForRemoval = false;
+  
+  static GRAVITY_INTERVAL = 1000 / 25;
+  static GROUND_LEVEL = 180;
+  static HURT_DURATION = 1;
+  static HEALTH_DAMAGE = 10;
+  static RESPAWN_HEALTH = 100;
+  static JUMP_SPEED = 30;
+  static WORLD_WIDTH = 720 * 6;
 
   applyGravity() {
     setInterval(() => {
-      if (this.isAboveGround() || this.speedY > 0) {
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
-      }
-    }, 1000 / 25);
+      this.updateVerticalPosition();
+    }, MovableObject.GRAVITY_INTERVAL);
+  }
+
+  updateVerticalPosition() {
+    if (this.shouldFall()) {
+      this.y -= this.speedY;
+      this.speedY -= this.acceleration;
+    }
+  }
+
+  shouldFall() {
+    return this.isAboveGround() || this.speedY > 0;
   }
 
   isAboveGround() {
-    return this instanceof ThrowableObject || this.y < 180;
+    return this instanceof ThrowableObject || this.y < MovableObject.GROUND_LEVEL;
   }
 
   isColliding(mo) {
-    return (
-      this.x +
-        this.collisionOffsetLeft +
-        (this.width - this.collisionOffsetLeft - this.collisionOffsetRight) >=
-        mo.x &&
-      this.x + this.collisionOffsetLeft <= mo.x + mo.width &&
-      this.y +
-        this.collisionOffsetTop +
-        (this.height - this.collisionOffsetTop - this.collisionOffsetBottom) >=
-        mo.y &&
-      this.y + this.collisionOffsetTop <= mo.y + mo.height
-    );
+    return this.checkHorizontalCollision(mo) && this.checkVerticalCollision(mo);
+  }
+
+  checkHorizontalCollision(mo) {
+    const thisLeft = this.getLeftBoundary();
+    const thisRight = this.getRightBoundary();
+    const moLeft = mo.x;
+    const moRight = mo.x + mo.width;
+    
+    return thisRight >= moLeft && thisLeft <= moRight;
+  }
+
+  getLeftBoundary() {
+    return this.x + this.collisionOffsetLeft;
+  }
+
+  getRightBoundary() {
+    const leftBoundary = this.getLeftBoundary();
+    return leftBoundary + (this.width - this.collisionOffsetLeft - this.collisionOffsetRight);
+  }
+
+  checkVerticalCollision(mo) {
+    const thisTop = this.getTopBoundary();
+    const thisBottom = this.getBottomBoundary();
+    const moTop = mo.y;
+    const moBottom = mo.y + mo.height;
+    
+    return thisBottom >= moTop && thisTop <= moBottom;
+  }
+
+  getTopBoundary() {
+    return this.y + this.collisionOffsetTop;
+  }
+
+  getBottomBoundary() {
+    const topBoundary = this.getTopBoundary();
+    return topBoundary + (this.height - this.collisionOffsetTop - this.collisionOffsetBottom);
   }
 
   hit() {
+    this.updateHitState();
+    this.reduceHealth();
+    this.handleHealthDepletion();
+  }
+
+  updateHitState() {
     this.lastHitTime = Date.now();
-    this.health -= 10;
+  }
+
+  reduceHealth() {
+    this.health -= MovableObject.HEALTH_DAMAGE;
+  }
+
+  handleHealthDepletion() {
     if (this.health === 0) {
-      if (this.life > 0) {
-        this.health = 100;
-        this.life--;
+      if (this.hasLivesLeft()) {
+        this.respawn();
       } else {
-        this.removeFromWorld();
-        this.lastHitTime = Date.now();
+        this.die();
       }
     }
   }
 
+  hasLivesLeft() {
+    return this.life > 0;
+  }
+
+  respawn() {
+    this.health = MovableObject.RESPAWN_HEALTH;
+    this.life--;
+  }
+
+  die() {
+    this.removeFromWorld();
+    this.lastHitTime = Date.now();
+  }
+
   isHurt() {
-    return (Date.now() - this.lastHitTime) / 1000 < 1;
+    const timeSinceHit = this.getTimeSinceLastHit();
+    return timeSinceHit < MovableObject.HURT_DURATION;
+  }
+
+  getTimeSinceLastHit() {
+    return (Date.now() - this.lastHitTime) / 1000;
   }
 
   isDead() {
@@ -64,7 +134,13 @@ class MovableObject extends DrawableObject {
   }
 
   moveRight() {
-    if (this.x + this.width < 720 * 6) this.x += this.speed;
+    if (this.canMoveRight()) {
+      this.x += this.speed;
+    }
+  }
+
+  canMoveRight() {
+    return this.x + this.width < MovableObject.WORLD_WIDTH;
   }
 
   moveLeft() {
@@ -72,12 +148,24 @@ class MovableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    const i = this.currentImage % images.length;
-    this.img = this.imageCache[images[i]];
+    const imageIndex = this.calculateImageIndex(images);
+    this.updateCurrentImage(images, imageIndex);
+    this.incrementImageCounter();
+  }
+
+  calculateImageIndex(images) {
+    return this.currentImage % images.length;
+  }
+
+  updateCurrentImage(images, index) {
+    this.img = this.imageCache[images[index]];
+  }
+
+  incrementImageCounter() {
     this.currentImage++;
   }
 
   jump() {
-    this.speedY = 30;
+    this.speedY = MovableObject.JUMP_SPEED;
   }
 }
