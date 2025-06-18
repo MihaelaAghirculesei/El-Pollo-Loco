@@ -8,13 +8,9 @@ const SELECTORS = {
 
 const GAME_OVER_IMAGE_PATH = 'img_pollo_locco/img/9_intro_outro_screens/game_over/oh no you lost!.png';
 
-function handleGameEnd(world) {
-  if (world.gameOver) return false;
-  hideFooterButtonsAtEnd();
+function setGameOverState(world) {
   world.gameOver = true;
   clearInterval(world.gameInterval);
-  stopAllGameEndSounds(world);
-  return true;
 }
 
 function hideCanvases() {
@@ -27,72 +23,89 @@ function removeExistingScreens() {
 }
 
 function showFooter() {
-  document.querySelector(SELECTORS.FOOTER).style.display = 'flex';
+  const footer = document.querySelector(SELECTORS.FOOTER);
+  if (footer) footer.style.display = 'flex';
 }
 
-function createScreenElement(className, id = null) {
+function createGameOverScreen() {
   const screen = document.createElement('div');
-  screen.classList.add(className);
-  if (id) screen.id = id;
-  return screen;
-}
-
-function createGameOverImage() {
+  screen.classList.add('game-over-screen');
+  
   const image = document.createElement('img');
   image.src = GAME_OVER_IMAGE_PATH;
   image.alt = 'Game Over';
-  return image;
-}
-
-function displayGameOverScreen() {
-  const screen = createScreenElement('game-over-screen');
-  const image = createGameOverImage();
+  
   screen.appendChild(image);
   document.body.appendChild(screen);
 }
 
-function displayGameWonScreen() {
+function createGameWonScreen() {
   let screen = document.querySelector(SELECTORS.GAME_WON_SCREEN);
-
+  
   if (!screen) {
-    screen = createScreenElement('game-won-screen', 'game-won-screen');
+    screen = document.createElement('div');
+    screen.classList.add('game-won-screen');
+    screen.id = 'game-won-screen';
+    
     const text = document.createElement('h1');
     text.textContent = 'You Won!';
+    
     screen.appendChild(text);
     document.body.appendChild(screen);
     playGameWonSound();
   }
-
+  
   screen.style.display = 'flex';
 }
 
-function prepareGameEndUI() {
-  removeExistingScreens();
-  hideCanvases();
-  showFooter();
+function handleGameOverFlow(world) {
+  if (world?.gameOver) return false;
+  
+  hideFooterButtonsAtEnd();
+  setGameOverState(world);
+  return true;
 }
 
-export function showGameOver(world) {
-  removeExistingScreens();
-  if (!handleGameEnd(world)) return;
+function executeGameOverSequence(world) {
+  stopAllGameEndSounds(world);
   hideCanvases();
-  displayGameOverScreen();
+  createGameOverScreen();
   showFooter();
   playGameOverSound();
 }
 
-export function showGameWon(world) {
-  removeExistingScreens();
+function handleGameWonFlow(world) {
   hideFooterButtonsAtEnd();
   window.showFooterOnGameEnd();
   clearInterval(world.gameInterval);
   stopAllGameEndSounds(world);
-  displayGameWonScreen();
+  createGameWonScreen();
 }
 
-export function checkGameEnd(world) {
-  const endboss = world.level.enemies.find(enemy => enemy instanceof Endboss);
-  if (world.character.isDead()) {
+function findEndboss(world) {
+  return world?.level?.enemies?.find(enemy => enemy instanceof Endboss);
+}
+
+function showGameOver(world) {
+  if (!world) return;
+  
+  removeExistingScreens();
+  if (!handleGameOverFlow(world)) return;
+  executeGameOverSequence(world);
+}
+
+function showGameWon(world) {
+  if (!world) return;
+  
+  removeExistingScreens();
+  handleGameWonFlow(world);
+}
+
+function checkGameEnd(world) {
+  if (!world) return;
+  
+  const endboss = findEndboss(world);
+  if (world.character?.isDead()) {
     showGameOver(world);
   } else if (endboss?.isEnemyDead()) {
     showGameWon(world);

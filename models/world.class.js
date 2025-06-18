@@ -1,5 +1,3 @@
-import { checkGameEnd } from "./game-utils.js";
-
 export class World {
   character;
   endboss;
