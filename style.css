@@ -27,7 +27,7 @@
   
 /* === SPACING === */
   --btn-radius: clamp(12px, 2vw, 20px);
-   --btn-padding: clamp(3px, 1.5vw, 12px) clamp(6px, 3vw, 24px);
+  --btn-padding: clamp(3px, 1vw, 5px) clamp(6px, 2vw, 8px);
   --content-width: clamp(300px, 95%, 720px);
 }
 
@@ -820,13 +820,3 @@ footer {
   .mobile-btn { padding: 2px !important; border-radius: 8px !important; }
   .mobile-btn img { width: 18px !important; height: 18px !important; }
 }
-
-/* Nascondi footer su Surface Pro 7 */
-@media (min-width: 1281px) and (max-width: 2736px) and (max-height: 1824px) {
-  /* footer {
-    display: none !important;
-  }
-  
-    .mobile-btn { padding: 5px; border-radius: 8px; } */
-}
-
