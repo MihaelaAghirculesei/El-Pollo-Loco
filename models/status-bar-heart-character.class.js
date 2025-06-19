@@ -5,18 +5,18 @@ class StatusBarHeartCharacter extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png",
-    "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png",
+    "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png"
   ];
 
   constructor(character) {
     super();
     this.character = character;
-    this.setPosition();
+    this.setupStatusBar();
     this.loadImages(StatusBarHeartCharacter.IMAGES);
     this.setPercentage(100);
   }
 
-  setPosition() {
+  setupStatusBar() {
     this.x = 40;
     this.y = 0;
     this.width = 200;
@@ -25,16 +25,16 @@ class StatusBarHeartCharacter extends DrawableObject {
 
   setPercentage(percentage) {
     this.percentage = this.clampPercentage(percentage);
-    this.setImage();
+    this.updateStatusBarImage();
   }
 
   clampPercentage(percentage) {
     return Math.max(0, Math.min(percentage, 100));
   }
 
-  setImage() {
-    this.img =
-      this.imageCache[StatusBarHeartCharacter.IMAGES[this.getImageIndex()]];
+  updateStatusBarImage() {
+    const imageIndex = this.getImageIndex();
+    this.img = this.imageCache[StatusBarHeartCharacter.IMAGES[imageIndex]];
   }
 
   getImageIndex() {
