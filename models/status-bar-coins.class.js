@@ -5,19 +5,19 @@ class StatusBarCoins extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/40.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/60.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/80.png",
-    "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png",
+    "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png"
   ];
 
   percentageCoins = 0;
 
   constructor() {
     super();
+    this.setupStatusBar();
     this.loadImages(StatusBarCoins.IMAGES);
-    this.setPosition();
     this.setPercentageCoins(0);
   }
 
-  setPosition() {
+  setupStatusBar() {
     this.x = 40;
     this.y = 80;
     this.width = 200;
@@ -26,16 +26,16 @@ class StatusBarCoins extends DrawableObject {
 
   setPercentageCoins(percentage) {
     this.percentageCoins = this.limitPercentage(percentage);
-    this.updateImage();
+    this.updateStatusBarImage();
   }
 
   limitPercentage(percentage) {
     return Math.max(0, Math.min(percentage, 30));
   }
 
-  updateImage() {
-    const index = this.getImageIndex();
-    this.img = this.imageCache[StatusBarCoins.IMAGES[index]];
+  updateStatusBarImage() {
+    const imageIndex = this.getImageIndex();
+    this.img = this.imageCache[StatusBarCoins.IMAGES[imageIndex]];
   }
 
   getImageIndex() {
