@@ -16,10 +16,10 @@ export class World {
   gameOver = false;
   gameInterval;
 
-  constructor(c, k) {
-    this.canvas = c;
-    this.ctx = c.getContext("2d");
-    this.keyboard = k;
+  constructor(canvas, keyboard) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext("2d");
+    this.keyboard = keyboard;
     this.character = new Character();
     this.endboss = new Endboss();
     this.endboss.world = this;
@@ -37,18 +37,14 @@ export class World {
     this.spawnChickens();
   }
 
-  setWorld = () => (this.character.world = this);
+  setWorld() {
+    this.character.world = this;
+  }
 
-  run = () =>
-    (this.gameInterval = setInterval(() => {
+  run() {
+    this.gameInterval = setInterval(() => {
       if (!this.gameOver) {
-        if (Math.abs(this.character.x - this.endboss.x) < 500) {
-          this.endboss.startMoving();
-          if (!this.endbossAttackStarted) {
-            playEndbossAttackMusic(this);
-            this.endbossAttackStarted = true;
-          }
-        }
+        this.checkBossActivation();
         if (isGameMuted && this.endbossAttackStarted) {
           stopEndbossAttackMusic(this);
         }
@@ -57,12 +53,35 @@ export class World {
         this.checkCollection();
         checkGameEnd(this);
       }
-    }, 35));
+    }, 35);
+  }
 
-  draw = () => {
+  checkBossActivation() {
+    if (Math.abs(this.character.x - this.endboss.x) < 500) {
+      this.endboss.startMoving();
+      if (!this.endbossAttackStarted) {
+        playEndbossAttackMusic(this);
+        this.endbossAttackStarted = true;
+      }
+    }
+  }
+
+  draw() {
     if (this.gameOver) return;
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.clearCanvas();
     this.ctx.translate(this.camera_x, 0);
+    this.drawAllGameObjects();
+    this.ctx.translate(-this.camera_x, 0);
+    this.statusBarHeartEndboss.updateHealth();
+    this.drawAllStatusBars();
+    if (!this.gameOver) requestAnimationFrame(this.draw.bind(this));
+  }
+
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
+
+  drawAllGameObjects() {
     [
       this.backgroundObjects,
       this.clouds,
@@ -74,16 +93,16 @@ export class World {
       arr?.filter((o) => !o.markedForRemoval).forEach((o) => this.addToMap(o))
     );
     this.addToMap(this.character);
-    this.ctx.translate(-this.camera_x, 0);
-    this.statusBarHeartEndboss.updateHealth();
+  }
+
+  drawAllStatusBars() {
     [
       this.statusBarHeartCharacter,
       this.statusBarBottle,
       this.statusBarCoins,
       this.statusBarHeartEndboss,
     ].forEach((bar) => this.addToMap(bar));
-    if (!this.gameOver) requestAnimationFrame(this.draw);
-  };
+  }
 
   startEnemiesAnimation() {
     this.level.enemies.forEach((e) => {
@@ -96,7 +115,7 @@ export class World {
     });
   }
 
-  checkThrowObjects = () => {
+  checkThrowObjects() {
     if (this.keyboard.D && this.statusBarBottle.bottlesCount > 0) {
       let direction = this.character.otherDirection ? -1 : 1;
       this.throwableObject.push(
@@ -110,9 +129,9 @@ export class World {
         this.statusBarBottle.bottlesCount - 1
       );
     }
-  };
+  }
 
-  checkCharacterCollisions = () => {
+  checkCharacterCollisions() {
     let jumpedOnEnemy = false;
     this.level.enemies.forEach((e) => {
       if (this.character.isColliding(e) && !this.character.isDead()) {
@@ -133,34 +152,38 @@ export class World {
         }
       }
     });
-  };
+  }
 
-  addToMap = (mo) => {
+  addToMap(mo) {
     if (mo.otherDirection) this.flipImage(mo);
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
     if (mo.otherDirection) this.flipImageBack(mo);
-  };
+  }
 
-  flipImage = (mo) => {
+  flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
     this.ctx.scale(-1, 1);
     mo.x *= -1;
-  };
+  }
 
-  flipImageBack = (mo) => {
+  flipImageBack(mo) {
     mo.x *= -1;
     this.ctx.restore();
-  };
+  }
 
-  checkCollisions = () => {
-    this.checkCharacterCollisions();
+  checkCollisions() {
+    this.check1CharacterCollisions();
     this.checkBottleCollisions();
-    this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
-  };
+    this.filterMarkedEnemies();
+  }
 
-  checkBottleCollisions = () => {
+  check1CharacterCollisions() {
+    this.checkCharacterCollisions();
+  }
+
+  checkBottleCollisions() {
     this.throwableObject.forEach((bottle) => {
       if (bottle.y > 360) bottle.splash();
       this.level.enemies.forEach((enemy) => {
@@ -178,17 +201,23 @@ export class World {
         }
       });
     });
-    this.throwableObject = this.throwableObject.filter(
-      (b) => !b.markedForRemoval
-    );
-  };
+    this.filterMarkedBottles();
+  }
 
-  checkBottleSpawn = () => {
+  filterMarkedEnemies() {
+    this.level.enemies = this.level.enemies.filter((e) => !e.markedForRemoval);
+  }
+
+  filterMarkedBottles() {
+    this.throwableObject = this.throwableObject.filter((b) => !b.markedForRemoval);
+  }
+
+  checkBottleSpawn() {
     if (this.level.enemies.length <= level1.enemies.length - 2)
       this.statusBarBottle.setPercentageBottle(20);
-  };
+  }
 
-  spawnChickens = () =>
+  spawnChickens() {
     setInterval(() => {
       if (this.level.enemies.length < 10) {
         const enemy =
@@ -199,29 +228,30 @@ export class World {
         this.level.enemies.push(enemy);
       }
     }, 5000);
+  }
 
-  collectBottle = () => {
+  collectBottle() {
     this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount + 1);
-  };
+  }
 
-  checkCollection = () => {
-    const check = (arr, fn, soundFn) =>
-      arr.forEach((item, i) => {
-        if (this.character.isColliding(item) && !item.isCollected) {
-          soundFn(); 
-          fn.call(this);
-          item.isCollected = true;
-          arr.splice(i, 1);
-        }
-      });
-    check(this.level.bottle, this.collectBottle, playBottleCollectSound);
-    check(this.level.coins, this.collectCoin, playCoinCollectSound);
-  };
+  checkCollection() {
+    this.checkCollectible(this.level.bottle, this.collectBottle, playBottleCollectSound);
+    this.checkCollectible(this.level.coins, this.collectCoin, playCoinCollectSound);
+  }
 
-  collectCoin = () => {
-    this.statusBarCoins.setPercentageCoins(
-      this.statusBarCoins.percentageCoins + 1
-    );
+  checkCollectible(arr, collectFn, soundFn) {
+    arr.forEach((item, i) => {
+      if (this.character.isColliding(item) && !item.isCollected) {
+        soundFn(); 
+        collectFn.call(this);
+        item.isCollected = true;
+        arr.splice(i, 1);
+      }
+    });
+  }
+
+  collectCoin() {
+    this.statusBarCoins.setPercentageCoins(this.statusBarCoins.percentageCoins + 1);
     this.statusBarCoins.percentageCoins++;
     if (this.statusBarCoins.percentageCoins === 30) {
       this.showCongratulations();
@@ -230,9 +260,9 @@ export class World {
     }
     if (this.statusBarCoins.percentageCoins > 100)
       this.statusBarCoins.percentageCoins = 100;
-  };
+  }
 
-  showCongratulations = () => {
+  showCongratulations() {
     const popup = document.createElement("div");
     popup.classList.add("popup");
     popup.innerHTML = `
@@ -252,5 +282,5 @@ export class World {
         }
       }, 2000);
     });
-  };
+  }
 }
