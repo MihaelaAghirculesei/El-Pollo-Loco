@@ -147,7 +147,6 @@ window.restartGame = function () {
 };
 
 function hideFooterButtonsAtEnd() {
-  document.getElementById("expand-screen-btn").style.display = "none";
   document.getElementById("music-toggle-button").style.display = "none";
 }
 
@@ -159,27 +158,14 @@ function showFooterOnGameEnd() {
 }
 
 function hideGameButtons() { 
-  document.getElementById("expand-screen-btn").style.display = "none";
   document.getElementById('restart-game-button').style.display = 'none';
   document.getElementById('music-toggle-button').style.display = 'none';
 }
 
 function showGameButtons() {
-  document.getElementById("expand-screen-btn").style.display = "";
   document.getElementById('restart-game-button').style.display = 'inline-block';
   document.getElementById('music-toggle-button').style.display = 'inline-block';
 }
-
-function showExpandScreenButton() {
-  document.getElementById("expand-screen-btn").style.display = "";
-}
-
-function hideExpandScreenButton() {
-  document.getElementById("expand-screen-btn").style.display = "none";
-}
-
-window.hideExpandScreenButton = hideExpandScreenButton;
-window.showExpandScreenButton = showExpandScreenButton;
 
 function initializeGameButtons() {
   hideGameButtons();

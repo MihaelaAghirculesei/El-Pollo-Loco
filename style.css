@@ -64,7 +64,7 @@ h1 {
 
 #titleCanvas { height: clamp(60px, 10vh, 100px); }
 
-#expand-screen {
+#game-container {
   padding-bottom: clamp(50px, 7vh, 70px);
   flex: 1 1 auto;
   display: flex;
@@ -260,7 +260,7 @@ footer {
 .footer-left, .footer-right { display: flex; gap: 8px; }
 .footer-center { font-size: clamp(14px, 3vw, 17px); text-align: center; }
 
-#expand-screen-exit-text, #restart-game-button, #music-toggle-button { display: none; }
+#restart-game-button, #music-toggle-button { display: none; }
 
 .start-screen-active .footer-content {
   justify-content: center !important;
@@ -410,39 +410,6 @@ footer {
 .hidden-mobile { display: block; }
 .visible-mobile { display: none; }
 
-/* === FULLSCREEN === */
-#expand-screen:fullscreen, 
-#expand-screen:-webkit-full-screen, 
-#expand-screen:-moz-full-screen, 
-#expand-screen:-ms-fullscreen {
-  position: relative;
-  width: 100vw !important;
-  height: 100vh !important;
-}
-
-#expand-screen:fullscreen #canvas, 
-#expand-screen:-webkit-full-screen #canvas, 
-#expand-screen:-moz-full-screen #canvas, 
-#expand-screen:-ms-fullscreen #canvas {
-  width: 100vw !important;
-  height: 100vh !important;
-  max-width: 100vw !important;
-  max-height: 100vh !important;
-  display: block !important;
-  background: transparent;
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 1 !important;
-}
-
-#expand-screen:fullscreen #titleCanvas, 
-#expand-screen:-webkit-full-screen #titleCanvas, 
-#expand-screen:-moz-full-screen #titleCanvas, 
-#expand-screen:-ms-fullscreen #titleCanvas {
-  display: none !important;
-}
-
 /* === ACCESSIBILITY === */
 @media (prefers-reduced-motion: reduce) {
   .mobile-btn, .button-start-screen, .button-footer, .button-popup, button,
@@ -564,7 +531,7 @@ footer {
     z-index: 5501 !important;
     position: relative;
   }
-  
+
   .start-screen-active footer {
     min-height: 50px !important;
     display: flex !important;
@@ -743,7 +710,6 @@ footer {
 /* === Large Desktop === */
 @media (min-width: 1281px) {
   #titleCanvas { width: 720px !important; height: 100px !important; }
-  #canvas { width: 720px !important; height: 480px !important; }
   
   .start-screen { z-index: var(--z-ui-base) !important; }
   
