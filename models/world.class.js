@@ -262,25 +262,50 @@ export class World {
       this.statusBarCoins.percentageCoins = 100;
   }
 
-  showCongratulations() {
-    const popup = document.createElement("div");
-    popup.classList.add("popup");
-    popup.innerHTML = `
-      <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-      <button class="button-popup" onclick="this.parentElement.remove(); document.getElementById('content').style.pointerEvents='none'">Close</button>
-    `;
-    const contentContainer = document.getElementById('content') || document.body;
-    contentContainer.appendChild(popup);
-    contentContainer.style.pointerEvents = 'auto';
-    playNewLifeSound();
+  // showCongratulations() {
+  //   const popup = document.createElement("div");
+  //   popup.classList.add("popup");
+  //   popup.innerHTML = `
+  //     <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
+  //     <button class="button-popup" onclick="this.parentElement.remove(); document.getElementById('content').style.pointerEvents='none'">Close</button>
+  //   `;
+  //   const contentContainer = document.getElementById('content') || document.body;
+  //   contentContainer.appendChild(popup);
+  //   contentContainer.style.pointerEvents = 'auto';
+  //   playNewLifeSound();
     
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        if (popup.parentNode) {
-          popup.remove();
-          contentContainer.style.pointerEvents = 'none';
-        }
-      }, 2000);
-    });
-  }
+  //   requestAnimationFrame(() => {
+  //     setTimeout(() => {
+  //       if (popup.parentNode) {
+  //         popup.remove();
+  //         contentContainer.style.pointerEvents = 'none';
+  //       }
+  //     }, 200000);
+  //   });
+  // }
+
+  // Nel tuo world.js, sostituisci il metodo showCongratulations() con questo:
+
+showCongratulations() {
+  const popup = document.createElement("div");
+  popup.classList.add("popup");
+  popup.innerHTML = `
+    <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
+    <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
+  `;
+  
+  // Posiziona il popup relativo al canvas
+  const canvasRect = this.canvas.getBoundingClientRect();
+  popup.style.left = `${canvasRect.rigt + 17}px`;
+  popup.style.top = `${canvasRect.top - 7}px`;
+  
+  document.body.appendChild(popup);
+  playNewLifeSound();
+  
+  setTimeout(() => {
+    if (popup.parentNode) {
+      popup.remove();
+    }
+  }, 500000);
+}
 }
