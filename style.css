@@ -759,9 +759,6 @@ footer {
     height: 100vh; 
     z-index: var(--z-modals) !important; 
   }
-  
-  
-  /* start-screen-active .footer { display: none; } */
 }
 
 /* === Footer visible on desktop === */
