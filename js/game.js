@@ -17,24 +17,23 @@ function init() {
 
 function setupKeydownListeners() {
   window.addEventListener("keydown", (e) => {
-    if (e.keyCode == 39) keyboard.RIGHT = true;
-    if (e.keyCode == 37) keyboard.LEFT = true;
-    if (e.keyCode == 38) keyboard.UP = true;
-    if (e.keyCode == 40) keyboard.DOWN = true;
-    if (e.keyCode == 32) keyboard.SPACE = true;
-    if (e.keyCode == 68) keyboard.D = true;
+    setKeyState(e.keyCode, true);
   });
 }
 
 function setupKeyupListeners() {
   window.addEventListener("keyup", (e) => {
-    if (e.keyCode == 39) keyboard.RIGHT = false;
-    if (e.keyCode == 37) keyboard.LEFT = false;
-    if (e.keyCode == 38) keyboard.UP = false;
-    if (e.keyCode == 40) keyboard.DOWN = false;
-    if (e.keyCode == 32) keyboard.SPACE = false;
-    if (e.keyCode == 68) keyboard.D = false;
+    setKeyState(e.keyCode, false);
   });
+}
+
+function setKeyState(keyCode, state) {
+  if (keyCode == 39) keyboard.RIGHT = state;
+  if (keyCode == 37) keyboard.LEFT = state;
+  if (keyCode == 38) keyboard.UP = state;
+  if (keyCode == 40) keyboard.DOWN = state;
+  if (keyCode == 32) keyboard.SPACE = state;
+  if (keyCode == 68) keyboard.D = state;
 }
 
 function hideStartScreen() {
@@ -43,7 +42,7 @@ function hideStartScreen() {
   document.body.classList.remove('start-screen-active');
 }
 
-function handleMobileControlsVisibility() {
+function showMobileControlsIfNeeded() {
   if (isMobile()) {
     document.querySelector("footer").style.display = "none";
     document.getElementById("mobile-controls").style.display = "flex";
@@ -54,15 +53,8 @@ window.startGame = function () {
   showGameButtons();
   hideStartScreen();
   init();
-  handleMobileControlsVisibility();
+  showMobileControlsIfNeeded();
 };
-
-function handleMobileControls() {
-  if (isMobile()) {
-    document.querySelector("footer").style.display = "none";
-    document.getElementById("mobile-controls").style.display = "flex";
-  }
-}
 
 function cleanupWorldResources() {
   if (world && world.gameInterval) {
@@ -90,55 +82,37 @@ window.returnToMenu = function () {
   location.reload();
 };
 
-function showControlsScreen() {
-  document.getElementById("controlsScreen").style.display = "flex";
-  document.getElementById("controlsScreen").style.backgroundColor = "white";
+function showScreen(screenId) {
+  document.getElementById(screenId).style.display = "flex";
+  document.getElementById(screenId).style.backgroundColor = "white";
 }
 
-function hideControlsScreen() {
-  document.getElementById("controlsScreen").style.display = "none";
+function hideScreen(screenId) {
+  document.getElementById(screenId).style.display = "none";
 }
 
 window.openControls = function () {
-  showControlsScreen();
+  showScreen("controlsScreen");
 };
 
 window.closeControls = function () {
-  hideControlsScreen();
+  hideScreen("controlsScreen");
 };
 
-function showStoryScreen() {
-  document.getElementById("storyScreen").style.display = "flex";
-  document.getElementById("storyScreen").style.backgroundColor = "white";
-}
-
-function hideStoryScreen() {
-  document.getElementById("storyScreen").style.display = "none";
-}
-
 window.openStory = function () {
-  showStoryScreen();
+  showScreen("storyScreen");
 };
 
 window.closeStory = function () {
-  hideStoryScreen();
+  hideScreen("storyScreen");
 };
 
-function showSettingsScreen() {
-  document.getElementById("settingsScreen").style.display = "flex";
-  document.getElementById("settingsScreen").style.backgroundColor = "white";
-}
-
-function hideSettingsScreen() {
-  document.getElementById("settingsScreen").style.display = "none";
-}
-
 window.openSettings = function () {
-  showSettingsScreen();
+  showScreen("settingsScreen");
 };
 
 window.closeSettings = function () {
-  hideSettingsScreen();
+  hideScreen("settingsScreen");
 };
 
 window.restartGame = function () {
@@ -157,14 +131,18 @@ function showFooterOnGameEnd() {
   }
 }
 
+function setButtonsVisibility(isVisible) {
+  const display = isVisible ? 'inline-block' : 'none';
+  document.getElementById('restart-game-button').style.display = display;
+  document.getElementById('music-toggle-button').style.display = display;
+}
+
 function hideGameButtons() { 
-  document.getElementById('restart-game-button').style.display = 'none';
-  document.getElementById('music-toggle-button').style.display = 'none';
+  setButtonsVisibility(false);
 }
 
 function showGameButtons() {
-  document.getElementById('restart-game-button').style.display = 'inline-block';
-  document.getElementById('music-toggle-button').style.display = 'inline-block';
+  setButtonsVisibility(true);
 }
 
 function initializeGameButtons() {
@@ -181,9 +159,10 @@ function isMobile() {
 
 function updateAudioIcon(isMuted) {
   const audioIcon = document.getElementById("audio-icon");
-  audioIcon.src = isMuted
+  const iconPath = isMuted 
     ? "img_pollo_locco/img/10_buttons/sound-icon-off.png"
     : "img_pollo_locco/img/10_buttons/sound-icon-on.png";
+  audioIcon.src = iconPath;
 }
 
 function toggleWorldAudio() {
@@ -211,6 +190,16 @@ function showMobileControlsContainer() {
   }
 }
 
+function addTouchEventListeners(element, keyProperty) {
+  element.addEventListener("touchstart", () => {
+    keyboard[keyProperty] = true;
+  }, { passive: true });
+  
+  element.addEventListener("touchend", () => {
+    keyboard[keyProperty] = false;
+  }, { passive: true });
+}
+
 function setupTouchControl(elementId, keyProperty, callback = null) {
   const element = document.getElementById(elementId);
   if (!element) return;
@@ -218,13 +207,7 @@ function setupTouchControl(elementId, keyProperty, callback = null) {
   if (callback) {
     element.addEventListener("touchstart", callback, { passive: false });
   } else {
-    element.addEventListener("touchstart", () => {
-      keyboard[keyProperty] = true;
-    }, { passive: true });
-    
-    element.addEventListener("touchend", () => {
-      keyboard[keyProperty] = false;
-    }, { passive: true });
+    addTouchEventListeners(element, keyProperty);
   }
 }
 

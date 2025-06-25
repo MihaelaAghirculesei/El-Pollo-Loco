@@ -758,12 +758,15 @@ footer {
     height: 100vh; 
     z-index: var(--z-modals) !important; 
   }
+
+.mobile-btn { padding: 3px; border-radius: 8px; }
+.mobile-btn img { width: 21px; height: 21px; }
 }
 
 /* === Footer visible on desktop === */
 @media (min-width: 1281px) {
   footer {
-    min-height: 100px !important;
+    min-height: 80px !important;
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;

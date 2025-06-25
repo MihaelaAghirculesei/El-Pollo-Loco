@@ -20,17 +20,29 @@ export class World {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.keyboard = keyboard;
+    this.initializeGame();
+  }
+
+  initializeGame() {
     this.character = new Character();
     this.endboss = new Endboss();
     this.endboss.world = this;
     this.level.enemies.push(this.endboss);
     this.endbossAttackMusic = null;
     this.endbossAttackStarted = false;
+    this.setupStatusBars();
+    this.startGame();
+  }
+
+  setupStatusBars() {
     this.statusBarHeartEndboss = new StatusBarHeartEndboss(this.endboss);
     this.statusBarHeartCharacter = new StatusBarHeartCharacter(this.character);
     this.statusBarBottle = new StatusBarBottle();
     this.statusBarBottle.setBottlesCount(0);
     this.statusBarCoins = new StatusBarCoins(this);
+  }
+
+  startGame() {
     this.draw();
     this.setWorld();
     this.run();
@@ -44,16 +56,20 @@ export class World {
   run() {
     this.gameInterval = setInterval(() => {
       if (!this.gameOver) {
-        this.checkBossActivation();
-        if (isGameMuted && this.endbossAttackStarted) {
-          stopEndbossAttackMusic(this);
-        }
-        this.checkCollisions();
-        this.checkThrowObjects();
-        this.checkCollection();
-        checkGameEnd(this);
+        this.updateGame();
       }
     }, 35);
+  }
+
+  updateGame() {
+    this.checkBossActivation();
+    if (isGameMuted && this.endbossAttackStarted) {
+      stopEndbossAttackMusic(this);
+    }
+    this.checkCollisions();
+    this.checkThrowObjects();
+    this.checkCollection();
+    checkGameEnd(this);
   }
 
   checkBossActivation() {
@@ -117,41 +133,44 @@ export class World {
 
   checkThrowObjects() {
     if (this.keyboard.D && this.statusBarBottle.bottlesCount > 0) {
-      let direction = this.character.otherDirection ? -1 : 1;
-      this.throwableObject.push(
-        new ThrowableObject(
-          this.character.x + 10 * direction,
-          this.character.y + 10,
-          direction
-        )
-      );
-      this.statusBarBottle.setBottlesCount(
-        this.statusBarBottle.bottlesCount - 1
-      );
+      this.throwBottle();
     }
+  }
+
+  throwBottle() {
+    let direction = this.character.otherDirection ? -1 : 1;
+    this.throwableObject.push(
+      new ThrowableObject(
+        this.character.x + 10 * direction,
+        this.character.y + 10,
+        direction
+      )
+    );
+    this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount - 1);
   }
 
   checkCharacterCollisions() {
     let jumpedOnEnemy = false;
     this.level.enemies.forEach((e) => {
       if (this.character.isColliding(e) && !this.character.isDead()) {
-        if (
-          !jumpedOnEnemy &&
-          this.character.isAboveGround() &&
-          this.character.speedY <= 0
-        ) {
-          e.hit();
-          this.character.jump();
-          jumpedOnEnemy = true;
-          playEnemyHurtSound(e);
-        } else if (!jumpedOnEnemy) {
-          this.character.hit();
-          playCharacterHurtSound();
-          if (this.character.health === 0) this.character.life--;
-          this.statusBarHeartCharacter.setPercentage(this.character.health);
-        }
+        jumpedOnEnemy = this.handleCollision(e, jumpedOnEnemy);
       }
     });
+  }
+
+  handleCollision(e, jumpedOnEnemy) {
+    if (!jumpedOnEnemy && this.character.isAboveGround() && this.character.speedY <= 0) {
+      e.hit();
+      this.character.jump();
+      playEnemyHurtSound(e);
+      return true;
+    } else if (!jumpedOnEnemy) {
+      this.character.hit();
+      playCharacterHurtSound();
+      if (this.character.health === 0) this.character.life--;
+      this.statusBarHeartCharacter.setPercentage(this.character.health);
+    }
+    return jumpedOnEnemy;
   }
 
   addToMap(mo) {
@@ -186,22 +205,31 @@ export class World {
   checkBottleCollisions() {
     this.throwableObject.forEach((bottle) => {
       if (bottle.y > 360) bottle.splash();
-      this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy)) {
-          enemy.hit();
-          bottle.splash();
-          if (enemy instanceof Endboss && enemy.health <= 0) enemy.die();
-          else if (enemy.isEnemyDead()) {
-            requestAnimationFrame(() => {
-              this.level.enemies = this.level.enemies.filter(e => e !== enemy);
-            });
-            this.checkBottleSpawn();
-          }
-          playEnemyHurtSound(enemy);
-        }
-      });
+      this.checkBottleEnemyHits(bottle);
     });
     this.filterMarkedBottles();
+  }
+
+  checkBottleEnemyHits(bottle) {
+    this.level.enemies.forEach((enemy) => {
+      if (bottle.isColliding(enemy)) {
+        enemy.hit();
+        bottle.splash();
+        this.handleEnemyHit(enemy);
+        playEnemyHurtSound(enemy);
+      }
+    });
+  }
+
+  handleEnemyHit(enemy) {
+    if (enemy instanceof Endboss && enemy.health <= 0) {
+      enemy.die();
+    } else if (enemy.isEnemyDead()) {
+      requestAnimationFrame(() => {
+        this.level.enemies = this.level.enemies.filter(e => e !== enemy);
+      });
+      this.checkBottleSpawn();
+    }
   }
 
   filterMarkedEnemies() {
@@ -253,35 +281,50 @@ export class World {
   collectCoin() {
     this.statusBarCoins.setPercentageCoins(this.statusBarCoins.percentageCoins + 1);
     this.statusBarCoins.percentageCoins++;
+    this.checkCoinReward();
+    this.capCoins();
+  }
+
+  checkCoinReward() {
     if (this.statusBarCoins.percentageCoins === 30) {
       this.showCongratulations();
       this.character.life++;
       this.statusBarCoins.setPercentageCoins(0);
     }
+  }
+
+  capCoins() {
     if (this.statusBarCoins.percentageCoins > 100)
       this.statusBarCoins.percentageCoins = 100;
   }
 
+  showCongratulations() {
+    const popup = this.createPopup();
+    this.positionPopup(popup);
+    this.displayPopup(popup);
+  }
 
-showCongratulations() {
-  const popup = document.createElement("div");
-  popup.classList.add("popup");
-  popup.innerHTML = `
-    <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-    <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
-  `;
-  
-  const canvasRect = this.canvas.getBoundingClientRect();
-  popup.style.left = `${canvasRect.rigt + 17}px`;
-  popup.style.top = `${canvasRect.top - 7}px`;
-  
-  document.body.appendChild(popup);
-  playNewLifeSound();
-  
-  setTimeout(() => {
-    if (popup.parentNode) {
-      popup.remove();
-    }
-  }, 500000);
-}
+  createPopup() {
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+    popup.innerHTML = `
+      <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
+      <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
+    `;
+    return popup;
+  }
+
+  positionPopup(popup) {
+    const canvasRect = this.canvas.getBoundingClientRect();
+    popup.style.left = `${canvasRect.right + 17}px`;
+    popup.style.top = `${canvasRect.top - 7}px`;
+  }
+
+  displayPopup(popup) {
+    document.body.appendChild(popup);
+    playNewLifeSound();
+    setTimeout(() => {
+      if (popup.parentNode) popup.remove();
+    }, 2000);
+  }
 }

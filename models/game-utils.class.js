@@ -41,20 +41,16 @@ function createGameOverScreen() {
 
 function createGameWonScreen() {
   let screen = document.querySelector(SELECTORS.GAME_WON_SCREEN);
-  
   if (!screen) {
     screen = document.createElement('div');
     screen.classList.add('game-won-screen');
     screen.id = 'game-won-screen';
-    
     const text = document.createElement('h1');
     text.textContent = 'You Won!';
-    
     screen.appendChild(text);
     document.body.appendChild(screen);
     playGameWonSound();
   }
-  
   screen.style.display = 'flex';
 }
 
