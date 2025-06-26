@@ -1,7 +1,7 @@
 /* === FONT FACE === */
 @font-face {
   font-family: "nabla";
-  src: url(levels/fonts/nabla-regular-variable-font.ttf) format("truetype");
+  src: url(fonts/nabla-regular-variable-font.ttf) format("truetype");
 }
 
 /* === ROOT VARIABLES === */
