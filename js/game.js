@@ -177,9 +177,9 @@ window.closeSettings = function () {
 };
 
 /** 
- * Restarts the game 
+ * Goes back to home menu 
  */
-window.restartGame = function () {
+window.goToHome  = function () {
   cleanupWorldResources();
   location.reload();
 };
@@ -207,7 +207,7 @@ function showFooterOnGameEnd() {
  */
 function setButtonsVisibility(isVisible) {
   const display = isVisible ? 'inline-block' : 'none';
-  document.getElementById('restart-game-button').style.display = display;
+  document.getElementById('home-button').style.display = display;
   document.getElementById('music-toggle-button').style.display = display;
 }
 
@@ -329,7 +329,7 @@ function setupTouchControl(elementId, keyProperty, callback = null) {
  * Sets up all touch controls for mobile 
  */
 function setupAllTouchControls() {
-  setupTouchControl("btn-restart", null, () => window.restartGame());
+  setupTouchControl("btn-home", null, () => window.goToHome());
   setupTouchControl("btn-left", "LEFT");
   setupTouchControl("btn-right", "RIGHT");
   setupTouchControl("btn-jump", "SPACE");

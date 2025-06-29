@@ -283,7 +283,7 @@ footer {
 .footer-left, .footer-right { display: flex; gap: 8px; }
 .footer-center { font-size: clamp(14px, 3vw, 17px); text-align: center;   font-family: "Roboto", "Sofia_Sans", "Milchroma"; }
 
-#restart-game-button, #music-toggle-button { display: none; }
+#home-game-button, #music-toggle-button { display: none; }
 
 .start-screen-active .footer-content {
   justify-content: center !important;
