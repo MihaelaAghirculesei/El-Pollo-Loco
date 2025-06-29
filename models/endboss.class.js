@@ -6,7 +6,7 @@ class Endboss extends MovableObject {
   MAX_HEALTH = 200;
   DAMAGE_AMOUNT = 1;
   DISTANCE_TO_KEEP = 50;
-  ANIMATION_SPEED = 100;
+  ANIMATION_SPEED = 150;
   REMOVAL_DELAY = 1000;
 
   IMAGES_WALKING = [

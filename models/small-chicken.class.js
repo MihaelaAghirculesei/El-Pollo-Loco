@@ -35,7 +35,7 @@ class SmallChicken extends MovableObject {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.initializeImages();
     this.x = 600 + Math.random() * 4000;
-    this.speed = 0.15 + Math.random() * 0.5;
+    this.speed = 0.15 + Math.random() * 0.3;
     this.life = 1;
     this.health = 1;
     this.world = world;
