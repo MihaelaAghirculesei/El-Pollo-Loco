@@ -3,7 +3,7 @@
  */
 class Character extends MovableObject {
   static CONFIG = {
-    HEIGHT: 240, Y_POSITION: 80, SPEED: 10, INITIAL_HEALTH: 100,
+    HEIGHT: 240, Y_POSITION: 80, SPEED: 5, INITIAL_HEALTH: 100,
     INITIAL_LIFE: 2, JUMP_SPEED: 30, CAMERA_OFFSET: 300,
     FRAME_RATE: 1000 / 60, ANIMATION_SPEED: 50,
     STATE_CHECK_INTERVAL: 100, IDLE_TIMEOUT: 3000,
@@ -217,6 +217,7 @@ class Character extends MovableObject {
     if (this.currentState === Character.STATES.IDLE) return this.playAnimation(this.IMAGES_IDLE);
     if (this.isAboveGround()) return this.playAnimation(this.IMAGES_JUMPING);
     if (this.isMoving()) return this.playAnimation(this.IMAGES_WALKING);
+    this.playAnimation(this.IMAGES_IDLE);
   }
 
   /**
