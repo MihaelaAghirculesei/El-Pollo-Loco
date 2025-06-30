@@ -168,32 +168,57 @@ export class World {
     }
   }
 
-  /**
-   * Checks collisions between character and enemies
-   */
-  checkCharacterCollisions() {
-    let jumped = false;
-    this.level.enemies.forEach(e => {
-      if (!this.character.isColliding(e) || this.character.isDead()) return;
-      jumped
-        ? this.applyCollisionDamage()
-        : this.handleEnemyJumpCollision(e, () => jumped = true);
-    });
-  }
+/**
+* Checks collisions between character and enemies and handles collision responses
+*/
+checkCharacterCollisions() {
+  let hasValidJump = false;
+  this.level.enemies.forEach(enemy => {
+    if (!this.isCollidingWithEnemy(enemy) || this.character.isDead()) return;
+    if (this.character.isAboveGround() && 
+        this.character.speedY <= 10 && 
+        (this.character.y + this.character.height * 0.8) < (enemy.y + enemy.height * 0.7)) {
+      hasValidJump = true;
+    }
+  });
 
-  /**
-   * Handles collision when character jumps on enemy
-   * @param {Object} enemy - The enemy object
-   * @param {Function} setJumped - Callback to set jumped state
-   */
-  handleEnemyJumpCollision(enemy, setJumped) {
-    if (this.character.isAboveGround() && this.character.speedY <= 0) {
+  this.level.enemies.forEach(enemy => {
+    if (!this.isCollidingWithEnemy(enemy) || this.character.isDead()) return; 
+    if (this.character.isAboveGround() && 
+        this.character.speedY <= 10 && 
+        (this.character.y + this.character.height * 0.8) < (enemy.y + enemy.height * 0.7)) {
       enemy.hit();
       this.character.jump();
       playEnemyHurtSound(enemy);
-      setJumped();
-    } else this.applyCollisionDamage();
-  }
+    } else if (!hasValidJump) {
+      this.applyCollisionDamage();
+      return;
+    }
+  });
+}
+
+/**
+* Checks collision between character and enemy using reduced collision zones for more precise detection
+*/
+isCollidingWithEnemy(enemy) {
+  const charMargin = 20;
+  const enemyMargin = 15;
+  
+  const charLeft = this.character.x + charMargin;
+  const charRight = this.character.x + this.character.width - charMargin;
+  const charTop = this.character.y + charMargin;
+  const charBottom = this.character.y + this.character.height - charMargin;
+  
+  const enemyLeft = enemy.x + enemyMargin;
+  const enemyRight = enemy.x + enemy.width - enemyMargin;
+  const enemyTop = enemy.y + enemyMargin;
+  const enemyBottom = enemy.y + enemy.height - enemyMargin;
+  
+  return charRight > enemyLeft && 
+         charLeft < enemyRight && 
+         charBottom > enemyTop && 
+         charTop < enemyBottom;
+}
 
   /**
    * Applies damage to character when colliding with enemies
