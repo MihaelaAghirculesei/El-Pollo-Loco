@@ -20,12 +20,7 @@ class Bottle extends MovableObject {
     ];
     this.defaultSize = 50;
     this.animationSpeed = 300;
-    this.defaultOffset = {
-      top: 16,
-      left: 32,
-      right: 25,
-      bottom: 8,
-    };
+    this.defaultOffset = {top: 0, left: 0, right: 0, bottom: 0 };
   }
 
   /**

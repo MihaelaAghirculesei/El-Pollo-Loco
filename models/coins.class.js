@@ -25,7 +25,7 @@ class Coin extends CollectableObject {
   /**
    * Offset for collision detection or positioning.
    */
-  oftset = { top: 50, left: 50, right: 50, bottom: 50 };
+   offset = { top: 0, left: 0, right: 0, bottom: 0 };
 
   /**
    * Reference to the animation frame request ID.

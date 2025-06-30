@@ -291,22 +291,68 @@ export class World {
     this.checkCollectible(this.level.coins, this.collectCoin, playCoinCollectSound);
   }
 
-  /**
-   * Generic function to check collision with collectible items
-   * @param {Array} arr - Array of collectible items
-   * @param {Function} collectFn - Function to call when item is collected
-   * @param {Function} soundFn - Function to play collection sound
-   */
-  checkCollectible(arr, collectFn, soundFn) {
-    arr.forEach((item, i) => {
-      if (this.character.isColliding(item) && !item.isCollected) {
-        soundFn();
-        collectFn.call(this);
-        item.isCollected = true;
-        arr.splice(i, 1);
-      }
-    });
-  }
+ /**
+ * Check collision with collectible items
+ * @param {Array} arr - Array of collectible items
+ * @param {Function} collectFn - Function to call when item is collected
+ * @param {Function} soundFn - Function to play sound on collection
+ */
+checkCollectible(arr, collectFn, soundFn) {
+  arr.forEach((item, i) => {
+    if (this.isCollidingWithItem(item) && !item.isCollected) {
+      soundFn();
+      collectFn.call(this);
+      item.isCollected = true;
+      arr.splice(i, 1);
+    }
+  });
+}
+
+/**
+ * Check if character is colliding with a specific item
+ * @param {Object} item - The collectible item to check collision with
+ * @returns {boolean} True if collision detected, false otherwise
+ */
+isCollidingWithItem(item) {
+  const charBounds = this.getCharacterBounds();
+  const itemBounds = this.getItemBounds(item);
+  
+  return charBounds.right > itemBounds.left && 
+         charBounds.left < itemBounds.right && 
+         charBounds.bottom > itemBounds.top && 
+         charBounds.top < itemBounds.bottom;
+}
+
+/**
+ * Get character collision boundaries with margins
+ * @returns {Object} Character bounds with left, right, top, bottom properties
+ */
+getCharacterBounds() {
+  const margin = 30;
+  return {
+    left: this.character.x + margin,
+    right: this.character.x + this.character.width - margin,
+    top: this.character.y + margin,
+    bottom: this.character.y + this.character.height - margin
+  };
+}
+
+/**
+ * Get item collision boundaries with appropriate margins
+ * @param {Object} item - The collectible item
+ * @returns {Object} Item bounds with left, right, top, bottom properties
+ */
+getItemBounds(item) {
+  const isCoin = item.constructor.name === 'Coin' || item.height > 100;
+  const margin = isCoin ? 40 : 10;
+  
+  return {
+    left: item.x + margin,
+    right: item.x + item.width - margin,
+    top: item.y + margin,
+    bottom: item.y + item.height - margin
+  };
+}
 
   /**
    * Handles bottle collection
