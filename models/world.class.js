@@ -169,32 +169,46 @@ export class World {
   }
 
 /**
-* Checks collisions between character and enemies and handles collision responses
-*/
+ * Checks collisions between character and enemies and handles collision responses
+ */
 checkCharacterCollisions() {
-  let hasValidJump = false;
   this.level.enemies.forEach(enemy => {
     if (!this.isCollidingWithEnemy(enemy) || this.character.isDead()) return;
-    if (this.character.isAboveGround() && 
-        this.character.speedY <= 10 && 
-        (this.character.y + this.character.height * 0.8) < (enemy.y + enemy.height * 0.7)) {
-      hasValidJump = true;
+    
+    if (this.isValidJump(enemy)) {
+      this.handleJumpOnEnemy(enemy);
+    } else {
+      this.handleCollisionDamage();
     }
   });
+}
 
-  this.level.enemies.forEach(enemy => {
-    if (!this.isCollidingWithEnemy(enemy) || this.character.isDead()) return; 
-    if (this.character.isAboveGround() && 
-        this.character.speedY <= 10 && 
-        (this.character.y + this.character.height * 0.8) < (enemy.y + enemy.height * 0.7)) {
-      enemy.hit();
-      this.character.jump();
-      playEnemyHurtSound(enemy);
-    } else if (!hasValidJump) {
-      this.applyCollisionDamage();
-      return;
-    }
-  });
+/**
+ * Determines if character is performing a valid jump attack on enemy
+ * @param {Object} enemy - The enemy to check against
+ * @returns {boolean} True if valid jump attack
+ */
+isValidJump(enemy) {
+  return this.character.isAboveGround() && this.character.y < (enemy.y - 20);
+}
+
+/**
+ * Handles successful jump attack on enemy
+ * @param {Object} enemy - The enemy being attacked
+ */
+handleJumpOnEnemy(enemy) {
+  enemy.hit();
+  this.character.jump();
+  playEnemyHurtSound(enemy);
+}
+
+/**
+ * Handles collision damage with cooldown protection
+ */
+handleCollisionDamage() {
+  if (Date.now() - this.character.lastHitTime > 1500) {
+    this.applyCollisionDamage();
+  }
 }
 
 /**
