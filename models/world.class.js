@@ -161,11 +161,12 @@ export class World {
    * Handles throwing objects (bottles) when D key is pressed
    */
   checkThrowObjects() {
-    if (this.keyboard.D && this.statusBarBottle.bottlesCount > 0) {
+     if (this.keyboard.D && !this.keyboard.wasD && this.statusBarBottle.bottlesCount > 0) {
       const dir = this.character.otherDirection ? -1 : 1;
       this.throwableObject.push(new ThrowableObject(this.character.x + 10 * dir, this.character.y + 10, dir));
       this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount - 1);
     }
+    this.keyboard.wasD = this.keyboard.D;
   }
 
 /**
