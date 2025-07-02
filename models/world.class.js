@@ -63,15 +63,22 @@ export class World {
     this.endboss = new Endboss();
     this.endboss.world = this;
     this.level.enemies.push(this.endboss);
+    this.initializeStatusBars();
+    this.setWorld();
+    this.spawnChickens();
+    this.run();
+    this.draw();
+  }
+
+  /**
+   * Initializes all status bars
+   */
+  initializeStatusBars() {
     this.statusBarHeartCharacter = new StatusBarHeartCharacter(this.character);
     this.statusBarHeartEndboss = new StatusBarHeartEndboss(this.endboss);
     this.statusBarBottle = new StatusBarBottle();
     this.statusBarBottle.setBottlesCount(0);
     this.statusBarCoins = new StatusBarCoins(this);
-    this.setWorld();
-    this.spawnChickens();
-    this.run();
-    this.draw();
   }
 
   /**
@@ -115,7 +122,7 @@ export class World {
    */
   draw() {
     if (this.gameOver) return;
-    this.clearCanvas();
+    clearCanvas(this.ctx, this.canvas);
     this.ctx.translate(this.camera_x, 0);
     this.drawAllGameObjects();
     this.ctx.translate(-this.camera_x, 0);
@@ -125,18 +132,16 @@ export class World {
   }
 
   /**
-   * Clears the entire canvas
-   */
-  clearCanvas() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  /**
    * Draws all game objects (background, clouds, enemies, collectibles, character)
    */
   drawAllGameObjects() {
-    [this.backgroundObjects, this.clouds, this.throwableObject, this.level.enemies, this.level.coins, this.level.bottle]
-      .forEach(arr => arr?.filter(o => !o.markedForRemoval).forEach(o => this.addToMap(o)));
+    const objectArrays = [
+      this.backgroundObjects, this.clouds, this.throwableObject,
+      this.level.enemies, this.level.coins, this.level.bottle
+    ];
+    objectArrays.forEach(arr => {
+      arr?.filter(o => !o.markedForRemoval).forEach(o => this.addToMap(o));
+    });
     this.addToMap(this.character);
   }
 
@@ -144,8 +149,11 @@ export class World {
    * Draws all status bars (health, bottles, coins)
    */
   drawAllStatusBars() {
-    [this.statusBarHeartCharacter, this.statusBarBottle, this.statusBarCoins, this.statusBarHeartEndboss]
-      .forEach(bar => this.addToMap(bar));
+    const statusBars = [
+      this.statusBarHeartCharacter, this.statusBarBottle,
+      this.statusBarCoins, this.statusBarHeartEndboss
+    ];
+    statusBars.forEach(bar => this.addToMap(bar));
   }
 
   /**
@@ -153,7 +161,9 @@ export class World {
    */
   startEnemiesAnimation() {
     this.level.enemies.forEach(e => {
-      if ((e instanceof Chicken || e instanceof SmallChicken) && typeof e.animate === "function") e.animate();
+      if ((e instanceof Chicken || e instanceof SmallChicken) && typeof e.animate === "function") {
+        e.animate();
+      }
     });
   }
 
@@ -161,7 +171,7 @@ export class World {
    * Handles throwing objects (bottles) when D key is pressed
    */
   checkThrowObjects() {
-     if (this.keyboard.D && !this.keyboard.wasD && this.statusBarBottle.bottlesCount > 0) {
+    if (this.keyboard.D && !this.keyboard.wasD && this.statusBarBottle.bottlesCount > 0) {
       const dir = this.character.otherDirection ? -1 : 1;
       this.throwableObject.push(new ThrowableObject(this.character.x + 10 * dir, this.character.y + 10, dir));
       this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount - 1);
@@ -169,71 +179,49 @@ export class World {
     this.keyboard.wasD = this.keyboard.D;
   }
 
-/**
- * Checks collisions between character and enemies and handles collision responses
- */
-checkCharacterCollisions() {
-  this.level.enemies.forEach(enemy => {
-    if (!this.isCollidingWithEnemy(enemy) || this.character.isDead()) return;
-    
-    if (this.isValidJump(enemy)) {
-      this.handleJumpOnEnemy(enemy);
-    } else {
-      this.handleCollisionDamage();
-    }
-  });
-}
-
-/**
- * Determines if character is performing a valid jump attack on enemy
- * @param {Object} enemy - The enemy to check against
- * @returns {boolean} True if valid jump attack
- */
-isValidJump(enemy) {
-  return this.character.isAboveGround() && this.character.y < (enemy.y - 20);
-}
-
-/**
- * Handles successful jump attack on enemy
- * @param {Object} enemy - The enemy being attacked
- */
-handleJumpOnEnemy(enemy) {
-  enemy.hit();
-  this.character.jump();
-  playEnemyHurtSound(enemy);
-}
-
-/**
- * Handles collision damage with cooldown protection
- */
-handleCollisionDamage() {
-  if (Date.now() - this.character.lastHitTime > 1500) {
-    this.applyCollisionDamage();
+  /**
+   * Main collision detection function
+   */
+  checkCollisions() {
+    this.checkCharacterCollisions();
+    this.checkBottleCollisions();
+    this.filterMarkedEnemies();
   }
-}
 
-/**
-* Checks collision between character and enemy using reduced collision zones for more precise detection
-*/
-isCollidingWithEnemy(enemy) {
-  const charMargin = 20;
-  const enemyMargin = 15;
-  
-  const charLeft = this.character.x + charMargin;
-  const charRight = this.character.x + this.character.width - charMargin;
-  const charTop = this.character.y + charMargin;
-  const charBottom = this.character.y + this.character.height - charMargin;
-  
-  const enemyLeft = enemy.x + enemyMargin;
-  const enemyRight = enemy.x + enemy.width - enemyMargin;
-  const enemyTop = enemy.y + enemyMargin;
-  const enemyBottom = enemy.y + enemy.height - enemyMargin;
-  
-  return charRight > enemyLeft && 
-         charLeft < enemyRight && 
-         charBottom > enemyTop && 
-         charTop < enemyBottom;
-}
+  /**
+   * Checks collisions between character and enemies and handles collision responses
+   */
+  checkCharacterCollisions() {
+    this.level.enemies.forEach(enemy => {
+      if (!isCollidingWithEnemy(this.character, enemy) || this.character.isDead()) return;
+      
+      if (isValidJump(this.character, enemy)) {
+        this.handleJumpOnEnemy(enemy);
+      } else {
+        this.handleCollisionDamage(enemy);
+      }
+    });
+  }
+
+  /**
+   * Handles successful jump attack on enemy
+   * @param {Object} enemy - The enemy being attacked
+   */
+  handleJumpOnEnemy(enemy) {
+    enemy.hit();
+    this.character.jump();
+    playEnemyHurtSound(enemy);
+  }
+
+  /**
+   * Handles collision damage with per-enemy cooldown tracking
+   * @param {Object} enemy - The enemy that caused the collision
+   */
+  handleCollisionDamage(enemy) {
+    if (shouldApplyCollisionDamage(this.character, enemy)) {
+      this.applyCollisionDamage();
+    }
+  }
 
   /**
    * Applies damage to character when colliding with enemies
@@ -246,12 +234,14 @@ isCollidingWithEnemy(enemy) {
   }
 
   /**
-   * Main collision detection function
+   * Cleans up enemy hit tracking when enemies are removed
    */
-  checkCollisions() {
-    this.checkCharacterCollisions();
-    this.checkBottleCollisions();
-    this.filterMarkedEnemies();
+  cleanupEnemyHitTracking() {
+    this.character.hitByEnemies.forEach((timestamp, enemy) => {
+      if (!this.level.enemies.includes(enemy)) {
+        this.character.hitByEnemies.delete(enemy);
+      }
+    });
   }
 
   /**
@@ -277,8 +267,9 @@ isCollidingWithEnemy(enemy) {
     enemy.hit();
     bottle.splash();
     playEnemyHurtSound(enemy);
-    if (enemy instanceof Endboss && enemy.health <= 0) enemy.die();
-    else if (enemy.isEnemyDead()) {
+    if (enemy instanceof Endboss && enemy.health <= 0) {
+      enemy.die();
+    } else if (enemy.isEnemyDead()) {
       requestAnimationFrame(() => {
         this.level.enemies = this.level.enemies.filter(e => e !== enemy);
       });
@@ -290,22 +281,24 @@ isCollidingWithEnemy(enemy) {
    * Removes enemies marked for removal from the game
    */
   filterMarkedEnemies() {
-    this.level.enemies = this.level.enemies.filter(e => !e.markedForRemoval);
+    this.level.enemies = filterMarkedObjects(this.level.enemies);
+    this.cleanupEnemyHitTracking(); 
   }
 
   /**
    * Removes bottles marked for removal from the game
    */
   filterMarkedBottles() {
-    this.throwableObject = this.throwableObject.filter(b => !b.markedForRemoval);
+    this.throwableObject = filterMarkedObjects(this.throwableObject);
   }
 
   /**
    * Spawns bottles when enough enemies are defeated
    */
   checkBottleSpawn() {
-    if (this.level.enemies.length <= level1.enemies.length - 2)
+    if (this.level.enemies.length <= level1.enemies.length - 2) {
       this.statusBarBottle.setPercentageBottle(20);
+    }
   }
 
   /**
@@ -327,72 +320,20 @@ isCollidingWithEnemy(enemy) {
    * Checks for collection of bottles and coins
    */
   checkCollection() {
-    this.checkCollectible(this.level.bottle, this.collectBottle, playBottleCollectSound);
-    this.checkCollectible(this.level.coins, this.collectCoin, playCoinCollectSound);
+    this.level.bottle = checkCollectible(
+      this.character, 
+      this.level.bottle, 
+      () => this.collectBottle(), 
+      playBottleCollectSound
+    );
+    
+    this.level.coins = checkCollectible(
+      this.character, 
+      this.level.coins, 
+      () => this.collectCoin(), 
+      playCoinCollectSound
+    );
   }
-
- /**
- * Check collision with collectible items
- * @param {Array} arr - Array of collectible items
- * @param {Function} collectFn - Function to call when item is collected
- * @param {Function} soundFn - Function to play sound on collection
- */
-checkCollectible(arr, collectFn, soundFn) {
-  arr.forEach((item, i) => {
-    if (this.isCollidingWithItem(item) && !item.isCollected) {
-      soundFn();
-      collectFn.call(this);
-      item.isCollected = true;
-      arr.splice(i, 1);
-    }
-  });
-}
-
-/**
- * Check if character is colliding with a specific item
- * @param {Object} item - The collectible item to check collision with
- * @returns {boolean} True if collision detected, false otherwise
- */
-isCollidingWithItem(item) {
-  const charBounds = this.getCharacterBounds();
-  const itemBounds = this.getItemBounds(item);
-  
-  return charBounds.right > itemBounds.left && 
-         charBounds.left < itemBounds.right && 
-         charBounds.bottom > itemBounds.top && 
-         charBounds.top < itemBounds.bottom;
-}
-
-/**
- * Get character collision boundaries with margins
- * @returns {Object} Character bounds with left, right, top, bottom properties
- */
-getCharacterBounds() {
-  const margin = 30;
-  return {
-    left: this.character.x + margin,
-    right: this.character.x + this.character.width - margin,
-    top: this.character.y + margin,
-    bottom: this.character.y + this.character.height - margin
-  };
-}
-
-/**
- * Get item collision boundaries with appropriate margins
- * @param {Object} item - The collectible item
- * @returns {Object} Item bounds with left, right, top, bottom properties
- */
-getItemBounds(item) {
-  const isCoin = item.constructor.name === 'Coin' || item.height > 100;
-  const margin = isCoin ? 40 : 10;
-  
-  return {
-    left: item.x + margin,
-    right: item.x + item.width - margin,
-    top: item.y + margin,
-    bottom: item.y + item.height - margin
-  };
-}
 
   /**
    * Handles bottle collection
@@ -409,46 +350,9 @@ getItemBounds(item) {
     this.statusBarCoins.setPercentageCoins(coins >= 30 ? 0 : coins);
     if (coins === 30) {
       this.character.life++;
-      this.showCongratulations();
+      showCongratulations(this.canvas);
     }
     if (coins > 100) this.statusBarCoins.percentageCoins = 100;
-  }
-
-  /**
-   * Shows congratulations popup when player earns a new life
-   */
-  showCongratulations() {
-    const popup = this.createPopupElement();
-    this.positionPopup(popup);
-    document.body.appendChild(popup);
-    playNewLifeSound();
-    setTimeout(() => popup.remove(), 2000);
-  }
-
-  /**
-   * Creates the congratulations popup DOM element
-   * @returns {HTMLElement} The popup element
-   */
-  createPopupElement() {
-    const div = document.createElement("div");
-    div.className = "popup";
-    div.innerHTML = `
-      <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-      <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
-    `;
-    return div;
-  }
-
-  /**
-   * Positions the popup relative to the canvas
-   * @param {HTMLElement} popup - The popup element to position
-   */
-  positionPopup(popup) {
-    const { right, top } = this.canvas.getBoundingClientRect();
-    Object.assign(popup.style, {
-      left: `${right + 17}px`,
-      top: `${top - 7}px`
-    });
   }
 
   /**
@@ -456,29 +360,9 @@ getItemBounds(item) {
    * @param {Object} mo - The movable object to add
    */
   addToMap(mo) {
-    if (mo.otherDirection) this.flipImage(mo);
+    if (mo.otherDirection) flipImage(this.ctx, mo);
     mo.draw(this.ctx);
     mo.drawFrame(this.ctx);
-    if (mo.otherDirection) this.flipImageBack(mo);
-  }
-
-  /**
-   * Flips an image horizontally for rendering in opposite direction
-   * @param {Object} mo - The movable object to flip
-   */
-  flipImage(mo) {
-    this.ctx.save();
-    this.ctx.translate(mo.width, 0);
-    this.ctx.scale(-1, 1);
-    mo.x *= -1;
-  }
-
-  /**
-   * Restores image to original orientation after flipping
-   * @param {Object} mo - The movable object to restore
-   */
-  flipImageBack(mo) {
-    mo.x *= -1;
-    this.ctx.restore();
+    if (mo.otherDirection) flipImageBack(this.ctx, mo);
   }
 }

@@ -43,6 +43,7 @@ class Character extends MovableObject {
     this.health = cfg.INITIAL_HEALTH;
     this.life = cfg.INITIAL_LIFE;
     this.lastActionTime = Date.now() - cfg.INITIAL_LAST_ACTION_OFFSET;
+    this.hitByEnemies = new Map(); // Usa Map per salvare timestamp dei danni per nemico
     this.currentState = Character.STATES.SLEEPING;
   }
 
