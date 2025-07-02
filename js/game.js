@@ -1,7 +1,7 @@
 import { World } from "../models/world.class.js";
 
 let canvas, world, keyboard = new Keyboard(), isMuted = false;
-window.hideFooterButtonsAtEnd = hideFooterButtonsAtEnd;
+
 window.showFooterOnGameEnd = showFooterOnGameEnd;
 
 function init() {
@@ -43,7 +43,7 @@ function showMobileControlsIfNeeded() {
 }
 
 window.startGame = function () {
-  setButtonsVisibility(true);
+  setFooterButtonsVisibility(true);
   hideStartScreen();
   init();
   showMobileControlsIfNeeded();
@@ -61,7 +61,7 @@ function showStartScreen() {
 
 function resetMobileControlsForMenu() {
   if (isMobile()) {
-    document.getElementById("footer").style.display = "flex";
+    document.querySelector("footer").style.display = "flex";
     document.getElementById("mobile-controls").style.display = "none";
   }
 }
@@ -83,17 +83,11 @@ window.openControls = () => toggleScreen("controlsScreen", true);
 window.closeControls = () => toggleScreen("controlsScreen", false);
 window.openStory = () => toggleScreen("storyScreen", true);
 window.closeStory = () => toggleScreen("storyScreen", false);
-window.openSettings = () => toggleScreen("settingsScreen", true);
-window.closeSettings = () => toggleScreen("settingsScreen", false);
 
 window.goToHome = function () {
   cleanupWorldResources();
   location.reload();
 };
-
-function hideFooterButtonsAtEnd() {
-  document.getElementById("music-toggle-button").style.display = "none";
-}
 
 function showFooterOnGameEnd() {
   if (isMobile()) {
@@ -102,11 +96,10 @@ function showFooterOnGameEnd() {
   }
 }
 
-function setButtonsVisibility(isVisible) {
+function setFooterButtonsVisibility(isVisible) {
   const display = isVisible ? 'inline-block' : 'none';
-  ['home-button', 'music-toggle-button'].forEach(id => {
-    document.getElementById(id).style.display = display;
-  });
+  const homeButton = document.getElementById('home-button');
+  if (homeButton) homeButton.style.display = display;
 }
 
 function loadGlobalSoundState() {
@@ -122,7 +115,7 @@ function initializeAudioSync() {
 }
 
 function handleDOMContentLoaded() {
-  setButtonsVisibility(false);
+  setFooterButtonsVisibility(false);
   initializeAudioSync();
 }
 
@@ -137,21 +130,12 @@ function updateAudioIcon(isMuted) {
   }
 }
 
-function toggleWorldAudio() {
-  toggleSound(world);
-  isMuted = audioManager.isGameMuted;
-  updateAudioIcon(isMuted);
-}
-
 function toggleGlobalAudio() {
   audioManager.toggleSound(null);
   isMuted = audioManager.isGameMuted;
   updateAudioIcon(isMuted);
 }
-
-function toggleMobileAudio() {
-  window.world ? toggleWorldAudio() : toggleGlobalAudio();
-}
+window.toggleGlobalAudio = toggleGlobalAudio;
 
 function addTouchEventListeners(element, keyProperty) {
   element.addEventListener("touchstart", () => keyboard[keyProperty] = true, { passive: true });
@@ -173,7 +157,7 @@ function setupAllTouchControls() {
     ["btn-right", "RIGHT"],
     ["btn-jump", "SPACE"],
     ["btn-throw", "D"],
-    ["btn-audio", null, (e) => { e.preventDefault(); toggleMobileAudio(); }]
+    ["btn-audio", null, (e) => { e.preventDefault(); toggleGlobalAudio(); }]
   ];
   
   controls.forEach(([id, key, callback]) => setupTouchControl(id, key, callback));

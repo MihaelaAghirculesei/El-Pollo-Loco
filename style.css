@@ -30,7 +30,7 @@
   --z-footer: 5500;
   --z-modals: 7000;
   
-/* === COLOR PALETTE === */
+  /* === COLOR PALETTE === */
   --btn-primary: #960b06;
   --btn-primary-hover: #eb1111;
   --accent-cyan: #0ff;
@@ -40,7 +40,7 @@
   --bg-popup: rgba(14,163,233,0.699);
   --bg-dark: rgba(0,0,0,0.699);
   
-/* === SPACING === */
+  /* === SPACING === */
   --btn-radius: clamp(12px, 2vw, 20px);
   --btn-padding: clamp(3px, 1vw, 5px) clamp(6px, 2vw, 8px);
   --content-width: clamp(300px, 95%, 720px);
@@ -100,7 +100,7 @@ h1 {
 
 .controls-screen, .story-container {
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.55);
-    margin-right: 7px;
+  margin-right: 7px;
 }
 
 #content {
@@ -170,7 +170,7 @@ h1 {
 }
 
 .controls, .fs-centered {
-  font-family:  "Roboto", "Sofia_Sans";
+  font-family: "Roboto", "Sofia_Sans";
   font-size: 10px; 
   display: flex;
   flex-direction: column;
@@ -196,7 +196,6 @@ h1 {
 .controls-container .box.jc-center:last-child {
   justify-content: flex-start;
   width: 60%;
-
 }
 
 .controls-container img {
@@ -280,10 +279,26 @@ footer {
   margin: 0 auto;
 }
 
-.footer-left, .footer-right { display: flex; gap: 8px; }
-.footer-center { font-size: clamp(14px, 3vw, 17px); text-align: center;   font-family: "Roboto", "Sofia_Sans", "Milchroma"; }
+.footer-left, .footer-right { 
+  display: flex; 
+  gap: 8px; 
+}
 
-#home-game-button, #music-toggle-button { display: none; }
+.footer-center { 
+  font-size: clamp(14px, 3vw, 17px); 
+  text-align: center; 
+  font-family: "Roboto", "Sofia_Sans", "Milchroma"; 
+}
+
+/* Solo il bottone home è nascosto di default */
+#home-game-button { 
+  display: none; 
+}
+
+/* Il bottone audio è sempre visibile quando il footer è presente */
+#music-toggle-button { 
+  display: inline-block; 
+}
 
 .start-screen-active .footer-content {
   justify-content: center !important;
@@ -291,8 +306,6 @@ footer {
   gap: 20px !important;
   height: 27px;
 }
-
-.start-screen-active .footer-right { display: none; }
 
 /* === MOBILE CONTROLS === */
 #mobile-controls {
@@ -495,8 +508,10 @@ footer {
   }
   
   .menu { z-index: var(--z-menu) !important; position: relative; }
-  .button-start-screen { z-index: var(--z-buttons) !important; position: relative; font-size:6px; }
+  .button-start-screen { z-index: var(--z-buttons) !important; position: relative; font-size: 6px; }
   #titleCanvas, h1 { display: none !important; }
+  
+  /* Su mobile il footer è nascosto nella start screen */
   .start-screen-active footer { display: none !important; }
 
   .mobile-btn { padding: 7px; border-radius: 8px; }
@@ -527,7 +542,7 @@ footer {
   }
   
   .controls-container img { max-width: 20px; width: 10vw; }
-  .controls-container span { font-size: 6px; line-height: 1 !important;}
+  .controls-container span { font-size: 6px; line-height: 1 !important; }
   .controls-container .box.jc-center img { 
     padding: 2px; 
     border-radius: 6px; 
@@ -549,18 +564,6 @@ footer {
     border-width: 1px;
     z-index: 5501 !important;
     position: relative;
-  }
-
-  .start-screen-active footer {
-    min-height: 50px !important;
-    display: flex !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: var(--z-footer) !important;
-    justify-content: center !important;
-    align-items: center !important;
   }
   
   .hidden-mobile { display: none !important; }
@@ -673,7 +676,6 @@ footer {
   }
   
   .game-active footer { display: none !important; }
-  .start-screen-active .footer-right { display: flex !important; }
   
   .mobile-btn { padding: 5px; border-radius: 8px; }
   .mobile-btn img { width: 35px; height: 35px; }
@@ -717,7 +719,6 @@ footer {
     align-items: center !important;
   }
   
-  .start-screen-active .footer-right { display: flex !important; } 
   .popup {
     width: clamp(150px, 20vw, 200px) !important;
     top: 39% !important; 
@@ -744,12 +745,6 @@ footer {
     align-items: center !important;
   }
 
-  .footer {
-    display: block;
-  }
-  
-  .start-screen-active .footer-right { display: flex !important; }
-
   .menu {
     padding-top: clamp(10px, 2vh, 20px);
   }
@@ -763,7 +758,7 @@ footer {
     z-index: var(--z-overlays) !important;
   }
 
-    .popup {
+  .popup {
     width: clamp(150px, 20vw, 200px) !important;
     top: 48% !important; 
     left: 62% !important;  
@@ -773,14 +768,14 @@ footer {
 
 /* === Special Cases === */
 @media (max-height: 920px) {
-  canvas {z-index: 1 !important; }
+  canvas { z-index: 1 !important; }
   .controls-screen, .story-container, .end-screen { 
     height: 100vh; 
     z-index: var(--z-modals) !important; 
   }
 
-.mobile-btn { padding: 3px; border-radius: 8px; }
-.mobile-btn img { width: 21px; height: 21px; }
+  .mobile-btn { padding: 3px; border-radius: 8px; }
+  .mobile-btn img { width: 21px; height: 21px; }
 }
 
 /* === Footer visible on desktop === */
@@ -818,6 +813,6 @@ footer {
 }
 
 @media (max-width: 915px) and (max-height: 412px) and (orientation: landscape) {
-  .mobile-btn { padding: 2px !important; border-radius: 8px !important; margin-left: 0px;   }
-  .mobile-btn img { width: 15px !important; height: 15px !important;  gap: 5px}
+  .mobile-btn { padding: 2px !important; border-radius: 8px !important; margin-left: 0px; }
+  .mobile-btn img { width: 15px !important; height: 15px !important; gap: 5px; }
 }

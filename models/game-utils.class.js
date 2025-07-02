@@ -82,7 +82,6 @@ function createGameWonScreen() {
  */
 function handleGameOverFlow(world) {
   if (world?.gameOver) return false;
-  hideFooterButtonsAtEnd();
   setGameOverState(world);
   return true;
 }
@@ -92,7 +91,6 @@ function handleGameOverFlow(world) {
  * @param {Object} world - The game world object
  */
 function handleGameWonFlow(world) {
-  hideFooterButtonsAtEnd();
   window.showFooterOnGameEnd();
   clearInterval(world.gameInterval);
   stopAllGameEndSounds(world);
