@@ -9,18 +9,40 @@ let isGameMuted = true;
  */
 class AudioManager {
   constructor() {
-    /** @private */
-    this.AUDIO_PATHS = this.defineAudioPaths();
-    this.isGameMuted = true;
-    this.isMusicPlaying = false;
-    this.audioPool = {};
-    this.backgroundMusic = this.createBackgroundMusic();
-    this.characterSnoringSound = null;
-    this.preloadFrequentSounds();
+    this.initialize();
   }
 
   /**
-   * Defines and returns all audio file paths.
+   * Initializes AudioManager properties.
+   */
+  initProperties() {
+    this.AUDIO_PATHS = this.defineAudioPaths();
+    this.isGameMuted = JSON.parse(localStorage.getItem('gameSoundMuted') || 'true');
+    this.isMusicPlaying = false;
+    this.audioPool = {};
+    this.backgroundMusic = this.createAudioInstance(this.AUDIO_PATHS.BACKGROUND, 0.1);
+    this.characterSnoringSound = null;
+  }
+
+  /**
+   * Sets up initial game state.
+   */
+  setupGame() {
+    this.preloadFrequentSounds();
+    this.updateAllButtons();
+    if (!this.isGameMuted) setTimeout(() => this.playBackgroundMusic(), 500);
+  }
+
+  /**
+   * Initializes all AudioManager.
+   */
+  initialize() {
+    this.initProperties();
+    this.setupGame();
+  }
+
+  /**
+   * Defines all audio file paths.
    * @returns {Object<string, string>} Audio file paths.
    */
   defineAudioPaths() {
@@ -44,15 +66,10 @@ class AudioManager {
    * Preloads frequently used sounds into audio pools.
    */
   preloadFrequentSounds() {
-    const frequentSounds = [
-      this.AUDIO_PATHS.COIN_COLLECT,
-      this.AUDIO_PATHS.BOTTLE_COLLECT,
-      this.AUDIO_PATHS.CHARACTER_HURT,
-      this.AUDIO_PATHS.CHICKEN_HURT,
-      this.AUDIO_PATHS.SMALL_CHICKEN_HURT,
-      this.AUDIO_PATHS.ENDBOSS_HURT
-    ];
-    frequentSounds.forEach(path => this.createAudioPool(path, 3));
+    [this.AUDIO_PATHS.COIN_COLLECT, this.AUDIO_PATHS.BOTTLE_COLLECT,
+     this.AUDIO_PATHS.CHARACTER_HURT, this.AUDIO_PATHS.CHICKEN_HURT,
+     this.AUDIO_PATHS.SMALL_CHICKEN_HURT, this.AUDIO_PATHS.ENDBOSS_HURT]
+      .forEach(path => this.createAudioPool(path, 3));
   }
 
   /**
@@ -70,6 +87,13 @@ class AudioManager {
   }
 
   /**
+   * Saves current sound state to localStorage.
+   */
+  saveSoundState() {
+    localStorage.setItem('gameSoundMuted', JSON.stringify(this.isGameMuted));
+  }
+
+  /**
    * Creates an individual audio instance.
    * @param {string} path - The path to the audio file.
    * @param {number} volume - Initial volume level.
@@ -83,20 +107,13 @@ class AudioManager {
   }
 
   /**
-   * Initializes background music.
-   * @returns {HTMLAudioElement}
-   */
-  createBackgroundMusic() {
-    return this.createAudioInstance(this.AUDIO_PATHS.BACKGROUND, 0.1);
-  }
-
-  /**
    * Plays a sound by path, using pool if available.
    * @param {string} path
    * @param {number} [volume=0.2]
    */
   playSound(path, volume = 0.2) {
     if (this.isGameMuted) return;
+    
     const pool = this.audioPool[path];
     if (pool) {
       const audio = pool.instances[pool.currentIndex];
@@ -120,49 +137,40 @@ class AudioManager {
     audio.currentTime = 0;
   }
 
-  /** Starts background music playback. */
+  /**
+   * Starts background music playback.
+   */
   playBackgroundMusic() {
+    if (this.isGameMuted) return;
     this.backgroundMusic.play().catch(() => {});
     this.isMusicPlaying = true;
   }
 
-  /** Stops background music playback. */
+  /**
+   * Stops background music playback.
+   */
   stopBackgroundMusic() {
     this.stopAudio(this.backgroundMusic);
     this.isMusicPlaying = false;
   }
 
-  /** Initializes snoring sound for character. */
-  initCharacterSnoring() {
-    if (!this.characterSnoringSound) {
-      this.characterSnoringSound = this.createAudioInstance(
-        this.AUDIO_PATHS.CHARACTER_SNORING,
-        0.9
-      );
-      this.characterSnoringSound.loop = true;
-    }
-  }
-
-  /** Plays character snoring sound if not muted. */
+  /**
+   * Plays character snoring sound if not muted.
+   */
   playCharacterSnoring() {
     if (this.isGameMuted) return;
-    this.initCharacterSnoring();
+    if (!this.characterSnoringSound) {
+      this.characterSnoringSound = this.createAudioInstance(this.AUDIO_PATHS.CHARACTER_SNORING, 0.9);
+      this.characterSnoringSound.loop = true;
+    }
     this.characterSnoringSound.play().catch(() => {});
   }
 
-  /** Stops character snoring sound. */
+  /**
+   * Stops character snoring sound.
+   */
   stopCharacterSnoring() {
     this.stopAudio(this.characterSnoringSound);
-  }
-
-  /**
-   * Creates looping music for endboss.
-   * @returns {HTMLAudioElement}
-   */
-  createEndbossMusic() {
-    const music = this.createAudioInstance(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.5);
-    music.loop = true;
-    return music;
   }
 
   /**
@@ -171,7 +179,8 @@ class AudioManager {
    */
   playEndbossAttackMusic(world) {
     if (world.endbossAttackMusic || this.isGameMuted) return;
-    world.endbossAttackMusic = this.createEndbossMusic();
+    world.endbossAttackMusic = this.createAudioInstance(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.5);
+    world.endbossAttackMusic.loop = true;
     world.endbossAttackMusic.play().catch(() => {});
   }
 
@@ -186,50 +195,15 @@ class AudioManager {
     world.endbossAttackStarted = false;
   }
 
-  playNewLifeSound() { this.playSound(this.AUDIO_PATHS.NEW_LIFE); }
-  playCharacterHurtSound() { this.playSound(this.AUDIO_PATHS.CHARACTER_HURT); }
-  playCoinCollectSound() { this.playSound(this.AUDIO_PATHS.COIN_COLLECT); }
-  playBottleCollectSound() { this.playSound(this.AUDIO_PATHS.BOTTLE_COLLECT); }
-  playGameOverSound() { this.playSound(this.AUDIO_PATHS.LOSE_GAME); }
-  playGameWonSound() { this.playSound(this.AUDIO_PATHS.WIN_GAME); }
-  playEndbossHurtSound() { this.playSound(this.AUDIO_PATHS.ENDBOSS_HURT, 0.3); }
-  playEndbossAttackSound() { this.playSound(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.4); }
-
   /**
    * Plays hurt sound based on enemy type.
    * @param {Object} enemy
    */
   playEnemyHurtSound(enemy) {
-    this.playSound(this.getEnemyHurtSoundPath(enemy));
-  }
-
-  /**
-   * Determines correct hurt sound path for an enemy.
-   * @param {Object} enemy
-   * @returns {string}
-   */
-  getEnemyHurtSoundPath(enemy) {
-    return enemy.constructor.name === 'SmallChicken'
+    const path = enemy.constructor.name === 'SmallChicken'
       ? this.AUDIO_PATHS.SMALL_CHICKEN_HURT
       : this.AUDIO_PATHS.CHICKEN_HURT;
-  }
-
-  /**
-   * Mutes a sound on a given entity.
-   * @param {Object} entity
-   * @param {string} soundProperty
-   */
-  muteEntitySound(entity, soundProperty) {
-    if (entity?.[soundProperty]) entity[soundProperty].pause();
-  }
-
-  /**
-   * Mutes all sounds in an array of entities.
-   * @param {Object[]} array
-   * @param {string} soundProperty
-   */
-  muteArraySounds(array, soundProperty) {
-    array?.forEach(item => this.muteEntitySound(item, soundProperty));
+    this.playSound(path);
   }
 
   /**
@@ -237,17 +211,9 @@ class AudioManager {
    * @param {Object} endboss
    */
   muteEndbossSounds(endboss) {
-    ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(sound =>
-      this.muteEntitySound(endboss, sound)
+    ['alert_sound', 'hurt_sound', 'dead_sound'].forEach(sound => 
+      endboss?.[sound]?.pause()
     );
-  }
-
-  /**
-   * Mutes all endbosses in an array.
-   * @param {Object[]} endbossArray
-   */
-  muteAllEndbosses(endbossArray) {
-    endbossArray?.forEach(endboss => this.muteEndbossSounds(endboss));
   }
 
   /**
@@ -257,10 +223,42 @@ class AudioManager {
   muteGameSounds(world) {
     if (!world?.level) return;
     const { level, character } = world;
-    this.muteEntitySound(character, "hurt_sound");
+    character?.hurt_sound?.pause();
     this.stopCharacterSnoring();
-    this.muteArraySounds(level.enemies, "chicken_sound");
-    this.muteAllEndbosses(level.endboss);
+    level.enemies?.forEach(item => item?.chicken_sound?.pause());
+    level.endboss?.forEach(endboss => this.muteEndbossSounds(endboss));
+  }
+
+  /**
+   * Sets mute state.
+   * @param {boolean} muted - Mute state.
+   */
+  setMuteState(muted) {
+    this.isGameMuted = isGameMuted = muted;
+  }
+
+  /**
+   * Saves state to localStorage.
+   */
+  saveState() {
+    localStorage.setItem('gameSoundMuted', JSON.stringify(this.isGameMuted));
+  }
+
+  /**
+   * Sets game mute state and saves it.
+   * @param {boolean} muted - Mute state.
+   */
+  setGameMuteState(muted) {
+    this.setMuteState(muted);
+    this.saveState();
+  }
+
+  /**
+   * Handles snoring for sleeping character.
+   * @param {Object} world
+   */
+  handleSnoring(world) {
+    if (world?.character?.currentState === "sleeping") this.playCharacterSnoring();
   }
 
   /**
@@ -268,20 +266,20 @@ class AudioManager {
    * @param {Object} world
    */
   enableAllSounds(world) {
-    if (!this.isMusicPlaying) {
-      this.playBackgroundMusic();
-      this.playSnoringIfSleeping(world);
-    }
+    this.setGameMuteState(false);
+    this.playBackgroundMusic();
+    this.handleSnoring(world);
+    this.updateAllButtons();
   }
 
   /**
-   * Plays snoring sound if character is sleeping.
+   * Stops all game sounds.
    * @param {Object} world
    */
-  playSnoringIfSleeping(world) {
-    if (world?.character?.currentState === "sleeping") {
-      this.playCharacterSnoring();
-    }
+  stopAllSounds(world) {
+    this.stopBackgroundMusic();
+    this.muteGameSounds(world);
+    this.stopEndbossAttackMusic(world);
   }
 
   /**
@@ -289,9 +287,9 @@ class AudioManager {
    * @param {Object} world
    */
   disableAllSounds(world) {
-    this.stopBackgroundMusic();
-    this.muteGameSounds(world);
-    this.stopEndbossAttackMusic(world);
+    this.setGameMuteState(true);
+    this.stopAllSounds(world);
+    this.updateAllButtons();
   }
 
   /**
@@ -310,12 +308,11 @@ class AudioManager {
    */
   toggleSound(world) {
     this.isGameMuted ? this.enableAllSounds(world) : this.disableAllSounds(world);
-    this.isGameMuted = !this.isGameMuted;
-    isGameMuted = this.isGameMuted;
-    this.updateSoundButton();
   }
 
-  /** Updates the UI button text for sound. */
+  /**
+   * Updates sound button text.
+   */
   updateSoundButton() {
     const button = document.getElementById("music-toggle-button");
     if (button) {
@@ -323,6 +320,60 @@ class AudioManager {
       button.blur();
     }
   }
+
+  /**
+   * Updates menu button text.
+   */
+  updateMenuButton() {
+    const menu = document.getElementById('btnSound');
+    if (menu) menu.innerText = this.isGameMuted ? 'Turn On Sounds' : 'Turn Off Sounds';
+  }
+
+  /**
+   * Updates audio icon image.
+   */
+  updateAudioIcon() {
+    const icon = document.getElementById("audio-icon");
+    if (icon) {
+      icon.src = this.isGameMuted 
+        ? "img_pollo_locco/img/10_buttons/sound-icon-off.png"
+        : "img_pollo_locco/img/10_buttons/sound-icon-on.png";
+    }
+  }
+
+  /**
+   * Updates all audio-related UI buttons.
+   */
+  updateAllButtons() {
+    this.updateSoundButton();
+    this.updateMenuButton();
+    this.updateAudioIcon();
+  }
+
+  // Sound effect methods
+  /** @description Plays new life sound. */
+  playNewLifeSound() { this.playSound(this.AUDIO_PATHS.NEW_LIFE); }
+  
+  /** @description Plays character hurt sound. */
+  playCharacterHurtSound() { this.playSound(this.AUDIO_PATHS.CHARACTER_HURT); }
+  
+  /** @description Plays coin collect sound. */
+  playCoinCollectSound() { this.playSound(this.AUDIO_PATHS.COIN_COLLECT); }
+  
+  /** @description Plays bottle collect sound. */
+  playBottleCollectSound() { this.playSound(this.AUDIO_PATHS.BOTTLE_COLLECT); }
+  
+  /** @description Plays game over sound. */
+  playGameOverSound() { this.playSound(this.AUDIO_PATHS.LOSE_GAME); }
+  
+  /** @description Plays game won sound. */
+  playGameWonSound() { this.playSound(this.AUDIO_PATHS.WIN_GAME); }
+  
+  /** @description Plays endboss hurt sound. */
+  playEndbossHurtSound() { this.playSound(this.AUDIO_PATHS.ENDBOSS_HURT, 0.3); }
+  
+  /** @description Plays endboss attack sound. */
+  playEndbossAttackSound() { this.playSound(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.4); }
 }
 
 /**
@@ -331,25 +382,8 @@ class AudioManager {
  */
 const audioManager = new AudioManager();
 
-// Exported utility functions
-const playSound = (path, volume) => audioManager.playSound(path, volume);
-const playCharacterSnoringSound = () => audioManager.playCharacterSnoring();
-const stopCharacterSnoringSound = () => audioManager.stopCharacterSnoring();
-const playBackgroundMusic = () => audioManager.playBackgroundMusic();
-const stopBackgroundMusic = () => audioManager.stopBackgroundMusic();
-const playEndbossAttackMusic = (world) => audioManager.playEndbossAttackMusic(world);
-const stopEndbossAttackMusic = (world) => audioManager.stopEndbossAttackMusic(world);
-const playNewLifeSound = () => audioManager.playNewLifeSound();
-const playEnemyHurtSound = (enemy) => audioManager.playEnemyHurtSound(enemy);
-const playCharacterHurtSound = () => audioManager.playCharacterHurtSound();
-const playGameOverSound = () => audioManager.playGameOverSound();
-const playGameWonSound = () => audioManager.playGameWonSound();
-const playCoinCollectSound = () => audioManager.playCoinCollectSound();
-const playBottleCollectSound = () => audioManager.playBottleCollectSound();
-const stopAllGameEndSounds = (world) => audioManager.stopAllGameEndSounds(world);
-const toggleSound = (world) => audioManager.toggleSound(world);
-const enableAllSounds = (world) => audioManager.enableAllSounds(world);
-const disableAllSounds = (world) => audioManager.disableAllSounds(world);
-const muteAllSounds = (world) => audioManager.muteGameSounds(world);
-const playEndbossHurtSound = () => audioManager.playEndbossHurtSound();
-const playEndbossAttackSound = () => audioManager.playEndbossAttackSound();
+// Synchronize global variable on page load
+document.addEventListener('DOMContentLoaded', function() {
+  isGameMuted = audioManager.isGameMuted;
+  audioManager.updateAllButtons();
+});

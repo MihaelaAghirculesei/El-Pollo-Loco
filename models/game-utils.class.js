@@ -156,3 +156,118 @@ function checkGameEnd(world) {
     showGameWon(world);
   }
 }
+
+/**
+ * Plays a sound by path with optional volume.
+ * @param {string} path - Audio file path.
+ * @param {number} volume - Volume level.
+ */
+const playSound = (path, volume) => audioManager.playSound(path, volume);
+
+/**
+ * Plays character snoring sound.
+ */
+const playCharacterSnoringSound = () => audioManager.playCharacterSnoring();
+
+/**
+ * Stops character snoring sound.
+ */
+const stopCharacterSnoringSound = () => audioManager.stopCharacterSnoring();
+
+/**
+ * Plays background music.
+ */
+const playBackgroundMusic = () => audioManager.playBackgroundMusic();
+
+/**
+ * Stops background music.
+ */
+const stopBackgroundMusic = () => audioManager.stopBackgroundMusic();
+
+/**
+ * Plays endboss attack music.
+ * @param {Object} world - Game world object.
+ */
+const playEndbossAttackMusic = (world) => audioManager.playEndbossAttackMusic(world);
+
+/**
+ * Stops endboss attack music.
+ * @param {Object} world - Game world object.
+ */
+const stopEndbossAttackMusic = (world) => audioManager.stopEndbossAttackMusic(world);
+
+/**
+ * Plays new life sound.
+ */
+const playNewLifeSound = () => audioManager.playNewLifeSound();
+
+/**
+ * Plays enemy hurt sound based on enemy type.
+ * @param {Object} enemy - Enemy object.
+ */
+const playEnemyHurtSound = (enemy) => audioManager.playEnemyHurtSound(enemy);
+
+/**
+ * Plays character hurt sound.
+ */
+const playCharacterHurtSound = () => audioManager.playCharacterHurtSound();
+
+/**
+ * Plays game over sound.
+ */
+const playGameOverSound = () => audioManager.playGameOverSound();
+
+/**
+ * Plays game won sound.
+ */
+const playGameWonSound = () => audioManager.playGameWonSound();
+
+/**
+ * Plays coin collect sound.
+ */
+const playCoinCollectSound = () => audioManager.playCoinCollectSound();
+
+/**
+ * Plays bottle collect sound.
+ */
+const playBottleCollectSound = () => audioManager.playBottleCollectSound();
+
+/**
+ * Stops all game end sounds.
+ * @param {Object} world - Game world object.
+ */
+const stopAllGameEndSounds = (world) => audioManager.stopAllGameEndSounds(world);
+
+/**
+ * Toggles sound on or off.
+ * @param {Object} world - Game world object.
+ */
+const toggleSound = (world) => audioManager.toggleSound(world);
+
+/**
+ * Enables all game sounds.
+ * @param {Object} world - Game world object.
+ */
+const enableAllSounds = (world) => audioManager.enableAllSounds(world);
+
+/**
+ * Disables all game sounds.
+ * @param {Object} world - Game world object.
+ */
+const disableAllSounds = (world) => audioManager.disableAllSounds(world);
+
+/**
+ * Mutes all game sounds.
+ * @param {Object} world - Game world object.
+ */
+const muteAllSounds = (world) => audioManager.muteGameSounds(world);
+
+/**
+ * Plays endboss hurt sound.
+ */
+const playEndbossHurtSound = () => audioManager.playEndbossHurtSound();
+
+/**
+ * Plays endboss attack sound.
+ */
+const playEndbossAttackSound = () => audioManager.playEndbossAttackSound();
