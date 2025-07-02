@@ -40,6 +40,7 @@ class ThrowableObject extends MovableObject {
     this.width = 60;
     this.height = 60;
     this.splashed = false;
+    this.hasHit = false;
     this.direction = direction;
     this.loadImages(ThrowableObject.IMAGES_ROTATION);
     this.loadImages(ThrowableObject.IMAGES_SPLASH);
@@ -105,6 +106,7 @@ class ThrowableObject extends MovableObject {
    */
   splash() {
     this.splashed = true;
+    this.hasHit = true;
     this.stopMoving();
     this.stopRotationAnimation();
     this.y -= 30;

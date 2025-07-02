@@ -75,14 +75,12 @@ class StatusBarHeartEndboss extends DrawableObject {
    * @returns {number} The index of the image to be displayed.
    */
   getImageIndex() {
-    if (this.percentage === 100) return 5;
-    if (this.percentage >= 80) return 4;
-    if (this.percentage >= 60) return 3;
-    if (this.percentage >= 40) return 2;
-    if (this.percentage >= 20) return 1;
-    return 0;
+    if (this.percentage >= 80) return 5;
+    if (this.percentage >= 60) return 4;
+    if (this.percentage >= 40) return 3;
+    if (this.percentage >= 20) return 2;
+    if (this.percentage > 0) return 1;
   }
-
   /**
    * Draws the status bar on the canvas.
    * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
