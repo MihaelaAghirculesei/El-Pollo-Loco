@@ -290,12 +290,10 @@ footer {
   font-family: "Roboto", "Sofia_Sans", "Milchroma"; 
 }
 
-/* Solo il bottone home è nascosto di default */
-#home-game-button { 
+#home-game-button, #play-again-button { 
   display: none; 
 }
 
-/* Il bottone audio è sempre visibile quando il footer è presente */
 #music-toggle-button { 
   display: inline-block; 
 }

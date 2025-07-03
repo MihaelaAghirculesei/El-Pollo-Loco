@@ -216,7 +216,52 @@ window.resumeGame = function() {
   const menuOverlay = document.getElementById('menu-overlay');
   if (menuOverlay) menuOverlay.classList.add('d_none');
 };
+/**
+* Restarts the game by setting a flag in localStorage and reloading the page.
+* This function creates a seamless restart experience by preserving the intent
+* to restart across page reloads.
+* 
+* @function playAgain
+* @global
+* @returns {void}
+* @example
+* // Call this function when user clicks "Play Again" button
+* window.playAgain();
+*/
+window.playAgain = function() {
+ // Save a state flag indicating that we need to restart the game
+ localStorage.setItem('autoStartGame', 'true');
+ location.reload();
+};
 
+/**
+* Event listener that runs when the DOM is fully loaded.
+* Checks if the game should auto-start based on a localStorage flag.
+* This works in conjunction with playAgain() to create a smooth restart flow.
+* 
+* @event DOMContentLoaded
+* @listens document#DOMContentLoaded
+* @returns {void}
+* @example
+* // This runs automatically when the page loads
+* // No manual invocation needed
+*/
+document.addEventListener('DOMContentLoaded', function() {
+ /**
+  * Check if auto-start flag exists in localStorage
+  * @type {string|null}
+  */
+ if (localStorage.getItem('autoStartGame') === 'true') {
+   // Clean up the flag to prevent unwanted restarts
+   localStorage.removeItem('autoStartGame');
+   
+   /**
+    * Start the game after a short delay to ensure DOM is ready
+    * @timeout 100ms
+    */
+   setTimeout(() => startGame(), 100);
+ }
+});
 document.addEventListener("DOMContentLoaded", handleDOMContentLoaded, { passive: true });
 document.addEventListener("DOMContentLoaded", initializeMobileAndOrientation, { passive: true });
 
