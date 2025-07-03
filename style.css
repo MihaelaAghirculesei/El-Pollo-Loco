@@ -719,6 +719,8 @@ footer {
     align-items: center !important;
   }
   
+  .game-active footer { display: none !important; }
+  
   .popup {
     width: clamp(150px, 20vw, 200px) !important;
     top: 39% !important; 
@@ -764,6 +766,37 @@ footer {
     left: 62% !important;  
     font-size: clamp(14px, 1vw, 16px);
   }
+  
+  .game-active footer { display: none !important; }
+}
+
+/* === Footer visible only on large desktop monitors NON-TOUCH === */
+@media (min-width: 1400px) and (pointer: fine) and (hover: hover) {
+  footer {
+    min-height: 80px !important;
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .game-active footer {
+    display: flex !important;
+    min-height: 80px !important;
+  }
+
+  .popup {
+    width: clamp(150px, 20vw, 200px) !important;
+    top: 49% !important; 
+    left: 56% !important;  
+    font-size: clamp(14px, 1vw, 16px);
+  }
+}
+
+/* === Footer hidden during game on tablets/touch devices === */
+@media (pointer: coarse) {
+  .game-active footer {
+    display: none !important;
+  }
 }
 
 /* === Special Cases === */
@@ -776,22 +809,6 @@ footer {
 
   .mobile-btn { padding: 3px; border-radius: 8px; }
   .mobile-btn img { width: 21px; height: 21px; }
-}
-
-/* === Footer visible on desktop === */
-@media (min-width: 1281px) {
-  footer {
-    min-height: 80px !important;
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-  .popup {
-    width: clamp(150px, 20vw, 200px) !important;
-    top: 49% !important; 
-    left: 56% !important;  
-    font-size: clamp(14px, 1vw, 16px);
-  }
 }
 
 /* === Landscape Mobile Devices === */
