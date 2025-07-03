@@ -4,19 +4,34 @@ let canvas, world, keyboard = new Keyboard(), isMuted = false;
 
 window.showFooterOnGameEnd = showFooterOnGameEnd;
 
-function init() {
+function initCanvas() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas, keyboard);
-  window.world = world;
-  world.startEnemiesAnimation();
-  syncAudioStates();
 }
 
-function syncAudioStates() {
+function createWorld() {
+  world = new World(canvas, keyboard);
+  window.world = world;
+}
+
+function syncAudio() {
   isMuted = audioManager.isGameMuted;
   isGameMuted = audioManager.isGameMuted;
   updateAudioIcon(isMuted);
   audioManager.updateAllButtons();
+}
+
+function init() {
+  initCanvas();
+  createWorld();
+  world.startEnemiesAnimation();
+  syncAudio();
+}
+
+function updateAudioIcon(isMuted) {
+  const audioIcon = document.getElementById("audio-icon");
+  if (audioIcon) {
+    audioIcon.src = `img_pollo_locco/img/10_buttons/sound-icon-${isMuted ? 'off' : 'on'}.png`;
+  }
 }
 
 function setKeyState(keyCode, state) {
@@ -35,11 +50,15 @@ function hideStartScreen() {
   document.body.classList.remove('start-screen-active');
 }
 
+function toggleMobileControls(showMobile) {
+  if (!isMobile()) return;
+  
+  document.querySelector("footer").style.display = showMobile ? "none" : "flex";
+  document.getElementById("mobile-controls").style.display = showMobile ? "flex" : "none";
+}
+
 function showMobileControlsIfNeeded() {
-  if (isMobile()) {
-    document.querySelector("footer").style.display = "none";
-    document.getElementById("mobile-controls").style.display = "flex";
-  }
+  toggleMobileControls(true);
 }
 
 window.startGame = function () {
@@ -60,10 +79,7 @@ function showStartScreen() {
 }
 
 function resetMobileControlsForMenu() {
-  if (isMobile()) {
-    document.querySelector("footer").style.display = "flex";
-    document.getElementById("mobile-controls").style.display = "none";
-  }
+  toggleMobileControls(false);
 }
 
 window.returnToMenu = function () {
@@ -91,8 +107,7 @@ window.goToHome = function () {
 
 function showFooterOnGameEnd() {
   if (isMobile()) {
-    document.querySelector("footer").style.display = "flex";
-    document.getElementById("mobile-controls").style.display = "none";
+    toggleMobileControls(false);
     const playAgainBtn = document.getElementById("btn-play-again");
     if (playAgainBtn) playAgainBtn.style.display = "block";
   }
@@ -112,7 +127,7 @@ function loadGlobalSoundState() {
 function initializeAudioSync() {
   setTimeout(() => {
     loadGlobalSoundState();
-    syncAudioStates();
+    syncAudio();
   }, 100);
 }
 
@@ -123,13 +138,6 @@ function handleDOMContentLoaded() {
 
 function isMobile() {
   return "ontouchstart" in window || navigator.maxTouchPoints > 0;
-}
-
-function updateAudioIcon(isMuted) {
-  const audioIcon = document.getElementById("audio-icon");
-  if (audioIcon) {
-    audioIcon.src = `img_pollo_locco/img/10_buttons/sound-icon-${isMuted ? 'off' : 'on'}.png`;
-  }
 }
 
 function toggleGlobalAudio() {
@@ -199,9 +207,13 @@ function setupOrientationListeners() {
   document.addEventListener("DOMContentLoaded", checkOrientation, { passive: true });
 }
 
-window.pauseGame = function() {
+function toggleMenuOverlay(show) {
   const menuOverlay = document.getElementById('menu-overlay');
-  if (menuOverlay) menuOverlay.classList.remove('d_none');
+  if (menuOverlay) menuOverlay.classList.toggle('d_none', !show);
+}
+
+window.pauseGame = function() {
+  toggleMenuOverlay(true);
   updateMenuSoundButton();
 };
 
@@ -216,8 +228,7 @@ window.toggleSounds = function() {
 };
 
 window.resumeGame = function() {
-  const menuOverlay = document.getElementById('menu-overlay');
-  if (menuOverlay) menuOverlay.classList.add('d_none');
+  toggleMenuOverlay(false);
 };
 /**
 * Restarts the game by setting a flag in localStorage and reloading the page.
