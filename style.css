@@ -509,7 +509,6 @@ footer {
   .button-start-screen { z-index: var(--z-buttons) !important; position: relative; font-size: 6px; }
   #titleCanvas, h1 { display: none !important; }
   
-  /* Su mobile il footer è nascosto nella start screen */
   .start-screen-active footer { display: none !important; }
 
   .mobile-btn { padding: 7px; border-radius: 8px; }
@@ -565,7 +564,7 @@ footer {
   }
   
   .hidden-mobile { display: none !important; }
-  .visible-mobile { display: block !important; }
+  .visible-mobile, #btn-play-again { display: block !important; }
 }
 
 /* === Tablet Portrait === */

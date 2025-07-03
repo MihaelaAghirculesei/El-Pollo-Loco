@@ -93,6 +93,8 @@ function showFooterOnGameEnd() {
   if (isMobile()) {
     document.querySelector("footer").style.display = "flex";
     document.getElementById("mobile-controls").style.display = "none";
+    const playAgainBtn = document.getElementById("btn-play-again");
+    if (playAgainBtn) playAgainBtn.style.display = "block";
   }
 }
 
@@ -157,7 +159,8 @@ function setupAllTouchControls() {
     ["btn-right", "RIGHT"],
     ["btn-jump", "SPACE"],
     ["btn-throw", "D"],
-    ["btn-audio", null, (e) => { e.preventDefault(); toggleGlobalAudio(); }]
+    ["btn-audio", null, (e) => { e.preventDefault(); toggleGlobalAudio(); }],
+    ["btn-play-again", null, () => window.playAgain()]
   ];
   
   controls.forEach(([id, key, callback]) => setupTouchControl(id, key, callback));
