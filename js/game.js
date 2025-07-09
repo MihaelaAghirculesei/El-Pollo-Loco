@@ -179,15 +179,41 @@ function setupTouchControl(elementId, keyProperty, callback = null) {
            : addTouchEventListeners(element, keyProperty);
 }
 
-/** Sets up all touch controls */
+/**
+ * Sets up all touch controls for the game interface.
+ */
 function setupAllTouchControls() {
+  setupIndividualTouchControls();
+  setupDirectionalButtonsContextMenu();
+}
+
+/**
+ * Configures individual touch control mappings.
+ */
+function setupIndividualTouchControls() {
   const controls = [
     ["btn-home", null, () => window.goToHome()],
-    ["btn-left", "LEFT"], ["btn-right", "RIGHT"], ["btn-jump", "SPACE"], ["btn-throw", "D"],
+    ["btn-left", "LEFT"], ["btn-right", "RIGHT"], 
+    ["btn-jump", "SPACE"], ["btn-throw", "D"],
     ["btn-audio", null, (e) => { e.preventDefault(); toggleGlobalAudio(); }],
     ["btn-play-again", null, () => window.playAgain()]
   ];
-  controls.forEach(([id, key, callback]) => setupTouchControl(id, key, callback));
+  
+  controls.forEach(([id, key, callback]) => {
+    setupTouchControl(id, key, callback);
+  });
+}
+
+/**
+ * Disables context menu on directional buttons.
+ */
+function setupDirectionalButtonsContextMenu() {
+  ["btn-left", "btn-right"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("contextmenu", (e) => e.preventDefault());
+    }
+  });
 }
 
 /** Shows mobile controls */
