@@ -233,15 +233,17 @@ handleCollisionResponse(enemy) {
     }
   }
 
-  /**
-   * Applies damage to character when colliding with enemies
-   */
-  applyCollisionDamage() {
-    this.character.hit();
-    playCharacterHurtSound();
-    if (this.character.health === 0) this.character.life--;
-    this.statusBarHeartCharacter.setPercentage(this.character.health);
-  }
+/**
+ * Applies damage to character when colliding with enemies
+ * Updated to use getHealthPercent() method
+ */
+applyCollisionDamage() {
+  this.character.hit();
+  playCharacterHurtSound();
+  
+  const healthPercent = this.character.getHealthPercent();
+  this.statusBarHeartCharacter.setPercentage(healthPercent);
+}
 
   /**
    * Cleans up enemy hit tracking when enemies are removed

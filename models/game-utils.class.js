@@ -168,7 +168,6 @@ const muteAllSounds = (world) => audioManager.muteGameSounds(world);
 const playEndbossHurtSound = () => audioManager.playEndbossHurtSound();
 const playEndbossAttackSound = () => audioManager.playEndbossAttackSound();
 
-// ==================== COLLISION DETECTION ====================
 
 /**
  * Checks collision between character and enemy using reduced collision zones
@@ -233,25 +232,58 @@ function isValidJump(character, enemy) {
  * @returns {number} Cooldown time in milliseconds
  */
 function calculateCooldownTime(enemy) {
-  return enemy instanceof Endboss ? 3000 : 15000;
+  return enemy instanceof Endboss ? 3000 : 1500;
 }
 
 /**
- * Handles collision damage with per-enemy cooldown tracking
- * @param {Object} character - The character object
- * @param {Object} enemy - The enemy that caused the collision
- * @returns {boolean} True if damage was applied, false if still in cooldown
+ * Handles cooldown for specific enemies (Endboss)
+ * @param {Object} character 
+ * @param {Object} enemy 
+ * @param {number} cooldownTime 
+ * @returns {boolean}
  */
-function shouldApplyCollisionDamage(character, enemy) {
+function handleEnemySpecificCooldown(character, enemy, cooldownTime) {
   const now = Date.now();
   const lastHitTime = character.hitByEnemies.get(enemy) || 0;
-  const cooldownTime = calculateCooldownTime(enemy);
   
   if (now - lastHitTime > cooldownTime) {
     character.hitByEnemies.set(enemy, now);
     return true;
   }
   return false;
+}
+
+/**
+ * Handles global cooldown for regular enemies
+ * @param {Object} character 
+ * @param {number} cooldownTime 
+ * @returns {boolean}
+ */
+function handleGlobalCooldown(character, cooldownTime) {
+  const now = Date.now();
+  if (!character.lastGlobalHitTime) character.lastGlobalHitTime = 0;
+  
+  if (now - character.lastGlobalHitTime > cooldownTime) {
+    character.lastGlobalHitTime = now;
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Determines collision damage based on enemy type
+ * @param {Object} character 
+ * @param {Object} enemy 
+ * @returns {boolean}
+ */
+function shouldApplyCollisionDamage(character, enemy) {
+  const cooldownTime = calculateCooldownTime(enemy);
+  
+  if (enemy instanceof Endboss) {
+    return handleEnemySpecificCooldown(character, enemy, cooldownTime);
+  } else {
+    return handleGlobalCooldown(character, cooldownTime);
+  }
 }
 
 // ==================== COLLECTION UTILITIES ====================

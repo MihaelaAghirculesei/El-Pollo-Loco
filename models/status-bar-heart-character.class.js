@@ -61,7 +61,9 @@ class StatusBarHeartCharacter extends DrawableObject {
    */
   updateStatusBarImage() {
     const imageIndex = this.getImageIndex();
-    this.img = this.imageCache[StatusBarHeartCharacter.IMAGES[imageIndex]];
+    if (StatusBarHeartCharacter.IMAGES[imageIndex]) {
+      this.img = this.imageCache[StatusBarHeartCharacter.IMAGES[imageIndex]];
+    }
   }
 
   /**
@@ -70,10 +72,10 @@ class StatusBarHeartCharacter extends DrawableObject {
    */
   getImageIndex() {
     if (this.percentage === 100) return 5;
-    if (this.percentage > 80) return 4;
-    if (this.percentage > 60) return 3;
-    if (this.percentage > 40) return 2;
-    if (this.percentage > 20) return 1;
+    if (this.percentage >= 80) return 4;
+    if (this.percentage >= 60) return 3;
+    if (this.percentage >= 40) return 2;
+    if (this.percentage >= 20) return 1;
     return 0;
   }
 
@@ -82,7 +84,9 @@ class StatusBarHeartCharacter extends DrawableObject {
    * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
    */
   draw(ctx) {
-    super.draw(ctx);
+    if (this.img) {
+      super.draw(ctx);
+    }
     this.drawHearts(ctx);
   }
 
@@ -91,7 +95,7 @@ class StatusBarHeartCharacter extends DrawableObject {
    * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
    */
   drawHearts(ctx) {
-    if (this.character.life > 0) {
+    if (this.character && this.character.life > 0) {
       ctx.fillStyle = "red";
       ctx.font = "30px Arial";
       ctx.fillText(`❤️ x${this.character.life}`, this.x + 220, this.y + 52);

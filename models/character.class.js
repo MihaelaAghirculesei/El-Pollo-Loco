@@ -44,6 +44,7 @@ class Character extends MovableObject {
     this.life = cfg.INITIAL_LIFE;
     this.lastActionTime = Date.now() - cfg.INITIAL_LAST_ACTION_OFFSET;
     this.hitByEnemies = new Map(); // Usa Map per salvare timestamp dei danni per nemico
+    this.lastGlobalHitTime = 0; // AGGIUNTO: Cooldown globale per polli/galline
     this.currentState = Character.STATES.SLEEPING;
   }
 
@@ -242,6 +243,76 @@ class Character extends MovableObject {
    */
   jump() {
     this.speedY = Character.CONFIG.JUMP_SPEED;
+  }
+
+  /**
+   * Handles the character getting hit: updates hit state and health.
+   * MODIFICA: Overrides parent method to use 20 damage instead of 10
+   */
+  hit() {
+    this.updateHitState();
+    this.health -= 20; // MODIFICA: 20 punti di danno (20%) invece di 10
+    this.handleHealthDepletion();
+  }
+
+  /**
+   * Updates the time of the last hit to current time.
+   */
+  updateHitState() {
+    this.lastHitTime = Date.now();
+  }
+
+  /**
+   * Checks health and handles respawn or death if health reaches zero.
+   */
+  handleHealthDepletion() {
+    if (this.health <= 0) {
+      this.health = 0;
+      if (this.hasLivesLeft()) {
+        this.respawn();
+      } else {
+        this.die();
+      }
+    }
+  }
+
+  /**
+   * Checks if the character has remaining lives.
+   * @returns {boolean}
+   */
+  hasLivesLeft() {
+    return this.life > 0;
+  }
+
+  /**
+   * Respawns the character by resetting health and reducing life count.
+   */
+  respawn() {
+    this.health = 100; // MODIFICA: Ripristina salute a 100
+    this.life--;
+  }
+
+  /**
+   * Marks the character as dead.
+   */
+  die() {
+    this.lastHitTime = Date.now();
+  }
+
+  /**
+   * Calculates the character's health as a percentage.
+   * AGGIUNTO: Nuovo metodo per calcolare percentuale salute
+   */
+  getHealthPercent() {
+    return Math.max(0, Math.round((this.health / 100) * 100));
+  }
+
+  /**
+   * Checks if the character is dead (no lives left).
+   * @returns {boolean}
+   */
+  isDead() {
+    return this.life <= 0;
   }
 
   /**
