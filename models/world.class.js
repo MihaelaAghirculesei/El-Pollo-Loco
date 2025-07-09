@@ -188,20 +188,30 @@ export class World {
     this.filterMarkedEnemies();
   }
 
-  /**
-   * Checks collisions between character and enemies and handles collision responses
-   */
-  checkCharacterCollisions() {
-    this.level.enemies.forEach(enemy => {
-      if (!isCollidingWithEnemy(this.character, enemy) || this.character.isDead()) return;
-      
-      if (isValidJump(this.character, enemy)) {
-        this.handleJumpOnEnemy(enemy);
-      } else {
-        this.handleCollisionDamage(enemy);
-      }
-    });
-  }
+/**
+* Checks for collisions between character and enemies
+* @returns {void}
+*/
+checkCharacterCollisions() {
+ this.level.enemies.forEach(enemy => {
+   if (isCollidingWithEnemy(this.character, enemy) && !this.character.isDead()) {
+     this.handleCollisionResponse(enemy);
+   }
+ });
+}
+
+/**
+* Handles the appropriate response based on collision type
+* @param {Object} enemy - The enemy object that collided with the character
+* @returns {void}
+*/
+handleCollisionResponse(enemy) {
+ if ((enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && isValidJump(this.character, enemy)) {
+   this.handleJumpOnEnemy(enemy);
+ } else {
+   this.handleCollisionDamage(enemy);
+ }
+}
 
   /**
    * Handles successful jump attack on enemy
