@@ -191,43 +191,61 @@ export class World {
     this.filterMarkedEnemies();
   }
 
-/**
-* Checks for collisions between character and enemies
-* @returns {void}
-*/
-checkCharacterCollisions() {
- this.level.enemies.forEach(enemy => {
-   if (isCollidingWithEnemy(this.character, enemy) && !this.character.isDead()) {
-     if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
-       if (enemy instanceof Endboss) {
-         return;
-       }
-     }
-     
-     this.handleCollisionResponse(enemy);
-   }
- });
-}
+  /**
+   * Checks for collisions between character and enemies
+   * @returns {void}
+   */
+  checkCharacterCollisions() {
+    this.level.enemies.forEach(enemy => {
+      if (isCollidingWithEnemy(this.character, enemy) && !this.character.isDead()) {
+        if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
+          if (enemy instanceof Endboss) {
+            return;
+          }
+        }
+        
+        this.handleCollisionResponse(enemy);
+      }
+    });
+  }
 
-/**
-* Handles the appropriate response based on collision type
-* @param {Object} enemy - The enemy object that collided with the character
-* @returns {void}
-*/
-handleCollisionResponse(enemy) {
-  if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
-    return; 
+  /**
+   * Handles the appropriate response based on collision type
+   * @param {Object} enemy - The enemy object that collided with the character
+   * @returns {void}
+   */
+  handleCollisionResponse(enemy) {
+    // Skip collision if recently jumped on enemy
+    if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
+      return; 
+    }
+    
+    // Special handling for Endboss - always apply damage when colliding
+    if (enemy instanceof Endboss) {
+      this.handleCollisionDamage(enemy);
+      return;
+    }
+    
+    // Skip collision during endboss fight if recently changed direction
+    if (this.endbossAttackStarted && this.character.lastDirectionChangeTime && 
+        Date.now() - this.character.lastDirectionChangeTime < 300) {
+      return;
+    }
+    
+    // Add: Skip if near endboss and jumping on regular enemies
+    const nearEndboss = this.level.enemies.some(e => e instanceof Endboss && Math.abs(this.character.x - e.x) < 200);
+    if (nearEndboss && (enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && 
+        isValidJump(this.character, enemy)) {
+      this.handleJumpOnEnemy(enemy);
+      return;
+    }
+    
+    if ((enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && isValidJump(this.character, enemy)) {
+      this.handleJumpOnEnemy(enemy);
+    } else {
+      this.handleCollisionDamage(enemy);
+    }
   }
-  if (this.endbossAttackStarted && this.character.lastDirectionChangeTime && 
-      Date.now() - this.character.lastDirectionChangeTime < 200) {
-    return;
-  }
- if ((enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && isValidJump(this.character, enemy)) {
-   this.handleJumpOnEnemy(enemy);
- } else {
-   this.handleCollisionDamage(enemy);
- }
-}
 
   /**
    * Handles successful jump attack on enemy
@@ -250,17 +268,17 @@ handleCollisionResponse(enemy) {
     }
   }
 
-/**
- * Applies damage to character when colliding with enemies
- * Updated to use getHealthPercent() method
- */
-applyCollisionDamage() {
-  this.character.hit();
-  playCharacterHurtSound();
-  
-  const healthPercent = this.character.getHealthPercent();
-  this.statusBarHeartCharacter.setPercentage(healthPercent);
-}
+  /**
+   * Applies damage to character when colliding with enemies
+   * Updated to use getHealthPercent() method
+   */
+  applyCollisionDamage() {
+    this.character.hit();
+    playCharacterHurtSound();
+    
+    const healthPercent = this.character.getHealthPercent();
+    this.statusBarHeartCharacter.setPercentage(healthPercent);
+  }
 
   /**
    * Cleans up enemy hit tracking when enemies are removed

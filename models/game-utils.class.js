@@ -140,8 +140,11 @@ function checkGameEnd(world) {
   const endboss = findEndboss(world);
   if (world.character?.isDead()) {
     showGameOver(world);
-  } else if (endboss?.isEnemyDead()) {
-    showGameWon(world);
+  } else if (endboss?.health <= 0 && !world.gameEndTriggered) { // Check health directly
+    world.gameEndTriggered = true; // Prevent multiple triggers
+    setTimeout(() => {
+      showGameWon(world);
+    }, 2500); // Wait 2.5 seconds to see boss death animation
   }
 }
 
