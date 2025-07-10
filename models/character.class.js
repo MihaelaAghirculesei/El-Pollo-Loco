@@ -43,9 +43,12 @@ class Character extends MovableObject {
     this.health = cfg.INITIAL_HEALTH;
     this.life = cfg.INITIAL_LIFE;
     this.lastActionTime = Date.now() - cfg.INITIAL_LAST_ACTION_OFFSET;
-    this.hitByEnemies = new Map(); // Usa Map per salvare timestamp dei danni per nemico
-    this.lastGlobalHitTime = 0; // AGGIUNTO: Cooldown globale per polli/galline
+    this.hitByEnemies = new Map(); 
+    this.lastGlobalHitTime = 0; 
     this.currentState = Character.STATES.SLEEPING;
+    
+    this.lastJumpKillTime = 0; 
+    this.lastDirectionChangeTime = 0; 
   }
 
   /**
@@ -126,6 +129,10 @@ class Character extends MovableObject {
    * Moves the character to the right and updates the last action time.
    */
   moveRightward() {
+    if (this.otherDirection === true) {
+      this.lastDirectionChangeTime = Date.now();
+    }
+    
     this.moveRight();
     this.otherDirection = false;
     this.updateLastActionTime();
@@ -136,6 +143,10 @@ class Character extends MovableObject {
    */
   moveLeftward() {
     if (this.x > 0) {
+      if (this.otherDirection === false) {
+        this.lastDirectionChangeTime = Date.now();
+      }
+      
       this.moveLeft();
       this.otherDirection = true;
       this.updateLastActionTime();
@@ -247,7 +258,6 @@ class Character extends MovableObject {
 
   /**
    * Handles the character getting hit: updates hit state and health.
-   * MODIFICA: Overrides parent method to use 20 damage instead of 10
    */
   hit() {
     this.updateHitState();
@@ -301,7 +311,6 @@ class Character extends MovableObject {
 
   /**
    * Calculates the character's health as a percentage.
-   * AGGIUNTO: Nuovo metodo per calcolare percentuale salute
    */
   getHealthPercent() {
     return Math.max(0, Math.round((this.health / 100) * 100));

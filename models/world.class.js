@@ -108,6 +108,9 @@ export class World {
    * Checks if the character is close enough to activate the boss fight
    */
   checkBossActivation() {
+    if (this.endboss._isMoving) {
+      return; 
+    }
     if (Math.abs(this.character.x - this.endboss.x) < 500) {
       this.endboss.startMoving();
       if (!this.endbossAttackStarted) {
@@ -195,6 +198,12 @@ export class World {
 checkCharacterCollisions() {
  this.level.enemies.forEach(enemy => {
    if (isCollidingWithEnemy(this.character, enemy) && !this.character.isDead()) {
+     if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
+       if (enemy instanceof Endboss) {
+         return;
+       }
+     }
+     
      this.handleCollisionResponse(enemy);
    }
  });
@@ -206,6 +215,13 @@ checkCharacterCollisions() {
 * @returns {void}
 */
 handleCollisionResponse(enemy) {
+  if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
+    return; 
+  }
+  if (this.endbossAttackStarted && this.character.lastDirectionChangeTime && 
+      Date.now() - this.character.lastDirectionChangeTime < 200) {
+    return;
+  }
  if ((enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && isValidJump(this.character, enemy)) {
    this.handleJumpOnEnemy(enemy);
  } else {
@@ -220,6 +236,7 @@ handleCollisionResponse(enemy) {
   handleJumpOnEnemy(enemy) {
     enemy.hit();
     this.character.jump();
+    this.character.lastJumpKillTime = Date.now();
     playEnemyHurtSound(enemy);
   }
 

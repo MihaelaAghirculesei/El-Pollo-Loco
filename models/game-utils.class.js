@@ -217,13 +217,28 @@ function isCollidingWithItem(character, item) {
 // ==================== VALIDATION UTILITIES ====================
 
 /**
+ * Checks if character has recently changed direction
+ * @param {Object} character - The character object
+ * @returns {boolean} True if direction changed in last 300ms
+ */
+function hasRecentDirectionChange(character) {
+  return character.lastDirectionChangeTime && Date.now() - character.lastDirectionChangeTime < 300;
+}
+
+/**
  * Determines if character is performing a valid jump attack on enemy
  * @param {Object} character - The character object
  * @param {Object} enemy - The enemy to check against
  * @returns {boolean} True if valid jump attack
  */
 function isValidJump(character, enemy) {
-  return character.isAboveGround() && character.y < (enemy.y - 20);
+  const isInAir = character.isAboveGround();
+  const isAboveEnemy = character.y < (enemy.y - 20);
+  const isFalling = character.speedY < 5;
+  
+  return hasRecentDirectionChange(character) 
+    ? isInAir && isAboveEnemy 
+    : isInAir && isAboveEnemy && isFalling;
 }
 
 /**
@@ -277,6 +292,10 @@ function handleGlobalCooldown(character, cooldownTime) {
  * @returns {boolean}
  */
 function shouldApplyCollisionDamage(character, enemy) {
+  if (character.lastJumpKillTime && Date.now() - character.lastJumpKillTime < 300) {
+    return false;
+  }
+  
   const cooldownTime = calculateCooldownTime(enemy);
   
   if (enemy instanceof Endboss) {
