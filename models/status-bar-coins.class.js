@@ -1,12 +1,7 @@
 /**
- * Represents a status bar displaying the number of collected coins.
- * @extends DrawableObject
+ * Status bar for coin collection display.
  */
 class StatusBarCoins extends DrawableObject {
-  /**
-   * Static array containing paths to the coin status bar images.
-   * @type {string[]}
-   */
   static IMAGES = [
     "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/0.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/20.png",
@@ -16,15 +11,10 @@ class StatusBarCoins extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/orange/100.png"
   ];
 
-  /**
-   * The current percentage of collected coins.
-   * @type {number}
-   */
   percentageCoins = 0;
 
   /**
-   * Creates an instance of StatusBarCoins.
-   * Initializes the status bar's position and dimensions, loads images, and sets the initial percentage to 0.
+   * Creates coin status bar instance.
    */
   constructor() {
     super();
@@ -34,7 +24,7 @@ class StatusBarCoins extends DrawableObject {
   }
 
   /**
-   * Sets up the initial position and dimensions of the status bar.
+   * Sets up status bar position and dimensions.
    */
   setupStatusBar() {
     this.x = 40;
@@ -44,9 +34,8 @@ class StatusBarCoins extends DrawableObject {
   }
 
   /**
-   * Sets the percentage of collected coins and updates the status bar image accordingly.
-   * The percentage is limited between 0 and 30.
-   * @param {number} percentage - The new percentage of coins.
+   * Sets coin percentage and updates display.
+   * @param {number} percentage - New coin percentage
    */
   setPercentageCoins(percentage) {
     this.percentageCoins = this.limitPercentage(percentage);
@@ -54,16 +43,16 @@ class StatusBarCoins extends DrawableObject {
   }
 
   /**
-   * Limits the given percentage to a range between 0 and 30.
-   * @param {number} percentage - The percentage to limit.
-   * @returns {number} The limited percentage.
+   * Limits percentage to valid range.
+   * @param {number} percentage - Percentage to limit
+   * @returns {number} Limited percentage
    */
   limitPercentage(percentage) {
     return Math.max(0, Math.min(percentage, 30));
   }
 
   /**
-   * Updates the image displayed by the status bar based on the current `percentageCoins`.
+   * Updates status bar image based on percentage.
    */
   updateStatusBarImage() {
     const imageIndex = this.getImageIndex();
@@ -71,8 +60,8 @@ class StatusBarCoins extends DrawableObject {
   }
 
   /**
-   * Calculates the index of the image to be displayed based on the current `percentageCoins`.
-   * @returns {number} The index of the image in the `IMAGES` array.
+   * Gets image index based on current percentage.
+   * @returns {number} Image index
    */
   getImageIndex() {
     return Math.floor(this.percentageCoins / 6);

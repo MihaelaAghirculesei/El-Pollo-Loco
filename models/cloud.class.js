@@ -1,11 +1,14 @@
+/**
+ * Class representing a moving cloud.
+ */
 class Cloud extends MovableObject {
   y = 20;
   height = 250;
   width = 500;
 
   /**
-   * Creates a cloud object at a given x position and starts animation.
-   * @param {number} x - The initial horizontal position of the cloud.
+   * Creates a cloud at given position.
+   * @param {number} x - Initial horizontal position
    */
   constructor(x) {
     super().loadImage(
@@ -18,7 +21,7 @@ class Cloud extends MovableObject {
   }
 
   /**
-   * Starts the animation loop, moving the cloud left and resetting its position if out of view.
+   * Starts cloud animation loop.
    */
   animate() {
     setInterval(() => {
@@ -28,7 +31,7 @@ class Cloud extends MovableObject {
   }
 
   /**
-   * Checks if the cloud is out of the visible canvas area and resets its position if so.
+   * Resets cloud position if out of view.
    */
   resetIfOutOfView() {
     if (this.x < -this.width) {
@@ -37,7 +40,7 @@ class Cloud extends MovableObject {
   }
 
   /**
-   * Resets the cloud's position to the right edge of the canvas with a random vertical offset.
+   * Resets cloud to right edge with random offset.
    */
   resetPosition() {
     this.x = this.canvas.width + Math.random() * 500;

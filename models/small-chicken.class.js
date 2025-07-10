@@ -1,26 +1,18 @@
 /**
- * Class representing a small chicken enemy that moves and can be killed.
- * @extends MovableObject
+ * Class representing a small chicken enemy.
  */
 class SmallChicken extends MovableObject {
-  /** @type {number} Vertical position of the chicken */
   y = 360;
-  /** @type {number} Height of the chicken */
   height = 60;
-  /** @type {number} Width of the chicken */
   width = 60;
-  /** @type {boolean} Flag indicating if the chicken is dead */
   isDead = false;
   
-  /** @type {string[]} Image paths for the dead animation */
   IMAGES_DEAD = [
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/2_dead/dead.png",
   ];
   
-  /** @type {{top:number, bottom:number, left:number, right:number}} Collision offset */
   offset = { top: 5, bottom: 10, left: 10, right: 5 };
   
-  /** @type {string[]} Image paths for the walking animation */
   IMAGES_WALKING = [
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/1_w.png",
     "img_pollo_locco/img/3_enemies_chicken/chicken_small/1_walk/2_w.png",
@@ -28,12 +20,29 @@ class SmallChicken extends MovableObject {
   ];
 
   /**
-   * Creates a small chicken enemy instance.
-   * @param {object} world - The game world object the chicken belongs to.
+   * Creates small chicken enemy instance.
+   * @param {object} world - Game world object
    */
   constructor(world) {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.initializeImages();
+    this.initializeProperties(world);
+  }
+
+  /**
+   * Loads all chicken images.
+   */
+  initializeImages() {
+    this.loadImages(this.IMAGES_WALKING);
+    this.loadImage(this.IMAGES_DEAD[0]);
+    this.loadImages(this.IMAGES_DEAD);
+  }
+
+  /**
+   * Initializes chicken properties.
+   * @param {object} world - Game world object
+   */
+  initializeProperties(world) {
     this.x = 600 + Math.random() * 4000;
     this.speed = 0.15 + Math.random() * 0.3;
     this.life = 1;
@@ -41,25 +50,24 @@ class SmallChicken extends MovableObject {
     this.world = world;
   }
 
-  /** Loads all walking and dead images for the chicken */
-  initializeImages() {
-    this.loadImages(this.IMAGES_WALKING);
-    this.loadImage(this.IMAGES_DEAD[0]);
-    this.loadImages(this.IMAGES_DEAD);
-  }
-
-  /** Starts the movement and walking animation of the chicken */
+  /**
+   * Starts chicken animation and movement.
+   */
   animate() {
     this.startMoving();
     this.startWalkingAnimation();
   }
 
-  /** Starts moving the chicken left at a fixed interval */
+  /**
+   * Starts moving chicken left.
+   */
   startMoving() {
     this.movementInterval = setInterval(() => this.moveLeft(), 1000 / 60);
   }
 
-  /** Starts cycling through walking images to animate walking */
+  /**
+   * Starts walking animation cycle.
+   */
   startWalkingAnimation() {
     this.walkingInterval = setInterval(
       () => this.playAnimation(this.IMAGES_WALKING),
@@ -67,15 +75,16 @@ class SmallChicken extends MovableObject {
     );
   }
 
-  /** Stops both movement and walking animation intervals */
+  /**
+   * Stops movement and animation intervals.
+   */
   stopMovementAndAnimation() {
     clearInterval(this.movementInterval);
     clearInterval(this.walkingInterval);
   }
 
   /**
-   * Called when the chicken is hit by the player or projectile.
-   * Decreases health and triggers death if health reaches zero.
+   * Handles chicken being hit.
    */
   hit() {
     this.health--;
@@ -84,7 +93,9 @@ class SmallChicken extends MovableObject {
     }
   }
 
-  /** Handles the death process of the chicken */
+  /**
+   * Handles chicken death process.
+   */
   die() {
     this.isDead = true;
     this.stopMovementAndAnimation();
@@ -93,20 +104,26 @@ class SmallChicken extends MovableObject {
     this.removeFromWorldAfterDelay();
   }
 
-  /** Plays the death animation images */
+  /**
+   * Plays death animation.
+   */
   playDeathAnimation() {
     this.loadImages(this.IMAGES_DEAD);
     this.playAnimation(this.IMAGES_DEAD);
   }
 
-  /** Stops the vertical movement of the character in the game world */
+  /**
+   * Stops character vertical movement.
+   */
   stopCharacterVerticalMovement() {
     if (this.world?.character) {
       this.world.character.speedY = 0;
     }
   }
 
-  /** Removes the chicken from the world after a short delay */
+  /**
+   * Removes chicken from world after delay.
+   */
   removeFromWorldAfterDelay() {
     setTimeout(() => {
       this.removeFromWorld();
@@ -114,7 +131,9 @@ class SmallChicken extends MovableObject {
     }, 110);
   }
 
-  /** Removes this chicken instance from the world's enemy list */
+  /**
+   * Removes chicken from world's enemy list.
+   */
   removeFromWorld() {
     const enemies = this.world?.level?.enemies;
     if (enemies) {
@@ -126,8 +145,8 @@ class SmallChicken extends MovableObject {
   }
 
   /**
-   * Checks if the chicken enemy is dead.
-   * @returns {boolean} True if health is 0 or less.
+   * Checks if chicken is dead.
+   * @returns {boolean} True if dead
    */
   isEnemyDead() {
     return this.health <= 0;

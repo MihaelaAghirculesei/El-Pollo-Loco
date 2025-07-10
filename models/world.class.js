@@ -1,59 +1,28 @@
 /**
- * Main game world class that manages all game objects, collisions, and game state
+ * Main game world class managing all game objects and state.
  */
 export class World {
-  /** @type {Character} The main player character */
   character;
-  
-  /** @type {Endboss} The end boss enemy */
   endboss;
-  
-  /** @type {Array} Array of enemy objects from level1 */
   enemies = level1.enemies;
-  
-  /** @type {Array} Array of cloud objects from level1 */
   clouds = level1.clouds;
-  
-  /** @type {Object} Current level object */
   level = level1;
-  
-  /** @type {Array} Array of background objects from level1 */
   backgroundObjects = level1.backgroundObjects;
-  
-  /** @type {HTMLCanvasElement} The game canvas element */
   canvas;
-  
-  /** @type {CanvasRenderingContext2D} The 2D rendering context */
   ctx;
-  
-  /** @type {Object} Keyboard input handler */
   keyboard;
-  
-  /** @type {number} Camera X position for scrolling */
   camera_x = 0;
-  
-  /** @type {StatusBarHeartCharacter} Status bar for character health */
   statusBarHeartCharacter;
-  
-  /** @type {StatusBarBottle} Status bar for bottles */
   statusBarBottle;
-  
-  /** @type {StatusBarCoins} Status bar for coins */
   statusBarCoins;
-  
-  /** @type {Array} Array of throwable objects (bottles) */
   throwableObject = [];
-  
-  /** @type {boolean} Game over state flag */
   gameOver = false;
-  
-  /** @type {number} Game loop interval ID */
   gameInterval;
 
   /**
-   * Creates a new World instance
-   * @param {HTMLCanvasElement} canvas - The game canvas element
-   * @param {Object} keyboard - The keyboard input handler
+   * Creates new World instance.
+   * @param {HTMLCanvasElement} canvas - Game canvas
+   * @param {Object} keyboard - Keyboard input handler
    */
   constructor(canvas, keyboard) {
     this.canvas = canvas;
@@ -71,7 +40,7 @@ export class World {
   }
 
   /**
-   * Initializes all status bars
+   * Initializes all status bars.
    */
   initializeStatusBars() {
     this.statusBarHeartCharacter = new StatusBarHeartCharacter(this.character);
@@ -82,14 +51,14 @@ export class World {
   }
 
   /**
-   * Sets the world reference for the character
+   * Sets world reference for character.
    */
   setWorld() {
     this.character.world = this;
   }
 
   /**
-   * Starts the main game loop with collision detection and game state checks
+   * Starts main game loop.
    */
   run() {
     this.gameInterval = setInterval(() => {
@@ -105,7 +74,7 @@ export class World {
   }
 
   /**
-   * Checks if the character is close enough to activate the boss fight
+   * Checks if character activates boss fight.
    */
   checkBossActivation() {
     if (this.endboss._isMoving) {
@@ -121,7 +90,7 @@ export class World {
   }
 
   /**
-   * Main draw function that renders all game objects and UI elements
+   * Main draw function rendering all game objects.
    */
   draw() {
     if (this.gameOver) return;
@@ -135,7 +104,7 @@ export class World {
   }
 
   /**
-   * Draws all game objects (background, clouds, enemies, collectibles, character)
+   * Draws all game objects to canvas.
    */
   drawAllGameObjects() {
     const objectArrays = [
@@ -149,7 +118,7 @@ export class World {
   }
 
   /**
-   * Draws all status bars (health, bottles, coins)
+   * Draws all status bars to canvas.
    */
   drawAllStatusBars() {
     const statusBars = [
@@ -160,7 +129,7 @@ export class World {
   }
 
   /**
-   * Starts animation for all chicken enemies
+   * Starts animation for all chicken enemies.
    */
   startEnemiesAnimation() {
     this.level.enemies.forEach(e => {
@@ -171,7 +140,7 @@ export class World {
   }
 
   /**
-   * Handles throwing objects (bottles) when D key is pressed
+   * Handles throwing objects when D key pressed.
    */
   checkThrowObjects() {
     if (this.keyboard.D && !this.keyboard.wasD && this.statusBarBottle.bottlesCount > 0) {
@@ -183,7 +152,7 @@ export class World {
   }
 
   /**
-   * Main collision detection function
+   * Main collision detection function.
    */
   checkCollisions() {
     this.checkCharacterCollisions();
@@ -192,8 +161,7 @@ export class World {
   }
 
   /**
-   * Checks for collisions between character and enemies
-   * @returns {void}
+   * Checks collisions between character and enemies.
    */
   checkCharacterCollisions() {
     this.level.enemies.forEach(enemy => {
@@ -203,36 +171,30 @@ export class World {
             return;
           }
         }
-        
         this.handleCollisionResponse(enemy);
       }
     });
   }
 
   /**
-   * Handles the appropriate response based on collision type
-   * @param {Object} enemy - The enemy object that collided with the character
-   * @returns {void}
+   * Handles appropriate collision response.
+   * @param {Object} enemy - Enemy that collided
    */
   handleCollisionResponse(enemy) {
-    // Skip collision if recently jumped on enemy
     if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
       return; 
     }
     
-    // Special handling for Endboss - always apply damage when colliding
     if (enemy instanceof Endboss) {
       this.handleCollisionDamage(enemy);
       return;
     }
     
-    // Skip collision during endboss fight if recently changed direction
     if (this.endbossAttackStarted && this.character.lastDirectionChangeTime && 
         Date.now() - this.character.lastDirectionChangeTime < 300) {
       return;
     }
     
-    // Add: Skip if near endboss and jumping on regular enemies
     const nearEndboss = this.level.enemies.some(e => e instanceof Endboss && Math.abs(this.character.x - e.x) < 200);
     if (nearEndboss && (enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && 
         isValidJump(this.character, enemy)) {
@@ -248,8 +210,8 @@ export class World {
   }
 
   /**
-   * Handles successful jump attack on enemy
-   * @param {Object} enemy - The enemy being attacked
+   * Handles successful jump attack on enemy.
+   * @param {Object} enemy - Enemy being attacked
    */
   handleJumpOnEnemy(enemy) {
     enemy.hit();
@@ -259,8 +221,8 @@ export class World {
   }
 
   /**
-   * Handles collision damage with per-enemy cooldown tracking
-   * @param {Object} enemy - The enemy that caused the collision
+   * Handles collision damage with cooldown tracking.
+   * @param {Object} enemy - Enemy causing damage
    */
   handleCollisionDamage(enemy) {
     if (shouldApplyCollisionDamage(this.character, enemy)) {
@@ -269,8 +231,7 @@ export class World {
   }
 
   /**
-   * Applies damage to character when colliding with enemies
-   * Updated to use getHealthPercent() method
+   * Applies damage to character from collision.
    */
   applyCollisionDamage() {
     this.character.hit();
@@ -281,7 +242,7 @@ export class World {
   }
 
   /**
-   * Cleans up enemy hit tracking when enemies are removed
+   * Cleans up enemy hit tracking for removed enemies.
    */
   cleanupEnemyHitTracking() {
     this.character.hitByEnemies.forEach((timestamp, enemy) => {
@@ -292,7 +253,7 @@ export class World {
   }
 
   /**
-   * Checks collisions between thrown bottles and enemies
+   * Checks collisions between bottles and enemies.
    */
   checkBottleCollisions() {
     this.throwableObject.forEach(bottle => {
@@ -306,9 +267,9 @@ export class World {
   }
 
   /**
-   * Handles when an enemy is hit by a bottle
-   * @param {Object} bottle - The bottle object
-   * @param {Object} enemy - The enemy object
+   * Handles enemy being hit by bottle.
+   * @param {Object} bottle - Bottle object
+   * @param {Object} enemy - Enemy object
    */
   handleEnemyHitByBottle(bottle, enemy) {
     enemy.hit();
@@ -325,7 +286,7 @@ export class World {
   }
 
   /**
-   * Removes enemies marked for removal from the game
+   * Removes enemies marked for removal.
    */
   filterMarkedEnemies() {
     this.level.enemies = filterMarkedObjects(this.level.enemies);
@@ -333,14 +294,14 @@ export class World {
   }
 
   /**
-   * Removes bottles marked for removal from the game
+   * Removes bottles marked for removal.
    */
   filterMarkedBottles() {
     this.throwableObject = filterMarkedObjects(this.throwableObject);
   }
 
   /**
-   * Spawns bottles when enough enemies are defeated
+   * Spawns bottles when enemies defeated.
    */
   checkBottleSpawn() {
     if (this.level.enemies.length <= level1.enemies.length - 2) {
@@ -349,7 +310,7 @@ export class World {
   }
 
   /**
-   * Spawns new chicken enemies periodically
+   * Spawns new chicken enemies periodically.
    */
   spawnChickens() {
     setInterval(() => {
@@ -364,7 +325,7 @@ export class World {
   }
 
   /**
-   * Checks for collection of bottles and coins
+   * Checks for collection of bottles and coins.
    */
   checkCollection() {
     this.level.bottle = checkCollectible(
@@ -383,14 +344,14 @@ export class World {
   }
 
   /**
-   * Handles bottle collection
+   * Handles bottle collection.
    */
   collectBottle() {
     this.statusBarBottle.setBottlesCount(this.statusBarBottle.bottlesCount + 1);
   }
 
   /**
-   * Handles coin collection and life rewards
+   * Handles coin collection and life rewards.
    */
   collectCoin() {
     const coins = ++this.statusBarCoins.percentageCoins;
@@ -403,8 +364,8 @@ export class World {
   }
 
   /**
-   * Adds a movable object to the canvas map with proper flipping for direction
-   * @param {Object} mo - The movable object to add
+   * Adds movable object to canvas with direction flipping.
+   * @param {Object} mo - Movable object to add
    */
   addToMap(mo) {
     if (mo.otherDirection) flipImage(this.ctx, mo);

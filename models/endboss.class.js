@@ -1,6 +1,5 @@
 /**
  * Endboss enemy character with complex behavior patterns.
- * @extends MovableObject
  */
 class Endboss extends MovableObject {
   MAX_HEALTH = 200;
@@ -46,7 +45,9 @@ class Endboss extends MovableObject {
     "img_pollo_locco/img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
 
-  /** Creates Endboss */
+  /**
+   * Creates Endboss instance.
+   */
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadAllImages();
@@ -54,12 +55,16 @@ class Endboss extends MovableObject {
     this.initializeState();
   }
 
-  /** Loads all images */
+  /**
+   * Loads all endboss images.
+   */
   loadAllImages() {
     this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_HURT, ...this.IMAGES_STAY, ...this.IMAGES_ATTACK, ...this.IMAGES_DEAD]);
   }
 
-  /** Sets stats */
+  /**
+   * Sets endboss stats.
+   */
   initializeStats() {
     this.height = 400;
     this.width = 250;
@@ -70,7 +75,9 @@ class Endboss extends MovableObject {
     this.isDead = false;
   }
 
-  /** Sets state */
+  /**
+   * Sets endboss state properties.
+   */
   initializeState() {
     this.walking = true;
     this._isMoving = false;
@@ -83,7 +90,9 @@ class Endboss extends MovableObject {
     this.groundLevel = 60;
   }
 
-  /** Starts movement */
+  /**
+   * Starts endboss movement.
+   */
   startMoving() {
     if (!this._isMoving) {
       this._isMoving = true;
@@ -91,13 +100,17 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** Starts animation */
+  /**
+   * Starts animation loop.
+   */
   animate() {
     if (this._moveInterval) return;
     this._moveInterval = setInterval(() => this.executeMovementCycle(), this.ANIMATION_SPEED);
   }
 
-  /** Executes cycle */
+  /**
+   * Executes movement cycle.
+   */
   executeMovementCycle() {
     if (this.isDead) {
       this.playAnimation(this.IMAGES_DEAD);
@@ -108,7 +121,9 @@ class Endboss extends MovableObject {
     this.playCurrentStateAnimation();
   }
 
-  /** Updates cycle */
+  /**
+   * Updates animation cycle.
+   */
   updateAnimationCycle() {
     if (this.sequenceComplete) {
       this.handlePostSequenceState();
@@ -117,7 +132,9 @@ class Endboss extends MovableObject {
     this.handleInitialSequence();
   }
 
-  /** Handles post sequence */
+  /**
+   * Handles post-sequence state logic.
+   */
   handlePostSequenceState() {
     if (this.isCharacterNear() && !this._isJumping) {
       this.currentState = 'attack';
@@ -130,13 +147,17 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** Handles sequence */
+  /**
+   * Handles initial sequence logic.
+   */
   handleInitialSequence() {
     this.stateTimer++;
     this.checkStateTransition();
   }
 
-  /** Checks transition */
+  /**
+   * Checks and executes state transitions.
+   */
   checkStateTransition() {
     const transitions = { walking: 6, alert: 8, attack: 6 };
     const nextStates = { walking: 'alert', alert: 'attack', attack: 'walking' };
@@ -146,19 +167,27 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** @param {string} nextState Transitions state */
+  /**
+   * Transitions to next state.
+   * @param {string} nextState - Next state to transition to
+   */
   transitionToNextState(nextState) {
     if (this.currentState === 'attack') this.sequenceComplete = true;
     this.currentState = nextState;
     this.stateTimer = 0;
   }
 
-  /** @returns {boolean} Checks proximity */
+  /**
+   * Checks if character is near endboss.
+   * @returns {boolean} True if character is near
+   */
   isCharacterNear() {
     return this.hasValidCharacter() && Math.abs(this.x - this.getCharacterPosition()) < 60;
   }
 
-  /** Plays animations */
+  /**
+   * Plays animations based on current state.
+   */
   playCurrentStateAnimation() {
     const animations = {
       walking: () => this.playAnimation(this.IMAGES_WALKING),
@@ -168,7 +197,9 @@ class Endboss extends MovableObject {
     animations[this.currentState]?.();
   }
 
-  /** Handles alert */
+  /**
+   * Handles alert state logic.
+   */
   handleAlertState() {
     this.playAnimation(this.IMAGES_STAY);
     if (this.stateTimer === 1 && !this.alertSoundPlayed) {
@@ -177,7 +208,9 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** Handles attack */
+  /**
+   * Handles attack state logic.
+   */
   handleAttackState() {
     this.playAnimation(this.IMAGES_ATTACK);
     if (this.stateTimer === 3) {
@@ -188,25 +221,34 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** Moves boss */
+  /**
+   * Moves endboss towards character.
+   */
   move() {
     if (!this.hasValidCharacter() || this.currentState !== 'walking' || this._isJumping) return;
     const characterX = this.getCharacterPosition();
     this.adjustPosition(characterX, this.DISTANCE_TO_KEEP);
   }
 
-  /** Performs jump */
+  /**
+   * Performs attack jump if conditions met.
+   */
   performAttackJump() {
     if (!this.canPerformJump()) return;
     this.executeJump();
   }
 
-  /** @returns {boolean} Can jump */
+  /**
+   * Checks if jump can be performed.
+   * @returns {boolean} True if jump can be performed
+   */
   canPerformJump() {
     return this.hasValidCharacter() && Math.abs(this.x - this.world.character.x) < 80;
   }
 
-  /** Executes jump */
+  /**
+   * Executes jump attack.
+   */
   executeJump() {
     if (this._isJumping) return;
     this._isJumping = true;
@@ -216,7 +258,9 @@ class Endboss extends MovableObject {
     this.performJumpAnimation();
   }
 
-  /** Jump animation */
+  /**
+   * Performs jump animation.
+   */
   performJumpAnimation() {
     this.y = 30;
     setTimeout(() => {
@@ -225,7 +269,9 @@ class Endboss extends MovableObject {
     }, 300);
   }
 
-  /** Plays alert sound */
+  /**
+   * Plays alert sound.
+   */
   playAlertSound() {
     if (this.world && !this.world.endbossAttackStarted && !this.alertSoundPlayed) {
       playEndbossAttackMusic(this.world);
@@ -233,40 +279,54 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** @returns {number} Character X */
+  /**
+   * Gets character X position.
+   */
   getCharacterPosition() {
     return this.world.character.x;
   }
 
-  /** @returns {boolean} Has character */
+  /**
+   * Checks if valid character exists.
+   */
   hasValidCharacter() {
     return this.world?.character;
   }
 
-  /** @param {number} characterX @param {number} distanceToKeep Adjusts position */
+  /**
+   * Adjusts endboss position relative to character.
+   */
   adjustPosition(characterX, distanceToKeep) {
     if (this.x < characterX - distanceToKeep) this.moveRight();
     else if (this.x > characterX + distanceToKeep) this.moveLeft();
   }
 
-  /** Moves right */
+  /**
+   * Moves endboss right.
+   */
   moveRight() {
     this.x += this.speed;
     this.otherDirection = true;
   }
 
-  /** Moves left */
+  /**
+   * Moves endboss left.
+   */
   moveLeft() {
     this.x -= this.speed;
     this.otherDirection = false;
   }
 
-  /** @returns {number} Health percent */
+  /**
+   * Gets health as percentage.
+   */
   getHealthPercent() {
     return Math.max(0, Math.round((this.health / this.MAX_HEALTH) * 100));
   }
 
-  /** Takes damage */
+  /**
+   * Handles endboss taking damage.
+   */
   hit() {
     if (this.isDead) return;
     this.health = Math.max(0, this.health - this.DAMAGE_AMOUNT);
@@ -275,7 +335,9 @@ class Endboss extends MovableObject {
     if (this.health <= 0) this.die();
   }
 
-  /** Handles death */
+  /**
+   * Handles endboss death.
+   */
   die() {
     this.isDead = true;
     this.currentState = 'dead';
@@ -284,14 +346,18 @@ class Endboss extends MovableObject {
     this.scheduleRemoval();
   }
 
-  /** Death effects */
+  /**
+   * Plays death effects.
+   */
   playDeathEffects() {
     this.playAnimation(this.IMAGES_DEAD);
     playEndbossHurtSound();
     if (this.world) stopEndbossAttackMusic(this.world);
   }
 
-  /** Stops movement */
+  /**
+   * Stops all movement.
+   */
   stopMovement() {
     if (this._moveInterval) {
       clearInterval(this._moveInterval);
@@ -299,24 +365,32 @@ class Endboss extends MovableObject {
     }
   }
 
-  /** Schedules removal */
+  /**
+   * Schedules removal from world.
+   */
   scheduleRemoval() {
     setTimeout(() => this.removeFromWorld(), 2000);
   }
 
-  /** Attack sound */
+  /**
+   * Plays attack sound.
+   */
   attack() {
     playEndbossAttackSound();
   }
 
-  /** Removes from world */
+  /**
+   * Removes endboss from world.
+   */
   removeFromWorld() {
     if (this.world?.level?.enemies) {
       this.world.level.enemies = this.world.level.enemies.filter(e => e !== this);
     }
   }
 
-  /** @returns {boolean} Is dead */
+  /**
+   * Checks if endboss is dead.
+   */
   isEnemyDead() {
     return this.health <= 0;
   }

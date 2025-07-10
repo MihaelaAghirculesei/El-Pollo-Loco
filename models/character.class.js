@@ -23,7 +23,7 @@ class Character extends MovableObject {
   static STATES = { ACTIVE: 'active', IDLE: 'idle', SLEEPING: 'sleeping' };
 
   /**
-   * Initializes the character with default values and prepares animations.
+   * Initializes the character with default values.
    */
   constructor() {
     super();
@@ -33,7 +33,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Sets initial values like position, speed, health, and state.
+   * Sets initial character properties.
    */
   setInitialValues() {
     const cfg = Character.CONFIG;
@@ -46,13 +46,12 @@ class Character extends MovableObject {
     this.hitByEnemies = new Map(); 
     this.lastGlobalHitTime = 0; 
     this.currentState = Character.STATES.SLEEPING;
-    
     this.lastJumpKillTime = 0; 
     this.lastDirectionChangeTime = 0; 
   }
 
   /**
-   * Loads image paths for different animation states of the character.
+   * Loads all character animation images.
    */
   loadCharacterImages() {
     this.IMAGES_IDLE = this.createImageArray('IDLE');
@@ -64,9 +63,9 @@ class Character extends MovableObject {
   }
 
   /**
-   * Creates an array of image paths for a specific animation type.
-   * @param {string} type - The type of animation.
-   * @returns {string[]} Array of image paths.
+   * Creates image array for specific animation type.
+   * @param {string} type - Animation type
+   * @returns {string[]} Array of image paths
    */
   createImageArray(type) {
     const { path, start, count } = Character.IMAGE_PATHS[type];
@@ -75,7 +74,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Prepares the character by loading images, applying gravity, and starting animation loops.
+   * Prepares character for gameplay.
    */
   prepareCharacter() {
     this.loadImage(this.IMAGES_WALKING[0]);
@@ -88,12 +87,11 @@ class Character extends MovableObject {
    * Loads all character images into memory.
    */
   loadAllCharacterImages() {
-    const all = [
-      this.IMAGES_WALKING, this.IMAGES_JUMPING,
-      this.IMAGES_DEAD, this.IMAGES_HURT,
-      this.IMAGES_IDLE, this.IMAGES_SLEEPING
+    const imageArrays = [
+      this.IMAGES_WALKING, this.IMAGES_JUMPING, this.IMAGES_DEAD, 
+      this.IMAGES_HURT, this.IMAGES_IDLE, this.IMAGES_SLEEPING
     ];
-    all.forEach(arr => this.loadImages(arr));
+    imageArrays.forEach(arr => this.loadImages(arr));
   }
 
   /**
@@ -106,7 +104,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Starts a loop that processes input and updates the camera position.
+   * Starts movement processing loop.
    */
   startMovementLoop() {
     setInterval(() => {
@@ -116,7 +114,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Processes keyboard input and triggers corresponding movements.
+   * Processes keyboard input for movement.
    */
   processInput() {
     const { RIGHT, LEFT, SPACE } = this.world.keyboard;
@@ -126,27 +124,25 @@ class Character extends MovableObject {
   }
 
   /**
-   * Moves the character to the right and updates the last action time.
+   * Moves character to the right.
    */
   moveRightward() {
     if (this.otherDirection === true) {
       this.lastDirectionChangeTime = Date.now();
     }
-    
     this.moveRight();
     this.otherDirection = false;
     this.updateLastActionTime();
   }
 
   /**
-   * Moves the character to the left (if possible) and updates the last action time.
+   * Moves character to the left if possible.
    */
   moveLeftward() {
     if (this.x > 0) {
       if (this.otherDirection === false) {
         this.lastDirectionChangeTime = Date.now();
       }
-      
       this.moveLeft();
       this.otherDirection = true;
       this.updateLastActionTime();
@@ -154,7 +150,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Attempts to make the character jump if not already in the air, and updates last action time.
+   * Attempts to make character jump.
    */
   tryToJump() {
     if (!this.isAboveGround()) {
@@ -164,14 +160,14 @@ class Character extends MovableObject {
   }
 
   /**
-   * Updates the camera position based on the character's position.
+   * Updates camera position based on character position.
    */
   updateCameraPosition() {
     this.world.camera_x = -this.x + Character.CONFIG.CAMERA_OFFSET;
   }
 
   /**
-   * Starts a loop that checks the character's state and reacts on state changes.
+   * Starts state checking loop.
    */
   startStateLoop() {
     setInterval(() => {
@@ -185,8 +181,8 @@ class Character extends MovableObject {
   }
 
   /**
-   * Determines the character's current state based on death, endboss status, and inactivity.
-   * @returns {string} Current state.
+   * Determines current character state.
+   * @returns {string} Current state
    */
   determineState() {
     if (this.endbossDead()) return Character.STATES.ACTIVE;
@@ -195,8 +191,8 @@ class Character extends MovableObject {
   }
 
   /**
-   * Determines the state based on inactivity time.
-   * @returns {string} State according to inactivity duration.
+   * Gets state based on inactivity time.
+   * @returns {string} State according to inactivity
    */
   stateByInactivity() {
     const time = Date.now() - this.lastActionTime;
@@ -206,7 +202,7 @@ class Character extends MovableObject {
   }
 
   /**
-   * Reacts to a state change, e.g. playing or stopping snoring sounds.
+   * Responds to state changes with sound effects.
    */
   respondToStateChange() {
     if (this.currentState === Character.STATES.SLEEPING) playCharacterSnoringSound();
@@ -214,14 +210,14 @@ class Character extends MovableObject {
   }
 
   /**
-   * Starts a loop that plays animations according to the current state.
+   * Starts animation loop for state-based animations.
    */
   startAnimationLoop() {
     setInterval(() => this.playAnimationByState(), Character.CONFIG.ANIMATION_SPEED);
   }
 
   /**
-   * Plays the animation that corresponds to the current state.
+   * Plays animation based on current state.
    */
   playAnimationByState() {
     if (this.isDead()) return this.playAnimation(this.IMAGES_DEAD);
@@ -234,8 +230,8 @@ class Character extends MovableObject {
   }
 
   /**
-   * Checks if the character is currently moving.
-   * @returns {boolean} True if moving, false otherwise.
+   * Checks if character is currently moving.
+   * @returns {boolean} True if moving
    */
   isMoving() {
     const { RIGHT, LEFT } = this.world.keyboard;
@@ -243,37 +239,37 @@ class Character extends MovableObject {
   }
 
   /**
-   * Updates the timestamp of the character's last action.
+   * Updates timestamp of last action.
    */
   updateLastActionTime() {
     this.lastActionTime = Date.now();
   }
 
   /**
-   * Makes the character jump by setting vertical speed.
+   * Makes character jump by setting vertical speed.
    */
   jump() {
     this.speedY = Character.CONFIG.JUMP_SPEED;
   }
 
   /**
-   * Handles the character getting hit: updates hit state and health.
+   * Handles character getting hit.
    */
   hit() {
     this.updateHitState();
-    this.health -= 20; // MODIFICA: 20 punti di danno (20%) invece di 10
+    this.health -= 20;
     this.handleHealthDepletion();
   }
 
   /**
-   * Updates the time of the last hit to current time.
+   * Updates hit state timestamp.
    */
   updateHitState() {
     this.lastHitTime = Date.now();
   }
 
   /**
-   * Checks health and handles respawn or death if health reaches zero.
+   * Handles health depletion and respawn/death.
    */
   handleHealthDepletion() {
     if (this.health <= 0) {
@@ -287,46 +283,47 @@ class Character extends MovableObject {
   }
 
   /**
-   * Checks if the character has remaining lives.
-   * @returns {boolean}
+   * Checks if character has remaining lives.
+   * @returns {boolean} True if lives left
    */
   hasLivesLeft() {
     return this.life > 0;
   }
 
   /**
-   * Respawns the character by resetting health and reducing life count.
+   * Respawns character with full health.
    */
   respawn() {
-    this.health = 100; // MODIFICA: Ripristina salute a 100
+    this.health = 100;
     this.life--;
   }
 
   /**
-   * Marks the character as dead.
+   * Marks character as dead.
    */
   die() {
     this.lastHitTime = Date.now();
   }
 
   /**
-   * Calculates the character's health as a percentage.
+   * Gets character health as percentage.
+   * @returns {number} Health percentage
    */
   getHealthPercent() {
     return Math.max(0, Math.round((this.health / 100) * 100));
   }
 
   /**
-   * Checks if the character is dead (no lives left).
-   * @returns {boolean}
+   * Checks if character is dead.
+   * @returns {boolean} True if dead
    */
   isDead() {
     return this.life <= 0;
   }
 
   /**
-   * Checks if the endboss is dead.
-   * @returns {boolean} True if endboss is dead, false otherwise.
+   * Checks if endboss is dead.
+   * @returns {boolean} True if endboss is dead
    */
   endbossDead() {
     const endboss = this.world.enemies.find(e => e instanceof Endboss);

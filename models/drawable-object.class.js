@@ -1,6 +1,9 @@
+/**
+ * Base class for drawable objects.
+ */
 class DrawableObject {
   /**
-   * Creates an instance of DrawableObject and initializes its properties.
+   * Creates drawable object and initializes properties.
    */
   constructor() {
     this.initPosition();
@@ -11,7 +14,7 @@ class DrawableObject {
   }
 
   /**
-   * Initializes the position coordinates.
+   * Initializes position coordinates.
    */
   initPosition() {
     this.x = 120;
@@ -19,7 +22,7 @@ class DrawableObject {
   }
 
   /**
-   * Initializes the dimensions of the object.
+   * Initializes object dimensions.
    */
   initDimensions() {
     this.height = 200;
@@ -27,7 +30,7 @@ class DrawableObject {
   }
 
   /**
-   * Initializes image related properties.
+   * Initializes image-related properties.
    */
   initImageProperties() {
     this.img = null;
@@ -45,24 +48,24 @@ class DrawableObject {
   }
 
   /**
-   * Initializes the image cache object.
+   * Initializes image cache object.
    */
   initImageCache() {
     this.imageCache = {};
   }
 
   /**
-   * Loads an image from the given path.
-   * @param {string} path - The path to the image file.
+   * Loads image from given path.
+   * @param {string} path - Image file path
    */
   loadImage(path) {
     this.img = this.createImage(path);
   }
 
   /**
-   * Creates and returns an Image object with the specified source path.
-   * @param {string} path - The path to the image file.
-   * @returns {HTMLImageElement} The created image element.
+   * Creates and returns Image object.
+   * @param {string} path - Image file path
+   * @returns {HTMLImageElement} Created image element
    */
   createImage(path) {
     const img = new Image();
@@ -71,16 +74,16 @@ class DrawableObject {
   }
 
   /**
-   * Loads multiple images from an array of paths and caches them.
-   * @param {string[]} paths - Array of image paths.
+   * Loads multiple images and caches them.
+   * @param {string[]} paths - Array of image paths
    */
   loadImages(paths) {
     paths.forEach(path => this.cacheImage(path));
   }
 
   /**
-   * Creates an image, applies flipping, and caches it.
-   * @param {string} path - The path to the image file.
+   * Creates, flips, and caches image.
+   * @param {string} path - Image file path
    */
   cacheImage(path) {
     const img = this.createImage(path);
@@ -89,16 +92,16 @@ class DrawableObject {
   }
 
   /**
-   * Applies a horizontal flip transform to the given image element.
-   * @param {HTMLImageElement} img - The image element to flip.
+   * Applies horizontal flip to image.
+   * @param {HTMLImageElement} img - Image to flip
    */
   applyImageFlip(img) {
     img.style.transform = "scaleX(-1)";
   }
 
   /**
-   * Draws the object on the given canvas context.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context.
+   * Draws object on canvas context.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   draw(ctx) {
     if (!this.hasImage()) return;
@@ -106,24 +109,24 @@ class DrawableObject {
   }
 
   /**
-   * Checks if an image is currently loaded.
-   * @returns {boolean} True if an image is loaded, otherwise false.
+   * Checks if image is loaded.
+   * @returns {boolean} True if image loaded
    */
   hasImage() {
     return this.img !== null;
   }
 
   /**
-   * Renders the loaded image on the canvas.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context.
+   * Renders loaded image on canvas.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   renderImage(ctx) {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
 
   /**
-   * Draws a frame around the object if it is a character.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context.
+   * Draws frame around character objects.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   drawFrame(ctx) {
     if (!this.isCharacter()) return;
@@ -131,16 +134,16 @@ class DrawableObject {
   }
 
   /**
-   * Checks if the object is an instance of Character.
-   * @returns {boolean} True if the object is a Character, false otherwise.
+   * Checks if object is Character instance.
+   * @returns {boolean} True if Character
    */
   isCharacter() {
     return this instanceof Character;
   }
 
   /**
-   * Renders the collision box outline on the canvas.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context.
+   * Renders collision box outline.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   renderCollisionBox(ctx) {
     ctx.beginPath();
@@ -148,8 +151,8 @@ class DrawableObject {
   }
 
   /**
-   * Draws the collision box path on the canvas context.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context.
+   * Draws collision box path.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   drawCollisionPath(ctx) {
     const box = this.getCollisionBox();
@@ -157,8 +160,8 @@ class DrawableObject {
   }
 
   /**
-   * Returns the collision box coordinates and dimensions.
-   * @returns {{x: number, y: number, width: number, height: number}} The collision box object.
+   * Gets collision box coordinates and dimensions.
+   * @returns {{x: number, y: number, width: number, height: number}} Collision box
    */
   getCollisionBox() {
     return {
@@ -170,32 +173,32 @@ class DrawableObject {
   }
 
   /**
-   * Calculates the X coordinate of the collision box.
-   * @returns {number} The X position of the collision box.
+   * Calculates collision box X coordinate.
+   * @returns {number} X position
    */
   getCollisionX() {
     return this.x + this.collisionOffsetLeft;
   }
 
   /**
-   * Calculates the Y coordinate of the collision box.
-   * @returns {number} The Y position of the collision box.
+   * Calculates collision box Y coordinate.
+   * @returns {number} Y position
    */
   getCollisionY() {
     return this.y + this.collisionOffsetTop;
   }
 
   /**
-   * Calculates the width of the collision box.
-   * @returns {number} The width of the collision box.
+   * Calculates collision box width.
+   * @returns {number} Width
    */
   getCollisionWidth() {
     return this.width - this.collisionOffsetLeft - this.collisionOffsetRight;
   }
 
   /**
-   * Calculates the height of the collision box.
-   * @returns {number} The height of the collision box.
+   * Calculates collision box height.
+   * @returns {number} Height
    */
   getCollisionHeight() {
     return this.height - this.collisionOffsetTop - this.collisionOffsetBottom;

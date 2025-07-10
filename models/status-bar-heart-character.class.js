@@ -1,12 +1,7 @@
 /**
- * Represents a status bar displaying the character's health as hearts.
- * @extends DrawableObject
+ * Status bar for character health display.
  */
 class StatusBarHeartCharacter extends DrawableObject {
-  /**
-   * Static array of image paths for the different health percentages.
-   * @type {string[]}
-   */
   static IMAGES = [
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png",
     "img_pollo_locco/img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png",
@@ -17,8 +12,8 @@ class StatusBarHeartCharacter extends DrawableObject {
   ];
 
   /**
-   * Creates an instance of StatusBarHeartCharacter.
-   * @param {object} character - The character object whose health is to be displayed.
+   * Creates character health status bar.
+   * @param {object} character - Character object reference
    */
   constructor(character) {
     super();
@@ -29,7 +24,7 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   /**
-   * Sets up the initial position and dimensions of the status bar.
+   * Sets up status bar position and dimensions.
    */
   setupStatusBar() {
     this.x = 40;
@@ -39,8 +34,8 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   /**
-   * Sets the percentage of the status bar and updates its image.
-   * @param {number} percentage - The health percentage (0-100).
+   * Sets health percentage and updates display.
+   * @param {number} percentage - Health percentage (0-100)
    */
   setPercentage(percentage) {
     this.percentage = this.clampPercentage(percentage);
@@ -48,16 +43,16 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   /**
-   * Clamps the given percentage value between 0 and 100.
-   * @param {number} percentage - The percentage value to clamp.
-   * @returns {number} The clamped percentage value.
+   * Clamps percentage to valid range.
+   * @param {number} percentage - Percentage to clamp
+   * @returns {number} Clamped percentage
    */
   clampPercentage(percentage) {
     return Math.max(0, Math.min(percentage, 100));
   }
 
   /**
-   * Updates the image of the status bar based on the current percentage.
+   * Updates status bar image based on percentage.
    */
   updateStatusBarImage() {
     const imageIndex = this.getImageIndex();
@@ -67,8 +62,8 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   /**
-   * Determines the correct image index based on the current percentage.
-   * @returns {number} The index of the image to display.
+   * Gets correct image index based on percentage.
+   * @returns {number} Image index
    */
   getImageIndex() {
     if (this.percentage === 100) return 5;
@@ -80,8 +75,8 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   /**
-   * Draws the status bar and the heart count on the canvas.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+   * Draws status bar and heart count.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   draw(ctx) {
     if (this.img) {
@@ -91,8 +86,8 @@ class StatusBarHeartCharacter extends DrawableObject {
   }
 
   /**
-   * Draws the heart count next to the status bar if the character has life remaining.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+   * Draws heart count next to status bar.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   drawHearts(ctx) {
     if (this.character && this.character.life > 0) {

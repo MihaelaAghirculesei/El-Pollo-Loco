@@ -1,12 +1,7 @@
 /**
- * Represents a throwable object in the game, extending MovableObject.
- * This class handles the logic for throwing, rotating, and splashing a throwable item.
+ * Throwable object class for bottles.
  */
 class ThrowableObject extends MovableObject {
-  /**
-   * Static array of image paths for the rotation animation of the throwable object.
-   * @type {string[]}
-   */
   static IMAGES_ROTATION = [
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png",
@@ -14,10 +9,6 @@ class ThrowableObject extends MovableObject {
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png"
   ];
 
-  /**
-   * Static array of image paths for the splash animation of the throwable object.
-   * @type {string[]}
-   */
   static IMAGES_SPLASH = [
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png",
     "img_pollo_locco/img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png",
@@ -28,20 +19,14 @@ class ThrowableObject extends MovableObject {
   ];
 
   /**
-   * Creates an instance of ThrowableObject.
-   * @param {number} x - The initial x-coordinate of the object.
-   * @param {number} y - The initial y-coordinate of the object.
-   * @param {number} [direction=1] - The direction of the throw (1 for right, -1 for left).
+   * Creates throwable object instance.
+   * @param {number} x - Initial X coordinate
+   * @param {number} y - Initial Y coordinate
+   * @param {number} direction - Throw direction (1 for right, -1 for left)
    */
   constructor(x, y, direction = 1) {
     super();
-    this.x = x;
-    this.y = y;
-    this.width = 60;
-    this.height = 60;
-    this.splashed = false;
-    this.hasHit = false;
-    this.direction = direction;
+    this.initializeProperties(x, y, direction);
     this.loadImages(ThrowableObject.IMAGES_ROTATION);
     this.loadImages(ThrowableObject.IMAGES_SPLASH);
     this.setInitialImage();
@@ -50,14 +35,30 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Sets the initial image of the throwable object.
+   * Initializes throwable object properties.
+   * @param {number} x - X coordinate
+   * @param {number} y - Y coordinate
+   * @param {number} direction - Throw direction
+   */
+  initializeProperties(x, y, direction) {
+    this.x = x;
+    this.y = y;
+    this.width = 60;
+    this.height = 60;
+    this.splashed = false;
+    this.hasHit = false;
+    this.direction = direction;
+  }
+
+  /**
+   * Sets initial image for throwable object.
    */
   setInitialImage() {
     this.img = this.imageCache[ThrowableObject.IMAGES_ROTATION[0]];
   }
 
   /**
-   * Initiates the throwing action, applying gravity and starting horizontal movement.
+   * Initiates throwing action.
    */
   startThrow() {
     this.speedY = 30;
@@ -66,7 +67,7 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Starts the horizontal movement of the throwable object.
+   * Starts horizontal movement.
    */
   startMoving() {
     let speed = this.getThrowSpeed();
@@ -77,15 +78,15 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Determines the horizontal speed of the throw based on the direction.
-   * @returns {number} The throwing speed.
+   * Gets throw speed based on direction.
+   * @returns {number} Throw speed
    */
   getThrowSpeed() {
     return this.direction === -1 ? 5 : 10;
   }
 
   /**
-   * Starts the rotation animation of the throwable object.
+   * Starts rotation animation.
    */
   startRotationAnimation() {
     this.rotationInterval = setInterval(() => {
@@ -94,15 +95,14 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Plays the rotation animation using the predefined rotation images.
+   * Plays rotation animation.
    */
   playRotationAnimation() {
     this.playAnimation(ThrowableObject.IMAGES_ROTATION);
   }
 
   /**
-   * Handles the splash event, stopping movement and rotation, playing the splash animation,
-   * and then removing the object from the world.
+   * Handles splash event.
    */
   splash() {
     this.splashed = true;
@@ -114,31 +114,31 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Stops the horizontal movement of the object by clearing the movement interval.
+   * Stops horizontal movement.
    */
   stopMoving() {
     clearInterval(this.movementInterval);
   }
 
   /**
-   * Stops the rotation animation of the object by clearing the rotation interval.
+   * Stops rotation animation.
    */
   stopRotationAnimation() {
     clearInterval(this.rotationInterval);
   }
 
   /**
-   * Plays the splash animation once.
-   * @returns {Promise<void>} A promise that resolves when the splash animation is complete.
+   * Plays splash animation once.
+   * @returns {Promise<void>} Promise that resolves when animation completes
    */
   playSplashAnimation() {
     return this.playAnimationOnce(ThrowableObject.IMAGES_SPLASH);
   }
 
   /**
-   * Plays an animation sequence once and resolves a promise upon completion.
-   * @param {string[]} images - An array of image paths for the animation.
-   * @returns {Promise<void>} A promise that resolves when the animation finishes.
+   * Plays animation sequence once.
+   * @param {string[]} images - Animation images
+   * @returns {Promise<void>} Promise that resolves when complete
    */
   playAnimationOnce(images) {
     return new Promise((resolve) => {
@@ -155,7 +155,7 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Removes the throwable object from the game world if it exists within the level's enemies array.
+   * Removes throwable object from world.
    */
   removeFromWorld() {
     if (this.world) {

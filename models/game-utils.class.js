@@ -13,8 +13,8 @@ const GAME_OVER_IMAGE_PATH = 'img_pollo_locco/img/9_intro_outro_screens/game_ove
 // ==================== GAME END FUNCTIONS ====================
 
 /**
- * Sets the game state to "game over" and stops the game loop
- * @param {Object} world - The game world object containing state and intervals
+ * Sets game state to over and stops game loop.
+ * @param {Object} world - Game world object
  */
 function setGameOverState(world) {
   world.gameOver = true;
@@ -22,7 +22,7 @@ function setGameOverState(world) {
 }
 
 /**
- * Hides the main game canvas and the title canvas
+ * Hides main game canvases.
  */
 function hideCanvases() {
   document.getElementById('canvas').style.display = 'none';
@@ -30,14 +30,14 @@ function hideCanvases() {
 }
 
 /**
- * Removes all existing game over screen elements from the DOM
+ * Removes existing game over screens.
  */
 function removeExistingScreens() {
   document.querySelectorAll(SELECTORS.GAME_OVER_SCREEN).forEach(screen => screen.remove());
 }
 
 /**
- * Displays the footer element by setting its display style to 'flex'
+ * Shows footer element.
  */
 function showFooter() {
   const footer = document.querySelector(SELECTORS.FOOTER);
@@ -45,7 +45,7 @@ function showFooter() {
 }
 
 /**
- * Creates and appends a game over screen element with an image
+ * Creates and displays game over screen.
  */
 function createGameOverScreen() {
   const screen = document.createElement('div');
@@ -58,7 +58,7 @@ function createGameOverScreen() {
 }
 
 /**
- * Creates and shows the game won screen if it doesn't exist
+ * Creates and shows game won screen.
  */
 function createGameWonScreen() {
   let screen = document.querySelector(SELECTORS.GAME_WON_SCREEN);
@@ -76,9 +76,9 @@ function createGameWonScreen() {
 }
 
 /**
- * Handles the flow when the game is over; prevents multiple triggers
- * @param {Object} world - The game world object
- * @returns {boolean} - Returns false if the game is already over, true otherwise
+ * Handles game over flow logic.
+ * @param {Object} world - Game world object
+ * @returns {boolean} True if game over handled
  */
 function handleGameOverFlow(world) {
   if (world?.gameOver) return false;
@@ -87,8 +87,8 @@ function handleGameOverFlow(world) {
 }
 
 /**
- * Handles the flow when the game is won; manages state and UI
- * @param {Object} world - The game world object
+ * Handles game won flow logic.
+ * @param {Object} world - Game world object
  */
 function handleGameWonFlow(world) {
   window.showFooterOnGameEnd();
@@ -98,17 +98,17 @@ function handleGameWonFlow(world) {
 }
 
 /**
- * Finds the endboss enemy within the current game level
- * @param {Object} world - The game world object
- * @returns {Object|undefined} - Returns the endboss enemy object if found, otherwise undefined
+ * Finds endboss in current level.
+ * @param {Object} world - Game world object
+ * @returns {Object|undefined} Endboss enemy or undefined
  */
 function findEndboss(world) {
   return world?.level?.enemies?.find(enemy => enemy instanceof Endboss);
 }
 
 /**
- * Initiates the game over display sequence
- * @param {Object} world - The game world object
+ * Shows game over screen sequence.
+ * @param {Object} world - Game world object
  */
 function showGameOver(world) {
   if (!world) return;
@@ -122,8 +122,8 @@ function showGameOver(world) {
 }
 
 /**
- * Initiates the game won display sequence
- * @param {Object} world - The game world object
+ * Shows game won screen sequence.
+ * @param {Object} world - Game world object
  */
 function showGameWon(world) {
   if (!world) return;
@@ -132,19 +132,19 @@ function showGameWon(world) {
 }
 
 /**
- * Checks if the game has ended and triggers the appropriate end screen
- * @param {Object} world - The game world object
+ * Checks if game has ended and triggers appropriate screen.
+ * @param {Object} world - Game world object
  */
 function checkGameEnd(world) {
   if (!world) return;
   const endboss = findEndboss(world);
   if (world.character?.isDead()) {
     showGameOver(world);
-  } else if (endboss?.health <= 0 && !world.gameEndTriggered) { // Check health directly
-    world.gameEndTriggered = true; // Prevent multiple triggers
+  } else if (endboss?.health <= 0 && !world.gameEndTriggered) {
+    world.gameEndTriggered = true;
     setTimeout(() => {
       showGameWon(world);
-    }, 2500); // Wait 2.5 seconds to see boss death animation
+    }, 2500);
   }
 }
 
@@ -171,12 +171,11 @@ const muteAllSounds = (world) => audioManager.muteGameSounds(world);
 const playEndbossHurtSound = () => audioManager.playEndbossHurtSound();
 const playEndbossAttackSound = () => audioManager.playEndbossAttackSound();
 
-
 /**
- * Checks collision between character and enemy using reduced collision zones
- * @param {Object} character - The character object
- * @param {Object} enemy - The enemy to check collision with
- * @returns {boolean} True if collision detected
+ * Checks collision between character and enemy.
+ * @param {Object} character - Character object
+ * @param {Object} enemy - Enemy object
+ * @returns {boolean} True if colliding
  */
 function isCollidingWithEnemy(character, enemy) {
   const charMargin = 20, enemyMargin = 15;
@@ -194,10 +193,10 @@ function isCollidingWithEnemy(character, enemy) {
 }
 
 /**
- * Check if character is colliding with a collectible item
- * @param {Object} character - The character object
- * @param {Object} item - The collectible item to check collision with
- * @returns {boolean} True if collision detected, false otherwise
+ * Checks collision between character and collectible item.
+ * @param {Object} character - Character object
+ * @param {Object} item - Collectible item
+ * @returns {boolean} True if colliding
  */
 function isCollidingWithItem(character, item) {
   const charMargin = 30;
@@ -217,21 +216,19 @@ function isCollidingWithItem(character, item) {
          charBottom > itemTop && charTop < itemBottom;
 }
 
-// ==================== VALIDATION UTILITIES ====================
-
 /**
- * Checks if character has recently changed direction
- * @param {Object} character - The character object
- * @returns {boolean} True if direction changed in last 300ms
+ * Checks if character recently changed direction.
+ * @param {Object} character - Character object
+ * @returns {boolean} True if direction changed recently
  */
 function hasRecentDirectionChange(character) {
   return character.lastDirectionChangeTime && Date.now() - character.lastDirectionChangeTime < 300;
 }
 
 /**
- * Determines if character is performing a valid jump attack on enemy
- * @param {Object} character - The character object
- * @param {Object} enemy - The enemy to check against
+ * Determines if character is performing valid jump attack.
+ * @param {Object} character - Character object
+ * @param {Object} enemy - Enemy object
  * @returns {boolean} True if valid jump attack
  */
 function isValidJump(character, enemy) {
@@ -245,8 +242,8 @@ function isValidJump(character, enemy) {
 }
 
 /**
- * Calculates cooldown time based on enemy type
- * @param {Object} enemy - The enemy object
+ * Calculates cooldown time based on enemy type.
+ * @param {Object} enemy - Enemy object
  * @returns {number} Cooldown time in milliseconds
  */
 function calculateCooldownTime(enemy) {
@@ -254,11 +251,11 @@ function calculateCooldownTime(enemy) {
 }
 
 /**
- * Handles cooldown for specific enemies (Endboss)
- * @param {Object} character 
- * @param {Object} enemy 
- * @param {number} cooldownTime 
- * @returns {boolean}
+ * Handles enemy-specific cooldown logic.
+ * @param {Object} character - Character object
+ * @param {Object} enemy - Enemy object
+ * @param {number} cooldownTime - Cooldown duration
+ * @returns {boolean} True if cooldown allows damage
  */
 function handleEnemySpecificCooldown(character, enemy, cooldownTime) {
   const now = Date.now();
@@ -272,10 +269,10 @@ function handleEnemySpecificCooldown(character, enemy, cooldownTime) {
 }
 
 /**
- * Handles global cooldown for regular enemies
- * @param {Object} character 
- * @param {number} cooldownTime 
- * @returns {boolean}
+ * Handles global cooldown for regular enemies.
+ * @param {Object} character - Character object
+ * @param {number} cooldownTime - Cooldown duration
+ * @returns {boolean} True if cooldown allows damage
  */
 function handleGlobalCooldown(character, cooldownTime) {
   const now = Date.now();
@@ -289,10 +286,10 @@ function handleGlobalCooldown(character, cooldownTime) {
 }
 
 /**
- * Determines collision damage based on enemy type
- * @param {Object} character 
- * @param {Object} enemy 
- * @returns {boolean}
+ * Determines if collision damage should be applied.
+ * @param {Object} character - Character object
+ * @param {Object} enemy - Enemy object
+ * @returns {boolean} True if damage should be applied
  */
 function shouldApplyCollisionDamage(character, enemy) {
   if (character.lastJumpKillTime && Date.now() - character.lastJumpKillTime < 300) {
@@ -308,15 +305,13 @@ function shouldApplyCollisionDamage(character, enemy) {
   }
 }
 
-// ==================== COLLECTION UTILITIES ====================
-
 /**
- * Check collision with collectible items and handle collection
- * @param {Object} character - The character object
+ * Checks collision with collectibles and handles collection.
+ * @param {Object} character - Character object
  * @param {Array} items - Array of collectible items
- * @param {Function} collectFn - Function to call when item is collected
- * @param {Function} soundFn - Function to play sound on collection
- * @returns {Array} Updated array with collected items removed
+ * @param {Function} collectFn - Collection callback function
+ * @param {Function} soundFn - Sound callback function
+ * @returns {Array} Updated items array
  */
 function checkCollectible(character, items, collectFn, soundFn) {
   const itemsToRemove = [];
@@ -333,19 +328,17 @@ function checkCollectible(character, items, collectFn, soundFn) {
 }
 
 /**
- * Filters objects marked for removal from an array
+ * Filters objects marked for removal.
  * @param {Array} objectArray - Array of game objects
- * @returns {Array} Filtered array without marked objects
+ * @returns {Array} Filtered array
  */
 function filterMarkedObjects(objectArray) {
   return objectArray.filter(obj => !obj.markedForRemoval);
 }
 
-// ==================== UI/POPUP UTILITIES ====================
-
 /**
- * Shows congratulations popup when player earns a new life
- * @param {HTMLCanvasElement} canvas - The game canvas
+ * Shows congratulations popup for new life.
+ * @param {HTMLCanvasElement} canvas - Game canvas
  */
 function showCongratulations(canvas) {
   const div = document.createElement("div");
@@ -364,19 +357,19 @@ function showCongratulations(canvas) {
   setTimeout(() => div.remove(), 2000);
 }
 
-// ==================== RENDERING UTILITIES ====================
-
 /**
- * Clears the entire canvas
- * @param {CanvasRenderingContext2D} ctx - The canvas context
- * @param {HTMLCanvasElement} canvas - The canvas element
+ * Clears the entire canvas.
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {HTMLCanvasElement} canvas - Canvas element
  */
 function clearCanvas(ctx, canvas) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 /**
- * Flips an image horizontally for rendering in opposite direction
+ * Flips image horizontally for rendering.
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {Object} mo - Movable object
  */
 function flipImage(ctx, mo) {
   ctx.save();
@@ -386,7 +379,7 @@ function flipImage(ctx, mo) {
 }
 
 /**
- * Restores image to original orientation after flipping
+ * Restores image to original orientation.
  */
 function flipImageBack(ctx, mo) {
   mo.x *= -1;

@@ -1,16 +1,17 @@
+/**
+ * Base class for collectible objects.
+ */
 class CollectableObject extends DrawableObject {
-
   /**
-   * Creates an instance of CollectableObject.
-   * Inherits properties and methods from DrawableObject.
+   * Creates a collectible object instance.
    */
   constructor() {
     super();
   }
 
   /**
-   * Plays the animation by updating the current image and incrementing the image index.
-   * @param {string[]} images - Array of image keys used for animation frames.
+   * Plays animation by updating current image.
+   * @param {string[]} images - Array of image keys
    */
   playAnimation(images) {
     this.updateImage(images);
@@ -18,9 +19,8 @@ class CollectableObject extends DrawableObject {
   }
 
   /**
-   * Updates the displayed image based on the current image index.
-   * Cycles through the images array using modulo operation.
-   * @param {string[]} images - Array of image keys used for animation frames.
+   * Updates displayed image based on current index.
+   * @param {string[]} images - Array of image keys
    */
   updateImage(images) {
     const i = this.currentImage % images.length;
@@ -28,7 +28,7 @@ class CollectableObject extends DrawableObject {
   }
 
   /**
-   * Increments the current image index to progress the animation frame.
+   * Increments current image index.
    */
   incrementImageIndex() {
     this.currentImage++;

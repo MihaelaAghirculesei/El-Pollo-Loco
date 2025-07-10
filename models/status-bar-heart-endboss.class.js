@@ -1,12 +1,7 @@
 /**
- * Represents a status bar for the endboss's health, extending DrawableObject.
- * Displays different images based on the endboss's health percentage.
+ * Status bar for endboss health display.
  */
 class StatusBarHeartEndboss extends DrawableObject {
-  /**
-   * An array of image paths for the different health states of the status bar.
-   * @type {string[]}
-   */
   IMAGES = [
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/0.png",
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/20.png",
@@ -16,15 +11,11 @@ class StatusBarHeartEndboss extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/100.png"
   ];
 
-  /**
-   * The current percentage of the status bar, representing the endboss's health.
-   * @type {number}
-   */
   percentage = 100;
 
   /**
-   * Creates an instance of StatusBarHeartEndboss.
-   * @param {object} endboss - The endboss object whose health this status bar will display.
+   * Creates endboss health status bar.
+   * @param {object} endboss - Endboss object reference
    */
   constructor(endboss) {
     super();
@@ -35,7 +26,7 @@ class StatusBarHeartEndboss extends DrawableObject {
   }
 
   /**
-   * Sets up the initial position and dimensions of the status bar.
+   * Sets up status bar position and dimensions.
    */
   setupStatusBar() {
     this.x = 495;
@@ -45,8 +36,8 @@ class StatusBarHeartEndboss extends DrawableObject {
   }
 
   /**
-   * Sets the percentage of the status bar and updates its displayed image.
-   * @param {number} percentage - The new percentage value (0-100).
+   * Sets health percentage and updates display.
+   * @param {number} percentage - Health percentage (0-100)
    */
   setPercentage(percentage) {
     this.percentage = this.clampPercentage(percentage);
@@ -54,16 +45,16 @@ class StatusBarHeartEndboss extends DrawableObject {
   }
 
   /**
-   * Clamps the given percentage value between 0 and 100.
-   * @param {number} percentage - The percentage value to clamp.
-   * @returns {number} The clamped percentage value.
+   * Clamps percentage to valid range.
+   * @param {number} percentage - Percentage to clamp
+   * @returns {number} Clamped percentage
    */
   clampPercentage(percentage) {
     return Math.max(0, Math.min(percentage, 100));
   }
 
   /**
-   * Updates the image displayed by the status bar based on the current percentage.
+   * Updates status bar image based on percentage.
    */
   updateStatusBarImage() {
     const imageIndex = this.getImageIndex();
@@ -71,8 +62,8 @@ class StatusBarHeartEndboss extends DrawableObject {
   }
 
   /**
-   * Determines the correct image index based on the current percentage.
-   * @returns {number} The index of the image to be displayed.
+   * Gets correct image index based on percentage.
+   * @returns {number} Image index
    */
   getImageIndex() {
     if (this.percentage >= 80) return 5;
@@ -80,10 +71,12 @@ class StatusBarHeartEndboss extends DrawableObject {
     if (this.percentage >= 40) return 3;
     if (this.percentage >= 20) return 2;
     if (this.percentage > 0) return 1;
+    return 0;
   }
+
   /**
-   * Draws the status bar on the canvas.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+   * Draws status bar with dynamic positioning.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   draw(ctx) {
     this.updateCanvasPosition(ctx);
@@ -93,15 +86,15 @@ class StatusBarHeartEndboss extends DrawableObject {
   }
 
   /**
-   * Updates the x-position of the status bar based on the canvas width to keep it anchored to the right.
-   * @param {CanvasRenderingContext2D} ctx - The rendering context of the canvas.
+   * Updates position to stay anchored to right.
+   * @param {CanvasRenderingContext2D} ctx - Rendering context
    */
   updateCanvasPosition(ctx) {
     this.x = ctx.canvas.width - this.width - 20;
   }
 
   /**
-   * Updates the status bar's health percentage by querying the endboss's current health.
+   * Updates health percentage from endboss.
    */
   updateHealth() {
     if (this.endboss) {
