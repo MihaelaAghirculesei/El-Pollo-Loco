@@ -18,10 +18,10 @@ class AudioManager {
   initProperties() {
     this.AUDIO_PATHS = this.defineAudioPaths();
     this.isGameMuted = JSON.parse(localStorage.getItem('gameSoundMuted') || 'true');
-    this.isMusicPlaying = false;
     this.audioPool = {};
     this.backgroundMusic = this.createAudioInstance(this.AUDIO_PATHS.BACKGROUND, 0.1);
     this.characterSnoringSound = null;
+    this.endGameAudio = null; 
   }
 
   /**
@@ -87,13 +87,6 @@ class AudioManager {
   }
 
   /**
-   * Saves current sound state to localStorage.
-   */
-  saveSoundState() {
-    localStorage.setItem('gameSoundMuted', JSON.stringify(this.isGameMuted));
-  }
-
-  /**
    * Creates an individual audio instance.
    * @param {string} path - The path to the audio file.
    * @param {number} volume - Initial volume level.
@@ -143,7 +136,6 @@ class AudioManager {
   playBackgroundMusic() {
     if (this.isGameMuted) return;
     this.backgroundMusic.play().catch(() => {});
-    this.isMusicPlaying = true;
   }
 
   /**
@@ -151,7 +143,6 @@ class AudioManager {
    */
   stopBackgroundMusic() {
     this.stopAudio(this.backgroundMusic);
-    this.isMusicPlaying = false;
   }
 
   /**
@@ -238,19 +229,12 @@ class AudioManager {
   }
 
   /**
-   * Saves state to localStorage.
-   */
-  saveState() {
-    localStorage.setItem('gameSoundMuted', JSON.stringify(this.isGameMuted));
-  }
-
-  /**
    * Sets game mute state and saves it.
    * @param {boolean} muted - Mute state.
    */
   setGameMuteState(muted) {
     this.setMuteState(muted);
-    this.saveState();
+    localStorage.setItem('gameSoundMuted', JSON.stringify(this.isGameMuted));
   }
 
   /**
@@ -280,6 +264,10 @@ class AudioManager {
     this.stopBackgroundMusic();
     this.muteGameSounds(world);
     this.stopEndbossAttackMusic(world);
+    if (this.endGameAudio) {
+      this.stopAudio(this.endGameAudio);
+      this.endGameAudio = null;
+    }
   }
 
   /**
@@ -300,6 +288,10 @@ class AudioManager {
     this.stopCharacterSnoring();
     this.stopEndbossAttackMusic(world);
     this.stopBackgroundMusic();
+    if (this.endGameAudio) {
+      this.stopAudio(this.endGameAudio);
+      this.endGameAudio = null;
+    }
   }
 
   /**
@@ -350,39 +342,26 @@ class AudioManager {
     this.updateAudioIcon();
   }
 
-  // Sound effect methods
-  /** @description Plays new life sound. */
   playNewLifeSound() { this.playSound(this.AUDIO_PATHS.NEW_LIFE); }
-  
-  /** @description Plays character hurt sound. */
   playCharacterHurtSound() { this.playSound(this.AUDIO_PATHS.CHARACTER_HURT); }
-  
-  /** @description Plays coin collect sound. */
   playCoinCollectSound() { this.playSound(this.AUDIO_PATHS.COIN_COLLECT); }
-  
-  /** @description Plays bottle collect sound. */
   playBottleCollectSound() { this.playSound(this.AUDIO_PATHS.BOTTLE_COLLECT); }
-  
-  /** @description Plays game over sound. */
-  playGameOverSound() { this.playSound(this.AUDIO_PATHS.LOSE_GAME); }
-  
-  /** @description Plays game won sound. */
-  playGameWonSound() { this.playSound(this.AUDIO_PATHS.WIN_GAME); }
-  
-  /** @description Plays endboss hurt sound. */
   playEndbossHurtSound() { this.playSound(this.AUDIO_PATHS.ENDBOSS_HURT, 0.3); }
-  
-  /** @description Plays endboss attack sound. */
   playEndbossAttackSound() { this.playSound(this.AUDIO_PATHS.ENDBOSS_ATTACK, 0.4); }
+  
+  playGameOverSound() { 
+    this.endGameAudio = this.createAudioInstance(this.AUDIO_PATHS.LOSE_GAME, 0.2);
+    if (!this.isGameMuted) this.endGameAudio.play().catch(() => {});
+  }
+  
+  playGameWonSound() { 
+    this.endGameAudio = this.createAudioInstance(this.AUDIO_PATHS.WIN_GAME, 0.2);
+    if (!this.isGameMuted) this.endGameAudio.play().catch(() => {});
+  }
 }
 
-/**
- * Global instance of the AudioManager.
- * @type {AudioManager}
- */
 const audioManager = new AudioManager();
 
-// Synchronize global variable on page load
 document.addEventListener('DOMContentLoaded', function() {
   isGameMuted = audioManager.isGameMuted;
   audioManager.updateAllButtons();
