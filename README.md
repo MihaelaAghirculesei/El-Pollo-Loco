@@ -332,7 +332,7 @@ We welcome contributions! Here's how you can help:
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect_With_Me-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mihaela-aghirculesei-84147a23b/)
 [![Email](https://img.shields.io/badge/Email-Get_In_Touch-D14836?style=for-the-badge&logo=gmail)](kontakt@mihaela-melania-aghirculesei.de)
 
-**Built with ❤️ and lots of ☕ by [Mihaela Melania Aghirculesei]**
+**Built with ❤️ and lots of ☕ by Mihaela Melania Aghirculesei**
 
 </div>
 
