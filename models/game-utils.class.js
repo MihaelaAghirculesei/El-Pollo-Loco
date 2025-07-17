@@ -222,7 +222,7 @@ function isCollidingWithItem(character, item) {
  * @returns {boolean} True if direction changed recently
  */
 function hasRecentDirectionChange(character) {
-  return character.lastDirectionChangeTime && Date.now() - character.lastDirectionChangeTime < 300;
+  return (Date.now() - character.lastDirectionChangeTime) < 300;
 }
 
 /**

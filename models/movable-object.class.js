@@ -13,7 +13,7 @@ class MovableObject extends DrawableObject {
   markedForRemoval = false;
   
   static GRAVITY_INTERVAL = 1000 / 25;
-  static GROUND_LEVEL = 180;
+  static GROUND_LEVEL = 185;
   static HURT_DURATION = 1;
   static HEALTH_DAMAGE = 10;
   static RESPAWN_HEALTH = 100;
@@ -52,7 +52,7 @@ class MovableObject extends DrawableObject {
    * @returns {boolean} True if above ground
    */
   isAboveGround() {
-    return this instanceof ThrowableObject || this.y < MovableObject.GROUND_LEVEL;
+    return this instanceof ThrowableObject || this.y <= MovableObject.GROUND_LEVEL;
   }
 
   /**

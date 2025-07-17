@@ -181,17 +181,23 @@ export class World {
    * @param {Object} enemy - Enemy that collided
    */
   handleCollisionResponse(enemy) {
-    if (this.character.lastJumpKillTime && Date.now() - this.character.lastJumpKillTime < 500) {
-      return; 
+    if ((enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && isValidJump(this.character, enemy)) {
+      this.handleJumpOnEnemy(enemy);
+    } else {
+      this.handleCollisionDamage(enemy);
     }
     
     if (enemy instanceof Endboss) {
       this.handleCollisionDamage(enemy);
       return;
     }
+
+    if (this.character.lastJumpKillTime && (Date.now() - this.character.lastJumpKillTime < 500)) {
+      return; 
+    }
     
     if (this.endbossAttackStarted && this.character.lastDirectionChangeTime && 
-        Date.now() - this.character.lastDirectionChangeTime < 300) {
+      (Date.now() - this.character.lastDirectionChangeTime) < 300) {
       return;
     }
     
@@ -200,12 +206,6 @@ export class World {
         isValidJump(this.character, enemy)) {
       this.handleJumpOnEnemy(enemy);
       return;
-    }
-    
-    if ((enemy.constructor.name === 'Chicken' || enemy.constructor.name === 'SmallChicken') && isValidJump(this.character, enemy)) {
-      this.handleJumpOnEnemy(enemy);
-    } else {
-      this.handleCollisionDamage(enemy);
     }
   }
 
