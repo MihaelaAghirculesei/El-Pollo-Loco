@@ -37,6 +37,9 @@ function init() {
   createWorld();
   world.startEnemiesAnimation();
   syncAudio();
+  if (!audioManager.isGameMuted) {
+    setTimeout(() => audioManager.playBackgroundMusic(), 500);
+  }
 }
 
 /**
@@ -71,7 +74,7 @@ function setupKeyListeners() {
 function hideStartScreen() {
   document.getElementById("startScreen").style.display = "none";
   document.getElementById("content").style.display = "block";
-  document.body.classList.remove('start-screen-active');
+  document.body.classList.remove('start-screen-active'); 
 }
 
 /**
@@ -206,6 +209,7 @@ function initializeAudioSync() {
  */
 function handleDOMContentLoaded() {
   setFooterButtonsVisibility(false);
+  document.body.classList.add('start-screen-active');
   initializeAudioSync();
 }
 
@@ -357,7 +361,7 @@ function updateMenuSoundButton() {
  * Toggles game sounds.
  */
 window.toggleSounds = function() {
-  toggleSound(world);
+  audioManager.toggleSound(world); 
   updateMenuSoundButton();
 };
 

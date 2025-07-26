@@ -291,18 +291,17 @@ footer {
   font-family: "Roboto", "Sofia_Sans", "Milchroma"; 
 }
 
-#home-game-button, #play-again-button { 
+#home-game-button { 
   display: none; 
 }
 
-#music-toggle-button { 
+#play-again-button { 
   display: inline-block; 
 }
 
-#play-again-button.button-footer {
-  font-size: inherit !important;
+.footer-right #play-again-button.button-footer {
+  display: inline-block;
 }
-
 
 .start-screen-active .footer-content {
   justify-content: center !important;
@@ -440,6 +439,18 @@ footer {
 #btn-audio {
   touch-action: manipulation;
   display: flex;
+}
+
+#music-toggle-button { 
+  display: inline-block; 
+}
+
+body.start-screen-active #music-toggle-button {
+  display: none !important;
+}
+
+body.start-screen-active #play-again-button {
+  display: none !important;
 }
 
 #btn-audio img { pointer-events: none; }
