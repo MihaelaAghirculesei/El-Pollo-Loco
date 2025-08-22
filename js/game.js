@@ -5,13 +5,6 @@ let canvas, world, keyboard = new Keyboard(), isMuted = false;
 window.showFooterOnGameEnd = showFooterOnGameEnd;
 
 /**
- * Initializes the canvas element.
- */
-function initCanvas() {
-  canvas = document.getElementById("canvas");
-}
-
-/**
  * Creates a new World instance.
  */
 function createWorld() {
@@ -24,7 +17,6 @@ function createWorld() {
  */
 function syncAudio() {
   isMuted = audioManager.isGameMuted;
-  isGameMuted = audioManager.isGameMuted;
   updateAudioIcon(isMuted);
   audioManager.updateAllButtons();
 }
@@ -33,7 +25,7 @@ function syncAudio() {
  * Initializes the game.
  */
 function init() {
-  initCanvas();
+  canvas = document.getElementById("canvas");
   createWorld();
   world.startEnemiesAnimation();
   syncAudio();
@@ -87,20 +79,13 @@ function toggleMobileControls(showMobile) {
 }
 
 /**
- * Shows mobile controls if needed.
- */
-function showMobileControlsIfNeeded() {
-  toggleMobileControls(true);
-}
-
-/**
  * Starts the game.
  */
 window.startGame = function () {
   setFooterButtonsVisibility(true);
   hideStartScreen();
   init();
-  showMobileControlsIfNeeded();
+  toggleMobileControls(true);
 };
 
 /**
@@ -187,19 +172,12 @@ function setFooterButtonsVisibility(isVisible) {
 }
 
 /**
- * Loads global sound state.
- */
-function loadGlobalSoundState() {
-  isMuted = audioManager.isGameMuted;
-  updateAudioIcon(isMuted);
-}
-
-/**
  * Initializes audio sync with delay.
  */
 function initializeAudioSync() {
   setTimeout(() => {
-    loadGlobalSoundState();
+    isMuted = audioManager.isGameMuted;
+    updateAudioIcon(isMuted);
     syncAudio();
   }, 100);
 }

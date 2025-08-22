@@ -291,10 +291,6 @@ footer {
   font-family: "Roboto", "Sofia_Sans", "Milchroma"; 
 }
 
-#home-game-button { 
-  display: none; 
-}
-
 #play-again-button { 
   display: inline-block; 
 }

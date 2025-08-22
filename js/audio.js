@@ -33,7 +33,6 @@ class AudioManager {
   setupGame() {
     this.preloadFrequentSounds();
     this.updateAllButtons();
-    if (!this.isGameMuted) setTimeout(() => this.playBackgroundMusic(), 500);
   }
 
   /**
