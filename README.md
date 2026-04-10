@@ -6,11 +6,11 @@
 
 **A thrilling 2D platform adventure game built with vanilla JavaScript and HTML5 Canvas**
 
-[![Live Demo](https://img.shields.io/badge/🎮_Play_Now-Live_Demo-success?style=for-the-badge)](https://mihaela-melania-aghirculesei.de/el_pollo_loco/)
+[![Live Demo](https://img.shields.io/badge/🎮_Play_Now-Live_Demo-success?style=for-the-badge)](https://aghirculesei.pages.dev/el_pollo_loco/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Canvas](https://img.shields.io/badge/HTML5-Canvas-orange?style=for-the-badge&logo=html5)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
-[🎮 Play Game](https://mihaela-melania-aghirculesei.de/el_pollo_loco/) • [📋 Features](#-features) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Installation](#-installation) • [📱 Controls](#-controls)
+[🎮 Play Game](https://aghirculesei.pages.dev/el_pollo_loco/) • [📋 Features](#-features) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Installation](#-installation) • [📱 Controls](#-controls)
 
 </div>
 
@@ -87,7 +87,7 @@
 ### 🎥 **Live Demo**
 *Experience the full game in action!*
 
-[![Play Now](https://img.shields.io/badge/🎮_PLAY_THE_GAME-Click_Here-success?style=for-the-badge&size=large)](https://mihaela-melania-aghirculesei.de/el_pollo_loco/)
+[![Play Now](https://img.shields.io/badge/🎮_PLAY_THE_GAME-Click_Here-success?style=for-the-badge&size=large)](https://aghirculesei.pages.dev/el_pollo_loco/)
 
 </div>
 
@@ -328,9 +328,9 @@ We welcome contributions! Here's how you can help:
 
 <div align="center">
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit_My_Website-orange?style=for-the-badge&logo=firefox)](https://mihaela-melania-aghirculesei.de/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit_My_Website-orange?style=for-the-badge&logo=firefox)](https://aghirculesei.pages.dev/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect_With_Me-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mihaela-aghirculesei-84147a23b/)
-[![Email](https://img.shields.io/badge/Email-Get_In_Touch-D14836?style=for-the-badge&logo=gmail)](mailto:kontakt@mihaela-melania-aghirculesei.de)
+[![Email](https://img.shields.io/badge/Email-Get_In_Touch-D14836?style=for-the-badge&logo=gmail)](mailto:aghirculesei@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-View_Repository-181717?style=for-the-badge&logo=github)](https://github.com/MihaelaAghirculesei/El-Pollo-Loco)
 
 **Built with ❤️ and lots of ☕ by Mihaela Melania Aghirculesei**
