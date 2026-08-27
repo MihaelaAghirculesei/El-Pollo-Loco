@@ -3,6 +3,28 @@
  */
 class DrawableObject {
   /**
+   * Process-wide pool of decoded images, keyed by source path, shared by
+   * every instance so a sprite is only ever created and decoded once.
+   * @type {Object<string, HTMLImageElement>}
+   */
+  static imagePool = {};
+
+  /**
+   * Returns the pooled image for a path, creating it on first request.
+   * @param {string} path - Image file path
+   * @returns {HTMLImageElement} Shared image element
+   */
+  static getImage(path) {
+    let img = DrawableObject.imagePool[path];
+    if (!img) {
+      img = new Image();
+      img.src = path;
+      DrawableObject.imagePool[path] = img;
+    }
+    return img;
+  }
+
+  /**
    * Creates drawable object and initializes properties.
    */
   constructor() {
@@ -59,22 +81,20 @@ class DrawableObject {
    * @param {string} path - Image file path
    */
   loadImage(path) {
-    this.img = this.createImage(path);
+    this.img = DrawableObject.getImage(path);
   }
 
   /**
    * Creates and returns Image object.
    * @param {string} path - Image file path
-   * @returns {HTMLImageElement} Created image element
+   * @returns {HTMLImageElement} Shared image element
    */
   createImage(path) {
-    const img = new Image();
-    img.src = path;
-    return img;
+    return DrawableObject.getImage(path);
   }
 
   /**
-   * Loads multiple images and caches them.
+   * Points this object's cache entries at the shared images.
    * @param {string[]} paths - Array of image paths
    */
   loadImages(paths) {
@@ -82,21 +102,11 @@ class DrawableObject {
   }
 
   /**
-   * Creates, flips, and caches image.
+   * Resolves one path to its shared image and records it in the local cache.
    * @param {string} path - Image file path
    */
   cacheImage(path) {
-    const img = this.createImage(path);
-    this.applyImageFlip(img);
-    this.imageCache[path] = img;
-  }
-
-  /**
-   * Applies horizontal flip to image.
-   * @param {HTMLImageElement} img - Image to flip
-   */
-  applyImageFlip(img) {
-    img.style.transform = "scaleX(-1)";
+    this.imageCache[path] = DrawableObject.getImage(path);
   }
 
   /**
