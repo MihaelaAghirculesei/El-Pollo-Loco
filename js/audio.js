@@ -339,14 +339,6 @@ class AudioManager {
   }
 
   /**
-   * Updates menu button text.
-   */
-  updateMenuButton() {
-    const menu = document.getElementById('btnSound');
-    if (menu) menu.innerText = this.isGameMuted ? 'Turn On Sounds' : 'Turn Off Sounds';
-  }
-
-  /**
    * Updates audio icon image.
    */
   updateAudioIcon() {
@@ -363,7 +355,6 @@ class AudioManager {
    */
   updateAllButtons() {
     this.updateSoundButton();
-    this.updateMenuButton();
     this.updateAudioIcon();
   }
 

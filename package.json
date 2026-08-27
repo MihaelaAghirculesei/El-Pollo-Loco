@@ -2,6 +2,6 @@
   "name": "el-pollo-loco",
   "version": "1.0.0",
   "scripts": {
-    "build": "mkdir -p dist && cp -r index.html impressum.html impressum.css style.css sw.js fonts audio img_pollo_locco js models levels dist/"
+    "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css fonts audio img_pollo_locco js models levels dist/"
   }
 }

@@ -6,11 +6,11 @@
 
 **A thrilling 2D platform adventure game built with vanilla JavaScript and HTML5 Canvas**
 
-[![Live Demo](https://img.shields.io/badge/🎮_Play_Now-Live_Demo-success?style=for-the-badge)](https://aghirculesei.pages.dev/el_pollo_loco/)
+[![Live Demo](https://img.shields.io/badge/🎮_Play_Now-Live_Demo-success?style=for-the-badge)](https://el-pollo-loco-aghirculesei.pages.dev/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![Canvas](https://img.shields.io/badge/HTML5-Canvas-orange?style=for-the-badge&logo=html5)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 
-[🎮 Play Game](https://aghirculesei.pages.dev/el_pollo_loco/) • [📋 Features](#-features) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Installation](#-installation) • [📱 Controls](#-controls)
+[🎮 Play Game](https://el-pollo-loco-aghirculesei.pages.dev/) • [📋 Features](#-features) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Installation](#-installation) • [📱 Controls](#-controls)
 
 </div>
 
@@ -87,7 +87,7 @@
 ### 🎥 **Live Demo**
 *Experience the full game in action!*
 
-[![Play Now](https://img.shields.io/badge/🎮_PLAY_THE_GAME-Click_Here-success?style=for-the-badge&size=large)](https://aghirculesei.pages.dev/el_pollo_loco/)
+[![Play Now](https://img.shields.io/badge/🎮_PLAY_THE_GAME-Click_Here-success?style=for-the-badge&size=large)](https://el-pollo-loco-aghirculesei.pages.dev/)
 
 </div>
 
