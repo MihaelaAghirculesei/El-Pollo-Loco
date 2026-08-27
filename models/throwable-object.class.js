@@ -105,10 +105,12 @@ class ThrowableObject extends MovableObject {
    * Handles splash event.
    */
   splash() {
+    if (this.splashed) return;
     this.splashed = true;
     this.hasHit = true;
     this.stopMoving();
     this.stopRotationAnimation();
+    this.stopGravity();
     this.y -= 30;
     this.playSplashAnimation().then(() => this.removeFromWorld());
   }
@@ -155,12 +157,12 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Removes throwable object from world.
+   * Flags the bottle for removal so the world drops it on its next sweep.
    */
   removeFromWorld() {
-    if (this.world) {
-      const index = this.world.level.enemies.indexOf(this);
-      if (index > -1) this.world.level.enemies.splice(index, 1);
-    }
+    this.stopMoving();
+    this.stopRotationAnimation();
+    this.stopGravity();
+    this.markedForRemoval = true;
   }
 }

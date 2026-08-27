@@ -24,9 +24,20 @@ class MovableObject extends DrawableObject {
    * Applies gravity effect to object.
    */
   applyGravity() {
-    setInterval(() => {
+    this.stopGravity();
+    this.gravityInterval = setInterval(() => {
       this.updateVerticalPosition();
     }, MovableObject.GRAVITY_INTERVAL);
+  }
+
+  /**
+   * Stops the gravity loop if it is running.
+   */
+  stopGravity() {
+    if (this.gravityInterval) {
+      clearInterval(this.gravityInterval);
+      this.gravityInterval = null;
+    }
   }
 
   /**

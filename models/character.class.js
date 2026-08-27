@@ -327,10 +327,6 @@ class Character extends MovableObject {
    */
   endbossDead() {
     const endboss = this.world.enemies.find(e => e instanceof Endboss);
-    if (!endboss) {
-      console.warn('Endboss not found in enemies array.');
-      return false;
-    }
-    return endboss.isEnemyDead();
+    return endboss ? endboss.isEnemyDead() : false;
   }
 }
