@@ -10,6 +10,12 @@
     "url": "https://github.com/MihaelaAghirculesei/El-Pollo-Loco.git"
   },
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css fonts audio img_pollo_locco js models levels dist/"
+    "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css _headers fonts audio img_pollo_locco js models levels dist/",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0"
   }
 }
