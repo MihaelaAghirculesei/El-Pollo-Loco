@@ -257,7 +257,8 @@ export class World {
    */
   checkBottleCollisions() {
     this.throwableObject.forEach(bottle => {
-      if (bottle.y > 360) bottle.splash();
+      if (bottle.splashed) return;
+      if (bottle.y > 360) return bottle.splash();
       this.level.enemies.forEach(enemy => {
         if (!bottle.isColliding(enemy)) return;
         this.handleEnemyHitByBottle(bottle, enemy);
