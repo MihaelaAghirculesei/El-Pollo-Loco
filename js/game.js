@@ -45,19 +45,27 @@ function updateAudioIcon(isMuted) {
 }
 
 /**
+ * Maps physical key codes (KeyboardEvent.code) to game controls.
+ */
+const KEY_MAP = {
+  ArrowRight: 'RIGHT', ArrowLeft: 'LEFT', ArrowUp: 'UP', ArrowDown: 'DOWN',
+  Space: 'SPACE', KeyD: 'D',
+};
+
+/**
  * Sets keyboard key state.
  */
-function setKeyState(keyCode, state) {
-  const keys = {39: 'RIGHT', 37: 'LEFT', 38: 'UP', 40: 'DOWN', 32: 'SPACE', 68: 'D'};
-  if (keys[keyCode]) keyboard[keys[keyCode]] = state;
+function setKeyState(code, state) {
+  const control = KEY_MAP[code];
+  if (control) keyboard[control] = state;
 }
 
 /**
  * Sets up keyboard event listeners.
  */
 function setupKeyListeners() {
-  window.addEventListener("keydown", (e) => setKeyState(e.keyCode, true));
-  window.addEventListener("keyup", (e) => setKeyState(e.keyCode, false));
+  window.addEventListener("keydown", (e) => setKeyState(e.code, true));
+  window.addEventListener("keyup", (e) => setKeyState(e.code, false));
 }
 
 /**
