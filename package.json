@@ -1,6 +1,14 @@
 {
   "name": "el-pollo-loco",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "description": "A 2D platform adventure game built with vanilla JavaScript and the HTML5 Canvas API.",
+  "private": true,
+  "license": "MIT",
+  "homepage": "https://el-pollo-loco-aghirculesei.pages.dev/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MihaelaAghirculesei/El-Pollo-Loco.git"
+  },
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css fonts audio img_pollo_locco js models levels dist/"
   }
