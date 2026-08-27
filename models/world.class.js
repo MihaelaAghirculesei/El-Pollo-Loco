@@ -371,7 +371,6 @@ export class World {
   addToMap(mo) {
     if (mo.otherDirection) flipImage(this.ctx, mo);
     mo.draw(this.ctx);
-    mo.drawFrame(this.ctx);
     if (mo.otherDirection) flipImageBack(this.ctx, mo);
   }
 }
