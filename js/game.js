@@ -312,45 +312,6 @@ function setupOrientationListeners() {
 }
 
 /**
- * Toggles menu overlay.
- */
-function toggleMenuOverlay(show) {
-  const menuOverlay = document.getElementById('menu-overlay');
-  if (menuOverlay) menuOverlay.classList.toggle('d_none', !show);
-}
-
-/**
- * Pauses the game.
- */
-window.pauseGame = function() {
-  toggleMenuOverlay(true);
-  updateMenuSoundButton();
-};
-
-/**
- * Updates menu sound button text.
- */
-function updateMenuSoundButton() {
-  const btnSound = document.getElementById('btnSound');
-  if (btnSound) btnSound.innerText = audioManager.isGameMuted ? 'Turn On Sounds' : 'Turn Off Sounds';
-}
-
-/**
- * Toggles game sounds.
- */
-window.toggleSounds = function() {
-  audioManager.toggleSound(world); 
-  updateMenuSoundButton();
-};
-
-/**
- * Resumes the game.
- */
-window.resumeGame = function() {
-  toggleMenuOverlay(false);
-};
-
-/**
  * Restarts game by setting flag and reloading page.
  */
 window.playAgain = function() {
