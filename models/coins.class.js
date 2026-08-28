@@ -21,13 +21,12 @@ class Coin extends CollectableObject {
     this.loadImages(this.coinImg);
     this.x = x;
     this.y = y;
-    this.animateCoins();
   }
 
   /**
-   * Starts coin animation using requestAnimationFrame.
+   * Starts the coin spin animation. Called by the world once the game starts.
    */
-  animateCoins() {
+  start() {
     this.lastTime = 0;
     this.animationInterval = requestAnimationFrame(this.animateFrame.bind(this));
   }
