@@ -38,6 +38,7 @@ const gameGlobals = {
   showGameWon: "readonly",
   isCollidingWithEnemy: "readonly",
   isCollidingWithItem: "readonly",
+  isBottleHittingEnemy: "readonly",
   isValidJump: "readonly",
   shouldApplyCollisionDamage: "readonly",
   checkCollectible: "readonly",

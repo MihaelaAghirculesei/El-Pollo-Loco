@@ -288,7 +288,7 @@ export class World {
       if (bottle.splashed) return;
       if (bottle.y > 360) bottle.splash();
       this.level.enemies.forEach(enemy => {
-        if (!bottle.isColliding(enemy)) return;
+        if (!isBottleHittingEnemy(bottle, enemy)) return;
         this.handleEnemyHitByBottle(bottle, enemy);
       });
     });

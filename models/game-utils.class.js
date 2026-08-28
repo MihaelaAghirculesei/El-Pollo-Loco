@@ -189,8 +189,48 @@ function isCollidingWithEnemy(character, enemy) {
   const enemyTop = enemy.y + enemyMargin;
   const enemyBottom = enemy.y + enemy.height - enemyMargin;
   
-  return charRight > enemyLeft && charLeft < enemyRight && 
+  return charRight > enemyLeft && charLeft < enemyRight &&
          charBottom > enemyTop && charTop < enemyBottom;
+}
+
+/**
+ * Inset per side, as a fraction of the sprite's own width / height, used
+ * to shrink a rectangle down to its visible core for the bottle hit test.
+ * The endboss artwork carries a much wider transparent margin, so it gets
+ * its own, larger inset.
+ */
+const BOTTLE_HIT_INSET = { bottle: 0.28, enemy: 0.15, endbossX: 0.28, endbossY: 0.16 };
+
+/**
+ * Axis-aligned box for an object, inset on every side by the given
+ * fraction of its own size.
+ * @param {{x: number, y: number, width: number, height: number}} o - Sprite rectangle
+ * @param {number} fx - Horizontal inset as a fraction of width
+ * @param {number} fy - Vertical inset as a fraction of height
+ * @returns {{left: number, right: number, top: number, bottom: number}} Inset box
+ */
+function insetBox(o, fx, fy) {
+  const ix = o.width * fx;
+  const iy = o.height * fy;
+  return { left: o.x + ix, right: o.x + o.width - ix, top: o.y + iy, bottom: o.y + o.height - iy };
+}
+
+/**
+ * Hit test for a thrown bottle against an enemy. The generic
+ * `MovableObject` box uses the character-tuned collision offsets, which
+ * are far too loose for a 60px bottle: it shattered about a sprite-width
+ * early, and much earlier against the endboss. Both rectangles are shrunk
+ * to their visible core before testing for overlap.
+ * @param {Object} bottle - Thrown bottle
+ * @param {Object} enemy - Chicken, SmallChicken or Endboss
+ * @returns {boolean} True when the visible cores overlap
+ */
+function isBottleHittingEnemy(bottle, enemy) {
+  const i = BOTTLE_HIT_INSET;
+  const b = insetBox(bottle, i.bottle, i.bottle);
+  const isBoss = enemy instanceof Endboss;
+  const e = insetBox(enemy, isBoss ? i.endbossX : i.enemy, isBoss ? i.endbossY : i.enemy);
+  return b.right > e.left && b.left < e.right && b.bottom > e.top && b.top < e.bottom;
 }
 
 /**
