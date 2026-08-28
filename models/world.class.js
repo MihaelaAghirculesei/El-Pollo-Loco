@@ -16,7 +16,14 @@ export class World {
   statusBarCoins;
   throwableObject = [];
   gameOver = false;
-  gameInterval;
+  logicAccumulator = 0;
+  lastFrameTime = 0;
+
+  /** Fixed logic step (ms) — the cadence the game logic used to tick at. */
+  static LOGIC_STEP_MS = 35;
+  /** Clamp for a single frame's delta so a backgrounded tab returning
+   *  doesn't run a burst of catch-up steps. */
+  static MAX_FRAME_MS = 250;
 
   /**
    * Creates new World instance.
@@ -38,7 +45,6 @@ export class World {
     this.setWorld();
     this.startLevelAnimations();
     this.spawnChickens();
-    this.run();
     this.draw();
   }
 
@@ -71,19 +77,30 @@ export class World {
   }
 
   /**
-   * Starts main game loop.
+   * Advances the game logic in fixed 35 ms steps from the elapsed frame
+   * time, so it keeps its old cadence while running on the render clock.
+   * @param {number} dt - Milliseconds since the previous frame
    */
-  run() {
-    this.gameInterval = setInterval(() => {
-      if (!this.gameOver) {
-        this.checkBossActivation();
-        if (isGameMuted && this.endbossAttackStarted) stopEndbossAttackMusic(this);
-        this.checkCollisions();
-        this.checkThrowObjects();
-        this.checkCollection();
-        checkGameEnd(this);
-      }
-    }, 35);
+  stepGameLogic(dt) {
+    this.logicAccumulator += Math.min(dt, World.MAX_FRAME_MS);
+    while (this.logicAccumulator >= World.LOGIC_STEP_MS) {
+      this.updateGameLogic();
+      this.logicAccumulator -= World.LOGIC_STEP_MS;
+    }
+  }
+
+  /**
+   * One tick of game logic: boss activation, collisions, throwing,
+   * collection and the end-of-game check.
+   */
+  updateGameLogic() {
+    if (this.gameOver) return;
+    this.checkBossActivation();
+    if (isGameMuted && this.endbossAttackStarted) stopEndbossAttackMusic(this);
+    this.checkCollisions();
+    this.checkThrowObjects();
+    this.checkCollection();
+    checkGameEnd(this);
   }
 
   /**
@@ -93,7 +110,6 @@ export class World {
    */
   stopAllLoops() {
     this.gameOver = true;
-    clearInterval(this.gameInterval);
     clearInterval(this.spawnInterval);
     this.character?.stop();
     [
@@ -122,6 +138,10 @@ export class World {
    * Main draw function rendering all game objects.
    */
   draw() {
+    if (this.gameOver) return;
+    const now = performance.now();
+    this.stepGameLogic(this.lastFrameTime ? now - this.lastFrameTime : 0);
+    this.lastFrameTime = now;
     if (this.gameOver) return;
     clearCanvas(this.ctx, this.canvas);
     this.ctx.translate(this.camera_x, 0);

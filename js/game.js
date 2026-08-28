@@ -100,7 +100,7 @@ window.startGame = function () {
  * Cleans up world resources.
  */
 function cleanupWorldResources() {
-  if (world?.gameInterval) clearInterval(world.gameInterval);
+  world?.stopAllLoops();
 }
 
 /**
