@@ -31,7 +31,6 @@ class DrawableObject {
     this.initPosition();
     this.initDimensions();
     this.initImageProperties();
-    this.initCollisionOffsets();
     this.initImageCache();
   }
 
@@ -57,16 +56,6 @@ class DrawableObject {
   initImageProperties() {
     this.img = null;
     this.currentImage = 0;
-  }
-
-  /**
-   * Initializes collision offset values.
-   */
-  initCollisionOffsets() {
-    this.collisionOffsetTop = 80;
-    this.collisionOffsetBottom = 5;
-    this.collisionOffsetLeft = 10;
-    this.collisionOffsetRight = 10;
   }
 
   /**
