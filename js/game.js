@@ -320,27 +320,31 @@ function setupOrientationListeners() {
 }
 
 /**
- * Restarts game by setting flag and reloading page.
+ * Restarts the game in place: tears the finished world down, clears the
+ * end screens, and builds a fresh one. No page reload, so the decoded
+ * image pool carries over to the next run.
  */
-window.playAgain = function() {
-  localStorage.setItem('autoStartGame', 'true');
-  location.reload();
+window.playAgain = function () {
+  if (world) {
+    world.stopAllLoops();
+    audioManager.stopAllGameEndSounds(world);
+  }
+  clearEndScreens();
+  init();
+  toggleMobileControls(true);
 };
 
 /**
- * Auto-starts game if flag is set.
+ * Removes the game-over / win overlays and the new-life popup, and undoes
+ * the canvas hiding done when the game ended.
  */
-function handleAutoStart() {
-  if (localStorage.getItem('autoStartGame') === 'true') {
-    localStorage.removeItem('autoStartGame');
-    setTimeout(() => startGame(), 100);
-  }
+function clearEndScreens() {
+  document.querySelectorAll('.game-over-screen, .game-won-screen, .popup')
+    .forEach(el => el.remove());
+  document.getElementById('canvas').style.display = '';
+  document.getElementById('titleCanvas').style.display = '';
 }
 
-/**
- * Sets up auto-start listener.
- */
-document.addEventListener('DOMContentLoaded', handleAutoStart);
 document.addEventListener("DOMContentLoaded", handleDOMContentLoaded, { passive: true });
 document.addEventListener("DOMContentLoaded", initializeMobileAndOrientation, { passive: true });
 

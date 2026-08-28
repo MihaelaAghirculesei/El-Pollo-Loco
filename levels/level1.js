@@ -80,15 +80,25 @@ const backgroundPositions = [
 ];
 
 /**
- * Initializes level 1 with all objects (enemies, clouds, coins, bottles, background).
+ * Builds a fresh level 1 with its own new enemies, clouds, coins, bottles
+ * and background objects. Called once per game so a restart never reuses
+ * entities from the previous run.
+ * @returns {Level} A new level instance
  */
-const level1 = new Level(
-  [
-    ...createObjects(Chicken, chickenPositions),
-    ...createObjects(SmallChicken, smallChickenPositions),
-  ],
-  createObjects(Cloud, cloudPositions),
-  createObjects(Coin, coinPositions),
-  createObjects(Bottle, bottlePositions),
-  createObjects(BackgroundObjekt, backgroundPositions)
-);
+function buildLevel1() {
+  return new Level(
+    [
+      ...createObjects(Chicken, chickenPositions),
+      ...createObjects(SmallChicken, smallChickenPositions),
+    ],
+    createObjects(Cloud, cloudPositions),
+    createObjects(Coin, coinPositions),
+    createObjects(Bottle, bottlePositions),
+    createObjects(BackgroundObjekt, backgroundPositions)
+  );
+}
+
+// Build one level at load and drop it: the entities are discarded, but
+// their sprite paths stay in DrawableObject.imagePool and start decoding
+// now, so the first game — and every in-place restart — starts warm.
+buildLevel1();

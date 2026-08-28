@@ -23,7 +23,7 @@ const gameGlobals = {
   Keyboard: "readonly",
   Level: "readonly",
   World: "readonly",
-  level1: "readonly",
+  buildLevel1: "readonly",
   StatusBarHeartCharacter: "readonly",
   StatusBarHeartEndboss: "readonly",
   StatusBarBottle: "readonly",

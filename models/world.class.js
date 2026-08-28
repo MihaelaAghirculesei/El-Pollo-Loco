@@ -4,10 +4,9 @@
 export class World {
   character;
   endboss;
-  enemies = level1.enemies;
-  clouds = level1.clouds;
-  level = level1;
-  backgroundObjects = level1.backgroundObjects;
+  level;
+  clouds;
+  backgroundObjects;
   canvas;
   ctx;
   keyboard;
@@ -28,10 +27,14 @@ export class World {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.keyboard = keyboard;
+    this.level = buildLevel1();
+    this.clouds = this.level.clouds;
+    this.backgroundObjects = this.level.backgroundObjects;
     this.character = new Character();
     this.endboss = new Endboss();
     this.endboss.world = this;
     this.level.enemies.push(this.endboss);
+    this.initialEnemyCount = this.level.enemies.length;
     this.initializeStatusBars();
     this.setWorld();
     this.startLevelAnimations();
@@ -85,10 +88,12 @@ export class World {
   }
 
   /**
-   * Clears every recurring loop owned by the world and its entities, so
-   * nothing keeps running once the game-over / win screen is shown.
+   * Fully stops this world: sets the game-over flag (which ends the draw
+   * loop) and clears every recurring loop it and its entities own. Called
+   * on game over / win, and on an in-place restart.
    */
   stopAllLoops() {
+    this.gameOver = true;
     clearInterval(this.gameInterval);
     clearInterval(this.spawnInterval);
     this.character?.stop();
@@ -334,7 +339,7 @@ export class World {
    * Spawns bottles when enemies defeated.
    */
   checkBottleSpawn() {
-    if (this.level.enemies.length <= level1.enemies.length - 2) {
+    if (this.level.enemies.length <= this.initialEnemyCount - 2) {
       this.statusBarBottle.setPercentageBottle(20);
     }
   }
