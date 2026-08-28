@@ -25,6 +25,11 @@ class ThrowableObject extends MovableObject {
   static THROW_SPEED = { forward: 6, backward: 3 };
 
   /**
+   * Initial upward velocity of a throw. Lower means a flatter arc.
+   */
+  static THROW_LIFT = 22;
+
+  /**
    * Creates throwable object instance.
    * @param {number} x - Initial X coordinate
    * @param {number} y - Initial Y coordinate
@@ -67,7 +72,7 @@ class ThrowableObject extends MovableObject {
    * Initiates throwing action.
    */
   startThrow() {
-    this.speedY = 30;
+    this.speedY = ThrowableObject.THROW_LIFT;
     this.applyGravity();
     this.startMoving();
   }
