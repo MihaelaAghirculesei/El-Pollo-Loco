@@ -74,6 +74,20 @@ export class World {
   }
 
   /**
+   * Clears every recurring loop owned by the world and its entities, so
+   * nothing keeps running once the game-over / win screen is shown.
+   */
+  stopAllLoops() {
+    clearInterval(this.gameInterval);
+    clearInterval(this.spawnInterval);
+    this.character?.stop();
+    [
+      this.level.enemies, this.clouds,
+      this.level.bottle, this.level.coins, this.throwableObject
+    ].forEach(arr => arr?.forEach(o => o.stop?.()));
+  }
+
+  /**
    * Checks if character activates boss fight.
    */
   checkBossActivation() {

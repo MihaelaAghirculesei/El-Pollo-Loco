@@ -263,7 +263,7 @@ class Endboss extends MovableObject {
    */
   performJumpAnimation() {
     this.y = 30;
-    setTimeout(() => {
+    this._jumpTimeout = setTimeout(() => {
       this.y = 60;
       this._isJumping = false;
     }, 300);
@@ -366,10 +366,20 @@ class Endboss extends MovableObject {
   }
 
   /**
+   * Stops the movement loop and any pending jump / removal timers.
+   * Called when the game ends.
+   */
+  stop() {
+    this.stopMovement();
+    clearTimeout(this._jumpTimeout);
+    clearTimeout(this._removalTimeout);
+  }
+
+  /**
    * Schedules removal from world.
    */
   scheduleRemoval() {
-    setTimeout(() => this.removeFromWorld(), 2000);
+    this._removalTimeout = setTimeout(() => this.removeFromWorld(), 2000);
   }
 
   /**

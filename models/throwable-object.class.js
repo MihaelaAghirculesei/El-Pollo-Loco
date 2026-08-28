@@ -130,6 +130,15 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
+   * Stops the flight, spin and gravity loops. Called when the game ends.
+   */
+  stop() {
+    this.stopMoving();
+    this.stopRotationAnimation();
+    this.stopGravity();
+  }
+
+  /**
    * Plays splash animation once.
    * @returns {Promise<void>} Promise that resolves when animation completes
    */

@@ -79,4 +79,11 @@ class Coin extends CollectableObject {
     this.isCollected = true;
     this.stopAnimation();
   }
+
+  /**
+   * Stops the spin animation frame loop. Called when the game ends.
+   */
+  stop() {
+    this.stopAnimation();
+  }
 }

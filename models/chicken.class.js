@@ -88,7 +88,7 @@ class Chicken extends MovableObject {
     this.loadImages(this.imagesDead);
     this.playAnimation(this.imagesDead);
     if (this.world?.character) this.world.character.speedY = 0;
-    setTimeout(() => {
+    this.removalTimeout = setTimeout(() => {
       this.removeFromWorld();
       this.markedForRemoval = true;
     }, this.removalDelay);
@@ -100,6 +100,15 @@ class Chicken extends MovableObject {
   stopIntervals() {
     clearInterval(this.movementInterval);
     clearInterval(this.walkingInterval);
+  }
+
+  /**
+   * Stops every loop and pending timer this chicken owns, without running
+   * the death sequence. Called when the game ends.
+   */
+  stop() {
+    this.stopIntervals();
+    clearTimeout(this.removalTimeout);
   }
 
   /**

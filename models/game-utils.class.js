@@ -18,8 +18,7 @@ const GAME_OVER_IMAGE_PATH = 'img_pollo_locco/img/9_intro_outro_screens/game_ove
  */
 function setGameOverState(world) {
   world.gameOver = true;
-  clearInterval(world.gameInterval);
-  clearInterval(world.spawnInterval);
+  world.stopAllLoops();
 }
 
 /**
@@ -93,8 +92,8 @@ function handleGameOverFlow(world) {
  */
 function handleGameWonFlow(world) {
   window.showFooterOnGameEnd();
-  clearInterval(world.gameInterval);
-  clearInterval(world.spawnInterval);
+  world.gameOver = true;
+  world.stopAllLoops();
   stopAllGameEndSounds(world);
   createGameWonScreen();
 }
