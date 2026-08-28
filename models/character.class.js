@@ -338,7 +338,7 @@ class Character extends MovableObject {
    * @returns {boolean} True if endboss is dead
    */
   endbossDead() {
-    const endboss = this.world.enemies.find(e => e instanceof Endboss);
+    const endboss = this.world.level.enemies.find(e => e instanceof Endboss);
     return endboss ? endboss.isEnemyDead() : false;
   }
 }
