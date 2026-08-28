@@ -81,4 +81,11 @@ class Bottle extends MovableObject {
   destroy() {
     this.stopAnimation();
   }
+
+  /**
+   * Stops the idle animation loop. Called when the game ends.
+   */
+  stop() {
+    this.stopAnimation();
+  }
 }

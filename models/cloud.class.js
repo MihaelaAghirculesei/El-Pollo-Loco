@@ -24,10 +24,17 @@ class Cloud extends MovableObject {
    * Starts cloud animation loop.
    */
   animate() {
-    setInterval(() => {
+    this.animationInterval = setInterval(() => {
       this.moveLeft();
       this.resetIfOutOfView();
     }, 1000 / 60);
+  }
+
+  /**
+   * Stops the cloud drift loop. Called when the game ends.
+   */
+  stop() {
+    clearInterval(this.animationInterval);
   }
 
   /**
