@@ -19,6 +19,17 @@ class ThrowableObject extends MovableObject {
   ];
 
   /**
+   * Horizontal step per tick, in pixels. A backward throw covers less
+   * ground than a forward one. Tune these to change how far a bottle flies.
+   */
+  static THROW_SPEED = { forward: 6, backward: 3 };
+
+  /**
+   * Initial upward velocity of a throw. Lower means a flatter arc.
+   */
+  static THROW_LIFT = 22;
+
+  /**
    * Creates throwable object instance.
    * @param {number} x - Initial X coordinate
    * @param {number} y - Initial Y coordinate
@@ -61,7 +72,7 @@ class ThrowableObject extends MovableObject {
    * Initiates throwing action.
    */
   startThrow() {
-    this.speedY = 30;
+    this.speedY = ThrowableObject.THROW_LIFT;
     this.applyGravity();
     this.startMoving();
   }
@@ -82,7 +93,9 @@ class ThrowableObject extends MovableObject {
    * @returns {number} Throw speed
    */
   getThrowSpeed() {
-    return this.direction === -1 ? 5 : 10;
+    return this.direction === -1
+      ? ThrowableObject.THROW_SPEED.backward
+      : ThrowableObject.THROW_SPEED.forward;
   }
 
   /**

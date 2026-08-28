@@ -133,8 +133,9 @@ export class World {
    */
   drawAllGameObjects() {
     const objectArrays = [
-      this.backgroundObjects, this.clouds, this.throwableObject,
-      this.level.enemies, this.level.coins, this.level.bottle
+      this.backgroundObjects, this.clouds,
+      this.level.enemies, this.level.coins, this.level.bottle,
+      this.throwableObject
     ];
     for (const arr of objectArrays) {
       if (!arr) continue;
@@ -288,7 +289,7 @@ export class World {
       if (bottle.splashed) return;
       if (bottle.y > 360) bottle.splash();
       this.level.enemies.forEach(enemy => {
-        if (!bottle.isColliding(enemy)) return;
+        if (!isBottleHittingEnemy(bottle, enemy)) return;
         this.handleEnemyHitByBottle(bottle, enemy);
       });
     });
