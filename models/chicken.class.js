@@ -1,147 +1,109 @@
 /**
- * Class representing a chicken enemy.
+ * A walking chicken enemy. {@link SmallChicken} reuses this whole
+ * lifecycle and only swaps the values returned by {@link Chicken#spec}.
  */
 class Chicken extends MovableObject {
-  static IMAGES_DEAD = [
-    "img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png",
-  ];
-
-  static IMAGES_WALKING = [
-    "img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
-    "img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
-    "img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
-  ];
-
   /**
-   * Creates a new Chicken instance.
    * @param {object} world - Reference to the game world object
    */
   constructor(world) {
     super();
-    this.initializeProperties(world);
-    this.loadChickenImages();
-  }
-
-  /**
-   * Initializes chicken properties.
-   * @param {object} world - Game world reference
-   */
-  initializeProperties(world) {
-    this.height = 70;
-    this.width = 80;
-    this.y = 360;
-    this.isDead = false;
-    this.life = 1;
-    this.health = 2;
+    this.applySpec(this.spec());
     this.world = world;
+    this.isDead = false;
     this.markedForRemoval = false;
-    this.x = 800 + Math.random() * 4500;
-    this.speed = 0.1 + Math.random() * 0.2;
   }
 
   /**
-   * Loads all chicken images.
+   * Per-species configuration. Subclasses override this to retune the
+   * chicken without touching the lifecycle below.
+   * @returns {{walking: string[], dead: string[], width: number, height: number,
+   *   spawnX: number, spawnRange: number, minSpeed: number, speedRange: number,
+   *   health: number, removalDelay: number}}
    */
-  loadChickenImages() {
-    this.loadImage(Chicken.IMAGES_WALKING[0]);
-    this.loadImages(Chicken.IMAGES_WALKING);
-    this.loadImage(Chicken.IMAGES_DEAD[0]);
-    this.loadImages(Chicken.IMAGES_DEAD);
+  spec() {
+    return {
+      walking: [
+        "img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/1_w.png",
+        "img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/2_w.png",
+        "img_pollo_locco/img/3_enemies_chicken/chicken_normal/1_walk/3_w.png",
+      ],
+      dead: ["img_pollo_locco/img/3_enemies_chicken/chicken_normal/2_dead/dead.png"],
+      width: 80,
+      height: 70,
+      spawnX: 800,
+      spawnRange: 4500,
+      minSpeed: 0.1,
+      speedRange: 0.2,
+      health: 2,
+      removalDelay: 90,
+    };
   }
 
   /**
-   * Starts chicken animation and movement.
+   * Caches the spec's sprites and applies its stats and spawn position.
+   * @param {ReturnType<Chicken['spec']>} s
+   */
+  applySpec(s) {
+    this.imagesWalking = s.walking;
+    this.imagesDead = s.dead;
+    this.loadImage(s.walking[0]);
+    this.loadImages(s.walking);
+    this.loadImages(s.dead);
+    this.width = s.width;
+    this.height = s.height;
+    this.y = 360;
+    this.life = 1;
+    this.health = s.health;
+    this.removalDelay = s.removalDelay;
+    this.x = s.spawnX + Math.random() * s.spawnRange;
+    this.speed = s.minSpeed + Math.random() * s.speedRange;
+  }
+
+  /**
+   * Starts leftward movement and the walk-cycle animation.
    */
   animate() {
-    this.startMovement();
-    this.startWalkingAnimation();
-  }
-
-  /**
-   * Starts leftward movement at 60 FPS.
-   */
-  startMovement() {
     this.movementInterval = setInterval(() => this.moveLeft(), 1000 / 60);
-  }
-
-  /**
-   * Starts walking animation cycle.
-   */
-  startWalkingAnimation() {
     this.walkingInterval = setInterval(
-      () => this.playAnimation(Chicken.IMAGES_WALKING),
+      () => this.playAnimation(this.imagesWalking),
       200
     );
   }
 
   /**
-   * Handles chicken being hit.
+   * Applies one point of damage and dies when depleted.
    */
   hit() {
-    this.decreaseHealth();
+    this.health--;
     if (this.isEnemyDead()) this.die();
   }
 
   /**
-   * Decreases chicken health by one.
-   */
-  decreaseHealth() {
-    this.health--;
-  }
-
-  /**
-   * Handles chicken death sequence.
+   * Runs the death sequence: stop, show the dead frame, then schedule removal.
    */
   die() {
     this.isDead = true;
-    this.stopMovementAndAnimation();
-    this.playDeathAnimation();
-    this.stopCharacterVerticalMovement();
-    this.removeFromWorldAfterDelay();
+    this.stopIntervals();
+    this.loadImages(this.imagesDead);
+    this.playAnimation(this.imagesDead);
+    if (this.world?.character) this.world.character.speedY = 0;
+    setTimeout(() => {
+      this.removeFromWorld();
+      this.markedForRemoval = true;
+    }, this.removalDelay);
   }
 
   /**
-   * Stops movement and animation intervals.
+   * Clears the movement and animation intervals.
    */
-  stopMovementAndAnimation() {
+  stopIntervals() {
     clearInterval(this.movementInterval);
     clearInterval(this.walkingInterval);
   }
 
   /**
-   * Plays death animation.
-   */
-  playDeathAnimation() {
-    this.loadImages(Chicken.IMAGES_DEAD);
-    this.playAnimation(Chicken.IMAGES_DEAD);
-  }
-
-  /**
-   * Stops character vertical movement.
-   */
-  stopCharacterVerticalMovement() {
-    if (this.world?.character) this.world.character.speedY = 0;
-  }
-
-  /**
-   * Marks chicken for removal.
-   */
-  markForRemoval() {
-    this.markedForRemoval = true;
-  }
-
-  /**
-   * Removes chicken from world after delay.
-   */
-  removeFromWorldAfterDelay() {
-    setTimeout(() => {
-      this.removeFromWorld();
-      this.markForRemoval();
-    }, 70);
-  }
-
-  /**
-   * Removes chicken from world's enemy list.
+   * Removes this chicken from the world's enemy list.
    */
   removeFromWorld() {
     const enemies = this.world?.level?.enemies;
@@ -149,8 +111,7 @@ class Chicken extends MovableObject {
   }
 
   /**
-   * Checks if chicken is dead.
-   * @returns {boolean} True if dead
+   * @returns {boolean} True once health is depleted.
    */
   isEnemyDead() {
     return this.health <= 0;
