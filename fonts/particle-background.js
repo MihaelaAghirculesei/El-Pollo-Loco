@@ -51,12 +51,17 @@ function initParticles() {
 }
 
 function animateParticles() {
+  requestAnimationFrame(animateParticles);
+  // Only the start/menu screens show the title, so skip the work while a
+  // game is running or the tab is hidden.
+  if (document.hidden || !document.body.classList.contains("start-screen-active")) {
+    return;
+  }
   ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
   particles.forEach((particle) => {
     particle.update();
     particle.draw();
   });
-  requestAnimationFrame(animateParticles);
 }
 
 window.addEventListener("resize", () => {

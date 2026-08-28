@@ -111,9 +111,12 @@ export class World {
       this.backgroundObjects, this.clouds, this.throwableObject,
       this.level.enemies, this.level.coins, this.level.bottle
     ];
-    objectArrays.forEach(arr => {
-      arr?.filter(o => !o.markedForRemoval).forEach(o => this.addToMap(o));
-    });
+    for (const arr of objectArrays) {
+      if (!arr) continue;
+      for (const o of arr) {
+        if (!o.markedForRemoval) this.addToMap(o);
+      }
+    }
     this.addToMap(this.character);
   }
 
@@ -314,7 +317,8 @@ export class World {
    * Spawns new chicken enemies periodically.
    */
   spawnChickens() {
-    setInterval(() => {
+    this.spawnInterval = setInterval(() => {
+      if (this.gameOver) return;
       if (this.level.enemies.length < 10) {
         const enemy = Math.random() < 0.5 ? new Chicken(this) : new SmallChicken(this);
         enemy.x = this.character.x + 800 + Math.random() * 300;
