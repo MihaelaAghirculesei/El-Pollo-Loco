@@ -17,13 +17,12 @@ class Cloud extends MovableObject {
     );
     this.x = x;
     this.canvas = document.getElementById("canvas");
-    this.animate();
   }
 
   /**
-   * Starts cloud animation loop.
+   * Starts the cloud drift loop. Called by the world once the game starts.
    */
-  animate() {
+  start() {
     this.animationInterval = setInterval(() => {
       this.moveLeft();
       this.resetIfOutOfView();

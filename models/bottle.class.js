@@ -19,6 +19,12 @@ class Bottle extends MovableObject {
     super();
     this.initializeProperties(x, y);
     this.loadBottleImages();
+  }
+
+  /**
+   * Starts the idle animation loop. Called by the world once the game starts.
+   */
+  start() {
     this.startAnimation();
   }
 

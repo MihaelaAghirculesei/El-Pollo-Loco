@@ -34,9 +34,20 @@ export class World {
     this.level.enemies.push(this.endboss);
     this.initializeStatusBars();
     this.setWorld();
+    this.startLevelAnimations();
     this.spawnChickens();
     this.run();
     this.draw();
+  }
+
+  /**
+   * Starts the idle animation loops for the level's clouds, coins and
+   * bottles. They stay still until a game actually begins, instead of
+   * animating on the start screen from page load.
+   */
+  startLevelAnimations() {
+    [this.clouds, this.level.coins, this.level.bottle]
+      .forEach(arr => arr?.forEach(o => o.start?.()));
   }
 
   /**
