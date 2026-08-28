@@ -133,8 +133,9 @@ export class World {
    */
   drawAllGameObjects() {
     const objectArrays = [
-      this.backgroundObjects, this.clouds, this.throwableObject,
-      this.level.enemies, this.level.coins, this.level.bottle
+      this.backgroundObjects, this.clouds,
+      this.level.enemies, this.level.coins, this.level.bottle,
+      this.throwableObject
     ];
     for (const arr of objectArrays) {
       if (!arr) continue;
