@@ -34,7 +34,6 @@ export class World {
     this.endboss = new Endboss();
     this.endboss.world = this;
     this.level.enemies.push(this.endboss);
-    this.initialEnemyCount = this.level.enemies.length;
     this.initializeStatusBars();
     this.setWorld();
     this.startLevelAnimations();
@@ -316,7 +315,6 @@ export class World {
       requestAnimationFrame(() => {
         this.level.enemies = this.level.enemies.filter(e => e !== enemy);
       });
-      this.checkBottleSpawn();
     }
   }
 
@@ -325,7 +323,7 @@ export class World {
    */
   filterMarkedEnemies() {
     this.level.enemies = filterMarkedObjects(this.level.enemies);
-    this.cleanupEnemyHitTracking(); 
+    this.cleanupEnemyHitTracking();
   }
 
   /**
@@ -333,15 +331,6 @@ export class World {
    */
   filterMarkedBottles() {
     this.throwableObject = filterMarkedObjects(this.throwableObject);
-  }
-
-  /**
-   * Spawns bottles when enemies defeated.
-   */
-  checkBottleSpawn() {
-    if (this.level.enemies.length <= this.initialEnemyCount - 2) {
-      this.statusBarBottle.setPercentageBottle(20);
-    }
   }
 
   /**
