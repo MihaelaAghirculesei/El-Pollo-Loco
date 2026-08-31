@@ -9,7 +9,7 @@
 [![Play the game](https://img.shields.io/badge/▶_Play-Live_Demo-2ea44f?style=for-the-badge)](https://el-pollo-loco-aghirculesei.pages.dev/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas_2D-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](#-license)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](#license)
 
 </div>
 
