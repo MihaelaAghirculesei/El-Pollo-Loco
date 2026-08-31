@@ -1,351 +1,333 @@
-# 🐔 El Pollo Loco - JavaScript Adventure Game
+# 🐔 El Pollo Loco
 
 <div align="center">
 
-![Game Logo](img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png)
+![El Pollo Loco start screen](img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png)
 
-**A thrilling 2D platform adventure game built with vanilla JavaScript and HTML5 Canvas**
+**A 2D side-scrolling platform game built from scratch with vanilla JavaScript and the HTML5 Canvas API — no game engine, no rendering library, zero runtime dependencies.**
 
-[![Live Demo](https://img.shields.io/badge/🎮_Play_Now-Live_Demo-success?style=for-the-badge)](https://el-pollo-loco-aghirculesei.pages.dev/)
-[![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-yellow?style=for-the-badge&logo=javascript)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Canvas](https://img.shields.io/badge/HTML5-Canvas-orange?style=for-the-badge&logo=html5)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
-
-[🎮 Play Game](https://el-pollo-loco-aghirculesei.pages.dev/) • [📋 Features](#-features) • [🛠️ Tech Stack](#️-tech-stack) • [🚀 Installation](#-installation) • [📱 Controls](#-controls)
+[![Play the game](https://img.shields.io/badge/▶_Play-Live_Demo-2ea44f?style=for-the-badge)](https://el-pollo-loco-aghirculesei.pages.dev/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas_2D-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](#-license)
 
 </div>
 
 ---
 
-## 🎯 **Game Overview**
+## Table of Contents
 
-**El Pollo Loco** is a vibrant 2D platform adventure where you play as Pepe, a brave character on a mission to defeat the evil Endboss chicken and save the day! Navigate through challenging levels, collect coins and bottles, and use your skills to overcome enemies in this action-packed adventure.
-
-### 🌟 **What Makes This Special**
-
-- **🎨 Pure Vanilla JavaScript** - No frameworks, just raw performance
-- **📱 Cross-Platform** - Seamless desktop and mobile experience  
-- **🎵 Dynamic Audio** - Immersive sound design with intelligent audio pooling
-- **⚡ Optimized Performance** - 60fps smooth gameplay with efficient collision detection
-- **🏗️ Enterprise Architecture** - Clean, scalable, and maintainable codebase
-
----
-
-## 🎮 **Features**
-
-<table>
-<tr>
-<td width="50%">
-
-### 🎯 **Gameplay Features**
-- ✅ **Multiple Enemy Types** - Chickens, Small Chickens, and Epic Endboss
-- ✅ **Combat System** - Jump attacks and throwable bottle weapons
-- ✅ **Collectibles** - Coins for extra lives, bottles for ammunition
-- ✅ **Health System** - Dynamic health bars for player and boss
-- ✅ **Progressive Difficulty** - Increasingly challenging enemy spawns
-- ✅ **Boss Battle** - Epic final confrontation with unique mechanics
-
-</td>
-<td width="50%">
-
-### 🔧 **Technical Features**
-- ✅ **Responsive Design** - Adapts to any screen size
-- ✅ **Touch Controls** - Native mobile support
-- ✅ **Audio Management** - Advanced sound pooling system
-- ✅ **Memory Optimization** - Efficient resource cleanup
-- ✅ **Collision Detection** - Precise hitbox calculations
-- ✅ **Animation Engine** - Smooth sprite-based animations
-
-</td>
-</tr>
-</table>
+- [About](#about)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Controls](#controls)
+- [Gameplay & Mechanics](#gameplay--mechanics)
+- [Tech Stack](#tech-stack)
+- [Architecture](#architecture)
+- [Performance & Resource Management](#performance--resource-management)
+- [Security & Deployment](#security--deployment)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Project Structure](#project-structure)
+- [Roadmap](#roadmap)
+- [Credits](#credits)
+- [License](#license)
+- [Contact](#contact)
 
 ---
 
-## 🎬 **Game Preview**
+## About
+
+You play as **Pepe**, a villager whose quiet Mexican town is overrun by a flock of wild chickens.
+Run and jump across a parallax-scrolled desert, stomp the chickens, collect coins and salsa
+bottles, and take down the giant **Endboss** chicken guarding the far end of the level.
+
+The project is a study in building a complete game loop — physics, collision detection,
+sprite animation, an enemy state machine, an audio system and a responsive touch UI — using
+only the platform: plain classes, `<canvas>` 2D drawing and `requestAnimationFrame`.
+
+| | |
+|---|---|
+| **Play** | <https://el-pollo-loco-aghirculesei.pages.dev/> |
+| **Canvas** | 720 × 480 game view + a 720 × 100 animated title canvas |
+| **Runtime dependencies** | none |
+| **Build step** | none required to run; an optional static-copy build for deployment |
+| **Hosting** | Cloudflare Pages |
+
+---
+
+## Screenshots
 
 <div align="center">
 
-### 🎮 **Gameplay Screenshots**
-
-<table>
-<tr>
-<td align="center">
-<img src="img_pollo_locco/img/screenshots/gameplay1.png" width="200px" alt="Main Gameplay"/>
-<br/><sub><b>Main Gameplay</b></sub>
-</td>
-<td align="center">
-<img src="img_pollo_locco/img/screenshots/boss-fight.png" width="200px" alt="Boss Fight"/>
-<br/><sub><b>Epic Boss Battle</b></sub>
-</td>
-<td align="center">
-<img src="img_pollo_locco/img/screenshots/mobile.png" width="200px" alt="Mobile UI"/>
-<br/><sub><b>Mobile Interface</b></sub>
-</td>
-</tr>
-</table>
-
-### 🎥 **Live Demo**
-*Experience the full game in action!*
-
-[![Play Now](https://img.shields.io/badge/🎮_PLAY_THE_GAME-Click_Here-success?style=for-the-badge&size=large)](https://el-pollo-loco-aghirculesei.pages.dev/)
+| Gameplay | Boss fight | Mobile layout |
+|:---:|:---:|:---:|
+| <img src="img_pollo_locco/img/screenshots/gameplay1.png" width="240" alt="Gameplay" /> | <img src="img_pollo_locco/img/screenshots/boss-fight.png" width="240" alt="Boss fight" /> | <img src="img_pollo_locco/img/screenshots/mobile.png" width="240" alt="Mobile layout" /> |
 
 </div>
 
 ---
 
-## 🛠️ **Tech Stack**
+## Features
 
-<div align="center">
+### Gameplay
 
-| Frontend | Audio | Tools | Architecture |
-|----------|-------|-------|--------------|
-| ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=flat&logo=javascript&logoColor=black) | ![Audio](https://img.shields.io/badge/Web_Audio_API-HTML5-orange?style=flat) | ![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white) | ![OOP](https://img.shields.io/badge/OOP-Design_Patterns-blue?style=flat) |
-| ![HTML5](https://img.shields.io/badge/HTML5-Canvas-E34F26?style=flat&logo=html5&logoColor=white) | ![Audio Pool](https://img.shields.io/badge/Audio_Pooling-Custom-green?style=flat) | ![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=flat&logo=visualstudiocode&logoColor=white) | ![MVC](https://img.shields.io/badge/MVC-Architecture-purple?style=flat) |
-| ![CSS3](https://img.shields.io/badge/CSS3-Responsive-1572B6?style=flat&logo=css3&logoColor=white) | ![Sound FX](https://img.shields.io/badge/Sound_Effects-Custom-red?style=flat) | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white) | ![Modular](https://img.shields.io/badge/Modular_Design-ES6_Modules-yellow?style=flat) |
+- **Three enemy types** — regular chickens (2 HP), small chickens (1 HP, faster and smaller) and the Endboss (200 HP).
+- **Two ways to fight** — jump on a chicken to defeat it, or collect salsa bottles and throw them at range.
+- **Endboss state machine** — walk → alert → attack sequence, then a close-range lunge/jump once Pepe gets near.
+- **Collectibles** — coins (30 grant an extra life, with an on-screen popup) and bottles (throwing ammo).
+- **Four status bars** — Pepe's health, the Endboss's health, coin count and bottle count.
+- **Idle behaviour** — Pepe drifts to an idle animation after 3 s without input and falls asleep (with a snoring loop) after 6 s.
+- **Continuous enemy pressure** — new chickens respawn every 5 s up to 10 on screen at once.
+- **Win / lose flow** — dedicated game-over and "You Won!" screens with their own audio cues.
 
-</div>
+### Technical
 
-### 🏗️ **Architecture Highlights**
+- **Class-based OOP** with a shared `DrawableObject → MovableObject` inheritance chain.
+- **Custom physics** — gravity, jump impulses and ground handling on a fixed-step loop.
+- **Layered collision detection** — separate axis-aligned tests, tuned per interaction (character↔enemy, bottle↔enemy, character↔collectible), with per-enemy damage cooldowns.
+- **Parallax scrolling** — multi-layer background repeated across an ~8-screen-wide level, plus animated clouds and a particle effect behind the title.
+- **Audio system** — background music, boss-fight music, per-action sound effects, round-robin audio pooling for frequently played sounds and a mute state persisted to `localStorage`.
+- **Responsive & touch-ready** — on-screen controls appear automatically on touch devices, with a "rotate to landscape" prompt in portrait.
+- **Deterministic teardown** — every interval and timeout is cleared when a round ends or the player restarts, so nothing runs behind the end screen.
+- **Security headers & CSP** shipped with the deployment (see [Security & Deployment](#security--deployment)).
+- **Lint-clean** against a custom ESLint 10 flat config; every class and function carries JSDoc.
 
-```javascript
-📁 Project Structure
-├── 🎮 models/           # Game entities (Character, Enemies, World)
-├── 🎵 audio/            # Sound effects and music
-├── 🎨 img_pollo_locco/  # Game assets and sprites  
-├── 🛠️ js/              # Core game logic and utilities
-├── 📱 css/             # Responsive styling
-└── 🌐 index.html       # Entry point
+---
+
+## Controls
+
+### Keyboard
+
+| Action | Key |
+|---|---|
+| Move left / right | `←` / `→` |
+| Jump | `Space` |
+| Throw bottle | `D` |
+
+### Touch (mobile / tablet)
+
+On-screen buttons are shown automatically on touch devices: **left**, **right**, **jump**,
+**throw**, plus **home**, **sound toggle** and **play again**. A full-screen overlay asks the
+player to rotate to landscape while the device is in portrait.
+
+---
+
+## Gameplay & Mechanics
+
+### Pepe
+
+| Property | Value |
+|---|---|
+| Health | 100, −20 per hit (5 hits to lose a life) |
+| Lives | starts at 1; +1 for every 30 coins collected |
+| Move speed | 5 px/step |
+| Jump | impulse of 30, resolved by the gravity loop |
+| Animations | walk, jump, hurt, dead, idle, long-idle (sleep) |
+
+### Enemies
+
+| Enemy | Health | Notes |
+|---|---|---|
+| Chicken | 2 | walks left; defeated by a jump attack or a bottle |
+| Small chicken | 1 | smaller, faster variant (subclass of `Chicken`) |
+| Endboss | 200 | 25 damage per bottle hit (8 hits); walk / alert / attack states + lunge jump |
+
+### Combat & items
+
+- **Jump attack** — landing on a chicken while falling defeats it and bounces Pepe.
+- **Bottles** — thrown in the facing direction; a forward throw travels faster than a backward one. A bottle shatters on visible contact with an enemy or when it hits the ground.
+- **Coins** — collecting 30 awards an extra life and shows a congratulations popup; the coin bar then resets.
+
+### Audio
+
+Background track, a separate boss-fight track, and effects for hits, collecting, jumping,
+the new-life reward, winning and losing. Frequently triggered effects are played from a small
+pool of pre-created `Audio` elements to avoid restart latency. The mute setting is stored in
+`localStorage`, so it persists across sessions.
+
+---
+
+## Tech Stack
+
+| Area | Choice |
+|---|---|
+| Language | JavaScript (ES2022), `type="module"` entry point |
+| Rendering | HTML5 Canvas 2D API + `requestAnimationFrame` |
+| Audio | `HTMLAudioElement` (`new Audio(...)`) with a custom pooling layer |
+| Styling | Hand-written CSS (`style.css`, `impressum.css`), self-hosted fonts |
+| Persistence | `localStorage` for the mute setting |
+| Tooling | ESLint 10 (flat config), npm scripts |
+| Hosting / CI | Cloudflare Pages with a `_headers` config |
+
+No frameworks, bundlers or transpilers are used.
+
+---
+
+## Architecture
+
+### Class hierarchy
+
+```
+DrawableObject                     draw + shared image pool
+├── MovableObject                  physics, movement, hit/health, animation
+│   ├── Character                  Pepe: input, state machine, camera
+│   ├── Endboss                    boss AI state machine
+│   ├── Chicken                    walking enemy
+│   │   └── SmallChicken           faster/smaller variant
+│   ├── Bottle                     collectible bottle in the level
+│   ├── ThrowableObject            bottle in flight (rotation + splash)
+│   ├── Cloud                      background cloud
+│   └── BackgroundObjekt           parallax background layer
+├── CollectableObject
+│   └── Coin
+├── StatusBarHeartCharacter
+├── StatusBarHeartEndboss
+├── StatusBarBottle
+└── StatusBarCoins
 ```
 
+### Runtime
+
+- **`World`** builds the level (`buildLevel1()`), owns every entity and runs a single `requestAnimationFrame` loop. Each frame it:
+  - advances the **game logic** — boss activation, collision resolution, bottle throwing, item collection and the win/lose check — in fixed 35 ms steps drawn from a delta-time accumulator, so the simulation stays frame-rate independent and a backgrounded tab can't burst-catch-up (the per-frame delta is clamped);
+  - **renders** — clear the canvas, apply the camera translation, redraw every entity and status bar.
+- **`Character`** runs its own input, state (active / idle / sleeping) and animation intervals.
+- **`Endboss`** runs a state-machine interval (walking / alert / attack / jump).
+- **Script loading** — every class and helper is loaded as a classic `<script>` sharing global scope; `js/game.js` and `models/world.class.js` are the only ES modules. This is deliberate and is encoded in the ESLint config's `globals` list.
+
 ---
 
-## 🚀 **Installation**
+## Performance & Resource Management
 
-### 🔥 **Quick Start**
+- **Shared image pool** — `DrawableObject.imagePool` decodes each sprite once and hands the same `Image` to every instance that needs it. A throwaway level is built at page load purely to start that decoding early, so the first game runs warm.
+- **In-place restart** — *Play Again* tears the finished world down and builds a fresh one without reloading the page, so the decoded image pool carries straight into the next run.
+- **Lazy level animation** — clouds, coins and bottles stay still on the start screen and only begin animating when a game actually starts.
+- **Full teardown on game end** — `World.stopAllLoops()` sets the flag that ends the `requestAnimationFrame` loop, clears the spawn timer and calls `stop()` on every entity to kill its own intervals and timeouts (`Character.stop()`, `Endboss.stop()`, `Chicken.stop()`, `ThrowableObject.stop()`), so no work happens behind the end screen or after a restart.
+- **Throttled resize handling** — orientation checks are coalesced through `requestAnimationFrame`.
+- **Render loop** targets the display refresh rate (typically 60 FPS) and stops immediately when `gameOver` is set.
+
+---
+
+## Security & Deployment
+
+Deployed on **Cloudflare Pages**. The `_headers` file applies, on every response:
+
+| Header | Value |
+|---|---|
+| `Content-Security-Policy` | `default-src 'self'` with a tight per-directive allow-list (`script-src 'self' 'unsafe-inline'`, `object-src 'none'`, `frame-ancestors 'none'`, …) |
+| `X-Frame-Options` | `DENY` |
+| `X-Content-Type-Options` | `nosniff` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | geolocation, camera, microphone, payment, USB and FLoC all disabled |
+| `Cross-Origin-Opener-Policy` | `same-origin` |
+
+Static assets under `/audio`, `/img_pollo_locco` and `/fonts` are served with
+`Cache-Control: public, max-age=31536000, immutable`.
+
+The page also ships SEO and social metadata (`description`, canonical URL, Open Graph and
+Twitter card tags) and an SVG favicon.
+
+---
+
+## Getting Started
+
+No build or install is required to run the game — it is static files served over HTTP.
 
 ```bash
-# Clone the repository
 git clone https://github.com/MihaelaAghirculesei/El-Pollo-Loco.git
-
-# Navigate to project directory
 cd El-Pollo-Loco
-
-# Open in your preferred development environment
-code .
-
-# Launch with live server (VS Code extension) or any local server
-# No build process needed - pure vanilla JS!
 ```
 
-### 🌐 **Live Server Setup**
+Then serve the folder with any static server, for example:
 
-1. **VS Code**: Install "Live Server" extension → Right-click `index.html` → "Open with Live Server"
-2. **Python**: `python -m http.server 8000`
-3. **Node.js**: `npx live-server`
+| Tool | Command |
+|---|---|
+| VS Code | "Live Server" extension → right-click `index.html` → **Open with Live Server** |
+| Python | `python -m http.server 8000` |
+| Node | `npx serve` (or `npx live-server`) |
 
-### 📦 **No Dependencies Required!**
-This game runs on **pure vanilla JavaScript** - no npm install, no build process, just open and play!
-
----
-
-## 📱 **Controls**
-
-<div align="center">
-
-### 🖥️ **Desktop Controls**
-| Action | Key |
-|--------|-----|
-| Move Left | ← Arrow Key |
-| Move Right | → Arrow Key |
-| Jump | Spacebar |
-| Throw Bottle | D |
-
-### 📱 **Mobile Controls**
-| Action | Control |
-|--------|---------|
-| Move | Touch directional buttons |
-| Jump | Tap jump button |
-| Throw | Tap throw button |
-| Audio | Tap sound toggle |
-
-</div>
+Open the printed URL and press **Play**. Opening `index.html` directly from the file system
+is not recommended — the ES-module entry point needs an `http://` origin.
 
 ---
 
-## 🎯 **Game Mechanics**
+## Development
 
-### 🏃‍♂️ **Character System**
-- **Health**: 100 HP with visual health bar
-- **Lives**: Start with 1 life, earn more by collecting 30 coins
-- **Movement**: Smooth physics with gravity and collision detection
-- **States**: Idle, walking, jumping, hurt, and sleeping animations
-
-### ⚔️ **Combat System**
-- **Jump Attacks**: Land on enemies to defeat them
-- **Projectiles**: Throw bottles to damage enemies from distance
-- **Boss Mechanics**: Multi-phase battle with unique attack patterns
-
-### 💰 **Collectibles**
-- **Coins**: Collect 30 to earn an extra life
-- **Bottles**: Ammunition for ranged attacks
-- **Visual Feedback**: Animated collection effects with sound
-
-### 🎵 **Audio Experience**
-- **Dynamic Music**: Background music with boss battle themes
-- **Sound Effects**: Unique sounds for every action
-- **Audio Pooling**: Lag-free sound playback
-- **Mute Toggle**: Full audio control
-
----
-
-## 🧠 **Technical Deep Dive**
-
-### ⚡ **Performance Optimizations**
-
-```javascript
-// Audio Pooling for Lag-Free Sound
-createAudioPool(path, poolSize = 3) {
-  const pool = { instances: [], currentIndex: 0 };
-  for (let i = 0; i < poolSize; i++) {
-    pool.instances.push(this.createAudioInstance(path, 0.2));
-  }
-  this.audioPool[path] = pool;
-}
-
-// Efficient Collision Detection
-function isCollidingWithEnemy(character, enemy) {
-  const charMargin = 20, enemyMargin = 15;
-  // Optimized AABB collision with margins
-  return charRight > enemyLeft && charLeft < enemyRight && 
-         charBottom > enemyTop && charTop < enemyBottom;
-}
-
-// Memory Management
-filterMarkedObjects(objectArray) {
-  return objectArray.filter(obj => !obj.markedForRemoval);
-}
+```bash
+npm install        # dev tooling only (ESLint); not needed to run the game
+npm run lint       # ESLint 10, flat config in eslint.config.mjs
+npm run build      # copies the static files into dist/ for deployment
 ```
 
-### 🏗️ **Object-Oriented Design**
+- **`eslint.config.mjs`** declares the cross-file game globals, treats `js/**`, `models/**`,
+  `levels/**` and `fonts/**` as browser scripts, and marks `js/game.js` and
+  `models/world.class.js` as ES modules.
+- **`npm run build`** is a plain file copy (POSIX shell); run it on macOS/Linux or in CI.
+- Every class and function is documented with **JSDoc**.
+- `.editorconfig` and the ESLint config define the shared code style.
 
-```javascript
-// Clean Inheritance Hierarchy
-DrawableObject → MovableObject → Character
-                               → Enemies (Chicken, SmallChicken, Endboss)
-                               → Collectibles (Coin, Bottle)
+---
+
+## Project Structure
+
 ```
-### 📱 **Responsive Architecture**
-
-- **Mobile Detection**: Automatic touch control activation
-- **Orientation Handling**: Smart landscape mode recommendations  
-- **Dynamic UI**: Adaptive button layouts
-- **Performance Scaling**: Optimized for various device capabilities
-
----
-
-## 🎨 **Assets & Credits**
-
-### 🎭 **Game Assets**
-- **Character Sprites**: Pepe character with multiple animation states
-- **Enemy Design**: Chicken family with unique behaviors
-- **Environment**: Dynamic backgrounds and game elements
-- **UI Elements**: Clean game interface components
-
-### 🎵 **Audio Design**
-- **Background Music**: Adventure-themed soundtrack
-- **Sound Effects**: Audio feedback for game interactions
-- **Audio System**: Integrated sound management
+.
+├── index.html                 markup, screens, script tags
+├── impressum.html             legal notice / privacy page
+├── style.css / impressum.css  styling
+├── favicon.svg
+├── _headers                   Cloudflare Pages security & cache headers
+├── eslint.config.mjs          ESLint 10 flat config
+├── package.json               scripts + dev dependency (ESLint)
+├── js/
+│   ├── game.js                entry point (ES module): bootstrap, input, UI wiring
+│   └── audio.js               AudioManager: paths, pooling, mute, buttons
+├── models/                    all game classes (*.class.js)
+├── levels/
+│   └── level1.js              enemy / cloud / coin / bottle / background layout
+├── fonts/                     self-hosted fonts + particle-background.js
+└── img_pollo_locco/img/       sprites, backgrounds, UI, screenshots
+```
 
 ---
 
-## 🔧 **Development**
+## Roadmap
 
-### 📋 **Code Quality Standards**
-- ✅ **JSDoc Documentation**: Complete function documentation
-- ✅ **Modular Architecture**: Clean separation of concerns
-- ✅ **Performance Optimized**: 60fps stable gameplay
-- ✅ **Memory Efficient**: Proper resource cleanup
-- ✅ **Error Handling**: Robust error management
-- ✅ **Cross-Browser**: Compatible with all modern browsers
-
-### 🧪 **Development Approach**
-- **Iterative Development**: Feature-by-feature implementation
-- **Performance Focus**: Frame rate and responsiveness optimization
-- **Cross-Platform Testing**: Desktop and mobile compatibility
-- **Code Review**: Regular code quality improvements
+- Additional levels — `buildLevel1()` already separates the level data from world logic.
+- Fold the remaining per-entity animation timers (character, chickens, boss, clouds) into the world's `requestAnimationFrame` loop, so nothing runs on its own `setInterval`.
+- Move inline `onclick` handlers to `addEventListener` so `'unsafe-inline'` can be dropped from the script CSP.
+- Re-compress the screenshot assets used in this README.
+- Optional keyboard remapping and a settings screen.
 
 ---
 
-## 🤝 **Contributing**
+## Credits
 
-We welcome contributions! Here's how you can help:
-
-1. **🍴 Fork the repository**
-2. **🌿 Create your feature branch**: `git checkout -b feature/AmazingFeature`
-3. **💬 Commit your changes**: `git commit -m 'Add some AmazingFeature'`
-4. **📤 Push to the branch**: `git push origin feature/AmazingFeature`
-5. **🔄 Open a Pull Request**
-
-### 💡 **Ideas for Contributions**
-- 🎯 New enemy types and behaviors
-- 🗺️ Additional levels and environments  
-- 🎵 More sound effects and music
-- 📱 Enhanced mobile controls
-- 🌍 Internationalization support
+- **Sprite art & sound effects** — third-party *El Pollo Loco* game assets; not my own work.
+- **Fonts** — Michroma, Roboto, Sofia Sans and Nabla, all under the SIL Open Font License (the `OFL.txt` files are bundled under `fonts/`).
+- **Code** — Mihaela Melania Aghirculesei.
 
 ---
 
-## 📈 **Performance Highlights**
+## License
+
+Released under the **MIT License** — see [`LICENSE`](LICENSE).
+
+The bundled fonts keep their own SIL Open Font License; the game sprites and audio are
+third-party assets and are not covered by this licence.
+
+---
+
+## Contact
 
 <div align="center">
 
-| Metric | Performance |
-|--------|-------------|
-| **Frame Rate** | Smooth 60 FPS |
-| **Load Time** | Fast startup |
-| **Memory Usage** | Lightweight |
-| **Dependencies** | Zero external libs |
-| **Mobile Support** | ✅ Full compatibility |
+[![Portfolio](https://img.shields.io/badge/Portfolio-aghirculesei.pages.dev-orange?style=for-the-badge&logo=firefox)](https://aghirculesei.pages.dev/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mihaela-aghirculesei-84147a23b/)
+[![Email](https://img.shields.io/badge/Email-aghirculesei@gmail.com-D14836?style=for-the-badge&logo=gmail)](mailto:aghirculesei@gmail.com)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/MihaelaAghirculesei/El-Pollo-Loco)
 
-</div>
-
-## 🎖️ **Achievements**
-
-<div align="center">
-
-| 🏆 **Technical Excellence** | 🎮 **Game Design** | 🎨 **User Experience** |
-|------------------------------|-------------------|-------------------------|
-| ✅ Zero external dependencies | ✅ Engaging gameplay loop | ✅ Intuitive controls |
-| ✅ Vanilla JS mastery | ✅ Progressive difficulty | ✅ Responsive design |
-| ✅ Optimized performance | ✅ Satisfying mechanics | ✅ Professional UI/UX |
-| ✅ Clean architecture | ✅ Immersive audio | ✅ Cross-platform support |
-
-</div>
-
----
-
-## 📞 **Contact & Links**
-
-<div align="center">
-
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit_My_Website-orange?style=for-the-badge&logo=firefox)](https://aghirculesei.pages.dev/)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect_With_Me-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mihaela-aghirculesei-84147a23b/)
-[![Email](https://img.shields.io/badge/Email-Get_In_Touch-D14836?style=for-the-badge&logo=gmail)](mailto:aghirculesei@gmail.com)
-[![GitHub](https://img.shields.io/badge/GitHub-View_Repository-181717?style=for-the-badge&logo=github)](https://github.com/MihaelaAghirculesei/El-Pollo-Loco)
-
-**Built with ❤️ and lots of ☕ by Mihaela Melania Aghirculesei**
-
-</div>
-
----
-
-
-<div align="center">
-
-### 🌟 **If you enjoyed this game, please give it a star!** ⭐
-
-**Thank you for playing El Pollo Loco!** 🐔🎮
-
-*Made with passion for the art of game development*
+Built by **Mihaela Melania Aghirculesei**
 
 </div>
