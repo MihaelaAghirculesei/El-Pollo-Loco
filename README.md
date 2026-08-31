@@ -4,7 +4,7 @@
 
 ![El Pollo Loco start screen](img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png)
 
-**A 2D side-scrolling platform game built from scratch with vanilla JavaScript and the HTML5 Canvas API — no game engine, no rendering library, zero runtime dependencies.**
+**A 2D jump-'n'-run built from scratch on the HTML5 Canvas 2D API — no game engine, no rendering library, zero runtime dependencies. Class-based OOP, ~60 FPS, mobile touch controls.**
 
 [![Play the game](https://img.shields.io/badge/▶_Play-Live_Demo-2ea44f?style=for-the-badge)](https://el-pollo-loco-aghirculesei.pages.dev/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
