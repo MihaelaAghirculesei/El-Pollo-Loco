@@ -296,7 +296,6 @@ npm run build      # copies the static files into dist/ for deployment
 
 - Additional levels — `buildLevel1()` already separates the level data from world logic.
 - Fold the remaining per-entity animation timers (character, chickens, boss, clouds) into the world's `requestAnimationFrame` loop, so nothing runs on its own `setInterval`.
-- Re-compress the screenshot assets used in this README.
 - Optional keyboard remapping and a settings screen.
 
 ---
