@@ -12,11 +12,13 @@
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css favicon.svg _headers fonts audio img_pollo_locco js models levels dist/",
     "lint": "eslint .",
-    "test": "node --test \"test/**/*.test.js\""
+    "test": "node --test \"test/**/*.test.js\"",
+    "test:e2e": "node --test \"test/e2e/**/*.e2e.js\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "eslint": "^10.9.1",
-    "globals": "^17.11.0"
+    "globals": "^17.11.0",
+    "puppeteer-core": "^25.9.0"
   }
 }

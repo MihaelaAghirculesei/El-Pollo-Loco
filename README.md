@@ -93,6 +93,7 @@ only the platform: plain classes, `<canvas>` 2D drawing and `requestAnimationFra
 - **Security headers & CSP** shipped with the deployment (see [Security & Deployment](#security--deployment)).
 - **Lint-clean** against a custom ESLint 10 flat config; every class and function carries JSDoc.
 - **Unit-tested logic** — the collision, jump-validity, damage-cooldown and collectible helpers are covered by a `node:test` suite that loads the classic scripts into a VM sandbox, so it needs no browser, no build and no dependencies.
+- **Browser smoke test** — a headless-Chromium check (`node:test` + `puppeteer-core`, driving the system Chrome/Edge) serves the repo, presses **Play**, and asserts the canvas actually paints with no console errors.
 
 ---
 
@@ -158,7 +159,7 @@ pool of pre-created `Audio` elements to avoid restart latency. The mute setting 
 | Audio | `HTMLAudioElement` (`new Audio(...)`) with a custom pooling layer |
 | Styling | Hand-written CSS (`style.css`, `impressum.css`), self-hosted fonts |
 | Persistence | `localStorage` for the mute setting |
-| Tooling | ESLint 10 (flat config), `node:test` unit tests, npm scripts |
+| Tooling | ESLint 10 (flat config), `node:test` (unit + `puppeteer-core` smoke test), npm scripts |
 | Hosting / CI | Cloudflare Pages with a `_headers` config |
 
 No frameworks, bundlers or transpilers are used.
@@ -256,19 +257,25 @@ is not recommended — the ES-module entry point needs an `http://` origin.
 ## Development
 
 ```bash
-npm install        # dev tooling only (ESLint); not needed to run the game
+npm install        # dev tooling only (ESLint, puppeteer-core); not needed to run the game
 npm run lint       # ESLint 10, flat config in eslint.config.mjs
-npm test           # unit tests for the pure game logic (node:test, no deps)
+npm test           # unit tests for the pure game logic (node:test, no browser)
+npm run test:e2e   # headless-browser smoke test (needs Chrome or Edge installed)
 npm run build      # copies the static files into dist/ for deployment
 ```
 
 - **`eslint.config.mjs`** declares the cross-file game globals, treats `js/**`, `models/**`,
   `levels/**` and `fonts/**` as browser scripts, marks `js/game.js` and
-  `models/world.class.js` as ES modules, and `test/**` as CommonJS Node.
+  `models/world.class.js` as ES modules, `test/**` as CommonJS Node, and `test/e2e/**` as
+  CommonJS with browser globals too.
 - **`npm test`** runs `test/**/*.test.js` on Node's built-in runner (Node 18+). The suite
   loads a classic script (`models/game-utils.class.js`) into a `node:vm` context and
   exercises its pure helpers — collision boxes, jump validation, damage cooldowns,
   collectible pickup — with no DOM and no change to the game source.
+- **`npm run test:e2e`** serves the repo from a throwaway Node server and drives the
+  system Chrome/Edge with `puppeteer-core` (no bundled browser download): it loads the
+  page, presses **Play**, waits for the canvas to actually paint, and fails on any console
+  error. Set `CHROME_PATH` if the browser isn't found automatically.
 - **`npm run build`** is a plain file copy (POSIX shell); run it on macOS/Linux or in CI.
 - Every class and function is documented with **JSDoc**.
 - `.editorconfig` and the ESLint config define the shared code style.
@@ -285,7 +292,7 @@ npm run build      # copies the static files into dist/ for deployment
 ├── favicon.svg
 ├── _headers                   Cloudflare Pages security & cache headers
 ├── eslint.config.mjs          ESLint 10 flat config
-├── package.json               scripts + dev dependency (ESLint)
+├── package.json               scripts + dev dependencies (ESLint, puppeteer-core)
 ├── js/
 │   ├── game.js                entry point (ES module): bootstrap, input, UI wiring
 │   └── audio.js               AudioManager: paths, pooling, mute, buttons
@@ -293,7 +300,7 @@ npm run build      # copies the static files into dist/ for deployment
 ├── levels/
 │   └── level1.js              enemy / cloud / coin / bottle / background layout
 ├── fonts/                     self-hosted fonts + particle-background.js
-├── test/                      node:test suite + VM loader for the classic scripts
+├── test/                      node:test unit suite, VM loader, and e2e/ browser smoke test
 └── img_pollo_locco/img/       sprites, backgrounds, UI, screenshots
 ```
 

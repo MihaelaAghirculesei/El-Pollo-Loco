@@ -110,4 +110,12 @@ export default [
       globals: { ...globals.node },
     },
   },
+  {
+    // E2E smoke test also runs code inside the browser page (page.evaluate,
+    // waitForFunction), so it needs the browser globals too.
+    files: ["test/e2e/**/*.js"],
+    languageOptions: {
+      globals: { ...globals.browser },
+    },
+  },
 ];
