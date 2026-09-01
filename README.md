@@ -200,7 +200,7 @@ DrawableObject                     draw + shared image pool
 
 ## Performance & Resource Management
 
-- **Shared image pool** — `DrawableObject.imagePool` decodes each sprite once and hands the same `Image` to every instance that needs it. A throwaway level is built at page load purely to start that decoding early, so the first game runs warm.
+- **Shared image pool** — `DrawableObject.imagePool` decodes each sprite once and hands the same `Image` to every instance that needs it. A throwaway level is built at page load to start that decoding immediately, and pressing *Play* waits for the pooled sprites to finish decoding before the world is built, so the first rendered frame never stalls on a cold decode.
 - **In-place restart** — *Play Again* tears the finished world down and builds a fresh one without reloading the page, so the decoded image pool carries straight into the next run.
 - **Lazy level animation** — clouds, coins and bottles stay still on the start screen and only begin animating when a game actually starts.
 - **Full teardown on game end** — `World.stopAllLoops()` sets the flag that ends the `requestAnimationFrame` loop, clears the spawn timer and calls `stop()` on every entity to kill its own intervals and timeouts (`Character.stop()`, `Endboss.stop()`, `Chicken.stop()`, `ThrowableObject.stop()`), so no work happens behind the end screen or after a restart.
@@ -215,7 +215,7 @@ Deployed on **Cloudflare Pages**. The `_headers` file applies, on every response
 
 | Header | Value |
 |---|---|
-| `Content-Security-Policy` | `default-src 'self'` with a tight per-directive allow-list (`script-src 'self' 'unsafe-inline'`, `object-src 'none'`, `frame-ancestors 'none'`, …) |
+| `Content-Security-Policy` | `default-src 'self'` with a tight per-directive allow-list and no `'unsafe-inline'` anywhere (`script-src 'self'`, `style-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, …) |
 | `X-Frame-Options` | `DENY` |
 | `X-Content-Type-Options` | `nosniff` |
 | `Referrer-Policy` | `strict-origin-when-cross-origin` |
@@ -296,7 +296,6 @@ npm run build      # copies the static files into dist/ for deployment
 
 - Additional levels — `buildLevel1()` already separates the level data from world logic.
 - Fold the remaining per-entity animation timers (character, chickens, boss, clouds) into the world's `requestAnimationFrame` loop, so nothing runs on its own `setInterval`.
-- Move inline `onclick` handlers to `addEventListener` so `'unsafe-inline'` can be dropped from the script CSP.
 - Re-compress the screenshot assets used in this README.
 - Optional keyboard remapping and a settings screen.
 
