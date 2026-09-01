@@ -384,10 +384,21 @@ function filterMarkedObjects(objectArray) {
 function showCongratulations(canvas) {
   const div = document.createElement("div");
   div.className = "popup";
-  div.innerHTML = `
-    <p>Congratulations! You've collected 30 Coins and earned a new life!</p>
-    <button class="button-popup" onclick="this.parentElement.remove()">Close</button>
-  `;
+
+  const message = document.createElement("p");
+  message.textContent =
+    "Congratulations! You've collected 30 Coins and earned a new life!";
+
+  // Built with addEventListener rather than an inline onclick so the popup
+  // works under the deployed CSP (script-src 'self', no 'unsafe-inline').
+  const closeButton = document.createElement("button");
+  closeButton.className = "button-popup";
+  closeButton.textContent = "Close";
+  closeButton.addEventListener("click", () => div.remove());
+
+  div.appendChild(message);
+  div.appendChild(closeButton);
+
   const { right, top } = canvas.getBoundingClientRect();
   Object.assign(div.style, {
     left: `${right + 17}px`,
