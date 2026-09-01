@@ -11,7 +11,8 @@
   },
   "scripts": {
     "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css favicon.svg _headers fonts audio img_pollo_locco js models levels dist/",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "node --test \"test/**/*.test.js\""
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -92,6 +92,7 @@ only the platform: plain classes, `<canvas>` 2D drawing and `requestAnimationFra
 - **Deterministic teardown** — every interval and timeout is cleared when a round ends or the player restarts, so nothing runs behind the end screen.
 - **Security headers & CSP** shipped with the deployment (see [Security & Deployment](#security--deployment)).
 - **Lint-clean** against a custom ESLint 10 flat config; every class and function carries JSDoc.
+- **Unit-tested logic** — the collision, jump-validity, damage-cooldown and collectible helpers are covered by a `node:test` suite that loads the classic scripts into a VM sandbox, so it needs no browser, no build and no dependencies.
 
 ---
 
@@ -157,7 +158,7 @@ pool of pre-created `Audio` elements to avoid restart latency. The mute setting 
 | Audio | `HTMLAudioElement` (`new Audio(...)`) with a custom pooling layer |
 | Styling | Hand-written CSS (`style.css`, `impressum.css`), self-hosted fonts |
 | Persistence | `localStorage` for the mute setting |
-| Tooling | ESLint 10 (flat config), npm scripts |
+| Tooling | ESLint 10 (flat config), `node:test` unit tests, npm scripts |
 | Hosting / CI | Cloudflare Pages with a `_headers` config |
 
 No frameworks, bundlers or transpilers are used.
@@ -257,12 +258,17 @@ is not recommended — the ES-module entry point needs an `http://` origin.
 ```bash
 npm install        # dev tooling only (ESLint); not needed to run the game
 npm run lint       # ESLint 10, flat config in eslint.config.mjs
+npm test           # unit tests for the pure game logic (node:test, no deps)
 npm run build      # copies the static files into dist/ for deployment
 ```
 
 - **`eslint.config.mjs`** declares the cross-file game globals, treats `js/**`, `models/**`,
-  `levels/**` and `fonts/**` as browser scripts, and marks `js/game.js` and
-  `models/world.class.js` as ES modules.
+  `levels/**` and `fonts/**` as browser scripts, marks `js/game.js` and
+  `models/world.class.js` as ES modules, and `test/**` as CommonJS Node.
+- **`npm test`** runs `test/**/*.test.js` on Node's built-in runner (Node 18+). The suite
+  loads a classic script (`models/game-utils.class.js`) into a `node:vm` context and
+  exercises its pure helpers — collision boxes, jump validation, damage cooldowns,
+  collectible pickup — with no DOM and no change to the game source.
 - **`npm run build`** is a plain file copy (POSIX shell); run it on macOS/Linux or in CI.
 - Every class and function is documented with **JSDoc**.
 - `.editorconfig` and the ESLint config define the shared code style.
@@ -287,6 +293,7 @@ npm run build      # copies the static files into dist/ for deployment
 ├── levels/
 │   └── level1.js              enemy / cloud / coin / bottle / background layout
 ├── fonts/                     self-hosted fonts + particle-background.js
+├── test/                      node:test suite + VM loader for the classic scripts
 └── img_pollo_locco/img/       sprites, backgrounds, UI, screenshots
 ```
 

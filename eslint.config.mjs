@@ -102,4 +102,12 @@ export default [
     files: ["js/game.js", "models/world.class.js"],
     languageOptions: { sourceType: "module" },
   },
+  {
+    // Node test suite — CommonJS, run by `node --test`, never shipped.
+    files: ["test/**/*.js"],
+    languageOptions: {
+      sourceType: "commonjs",
+      globals: { ...globals.node },
+    },
+  },
 ];
