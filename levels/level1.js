@@ -103,21 +103,29 @@ function buildLevel1() {
 // now, so the first game — and every in-place restart — starts warm.
 buildLevel1();
 
+let spriteWarmup;
+
 /**
- * Blits every pooled sprite once to a throwaway canvas as soon as it has
- * decoded, paying the decode + first-draw cost while the start screen is
- * up instead of on the game's first real frame (which was hitching for
- * ~100 ms on a cold cache).
+ * Resolves once every pooled sprite has decoded and been blitted once, so
+ * the game's first real frame never pays a synchronous decode (that was
+ * blocking the first rAF for ~300-400 ms on a cold cache). Memoised:
+ * fired at load to warm while the start screen is up, and awaited again by
+ * the game bootstrap — instant on every run after the first.
  */
 function warmSpritePool() {
+  if (spriteWarmup) return spriteWarmup;
+  const images = Object.values(DrawableObject.imagePool);
   const scratch = document.createElement("canvas").getContext("2d");
-  for (const img of Object.values(DrawableObject.imagePool)) {
-    const blit = () => {
-      try { scratch.drawImage(img, 0, 0, 1, 1); } catch { /* not decodable */ }
-    };
-    if (img.complete && img.naturalWidth) blit();
-    else img.addEventListener("load", blit, { once: true });
-  }
+  spriteWarmup = Promise.allSettled(
+    images.map((img) =>
+      typeof img.decode === "function" ? img.decode() : Promise.resolve()
+    )
+  ).then(() => {
+    for (const img of images) {
+      try { scratch.drawImage(img, 0, 0); } catch { /* unusable sprite */ }
+    }
+  });
+  return spriteWarmup;
 }
 
 warmSpritePool();

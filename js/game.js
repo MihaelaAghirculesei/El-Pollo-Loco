@@ -87,29 +87,36 @@ function toggleMobileControls(showMobile) {
 }
 
 /**
- * Builds the world on the next frame instead of inside the click handler,
- * so pressing Play / Play Again stays responsive and Chrome no longer
- * warns about a long-running 'click' handler. The guard drops any second
- * request until the first boot has finished.
+ * Waits for the sprite pool to finish decoding, then reveals the game and
+ * builds the world. Gating the build on the decode keeps the first
+ * rendered frame from blocking on cold image decodes (that was stalling
+ * the first frame for ~300-400 ms); the start / end screen stays up
+ * during the wait, so there is no empty frame. On every run after the
+ * first the pool is already warm and this resolves immediately. The guard
+ * ignores a second Play / Play Again press while a boot is in flight.
+ * @param {() => void} reveal - Swaps the menu / end screen for the canvas
  */
-function bootGame() {
+async function bootGame(reveal) {
   if (booting) return;
   booting = true;
-  requestAnimationFrame(() => {
+  try {
+    await warmSpritePool();
+    reveal();
+    toggleMobileControls(true);
     init();
+  } finally {
     booting = false;
-  });
+  }
 }
 
 /**
- * Starts the game. The screen switch happens synchronously so the click
- * feels instant; the heavy world build is deferred by `bootGame`.
+ * Starts the game from the menu.
  */
 function startGame() {
-  setFooterButtonsVisibility(true);
-  hideStartScreen();
-  toggleMobileControls(true);
-  bootGame();
+  bootGame(() => {
+    setFooterButtonsVisibility(true);
+    hideStartScreen();
+  });
 }
 
 /**
@@ -344,9 +351,7 @@ function playAgain() {
     world.stopAllLoops();
     audioManager.stopAllGameEndSounds(world);
   }
-  clearEndScreens();
-  toggleMobileControls(true);
-  bootGame();
+  bootGame(clearEndScreens);
 }
 
 /**
