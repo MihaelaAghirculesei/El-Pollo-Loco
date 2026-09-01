@@ -101,6 +101,7 @@ footer .button-footer {
   background-color: #960b06;
   border: clamp(1px, 0.5vw, 4px) solid #222;
   color: #0ff;
+  text-decoration: none;
   padding: 0.5em 1.2em;
   border-radius: 20px;
   font-family: "Roboto", "Sofia_Sans", "Milchroma";

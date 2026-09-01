@@ -89,12 +89,12 @@ function toggleMobileControls(showMobile) {
 /**
  * Starts the game.
  */
-window.startGame = function () {
+function startGame() {
   setFooterButtonsVisibility(true);
   hideStartScreen();
   init();
   toggleMobileControls(true);
-};
+}
 
 /**
  * Cleans up world resources.
@@ -115,12 +115,12 @@ function showStartScreen() {
 /**
  * Returns to main menu.
  */
-window.returnToMenu = function () {
+function returnToMenu() {
   cleanupWorldResources();
   showStartScreen();
   toggleMobileControls(false);
   location.reload();
-};
+}
 
 /**
  * Toggles screen display state.
@@ -134,30 +134,30 @@ function toggleScreen(screenId, show) {
 /**
  * Opens controls screen.
  */
-window.openControls = () => toggleScreen("controlsScreen", true);
+const openControls = () => toggleScreen("controlsScreen", true);
 
 /**
  * Closes controls screen.
  */
-window.closeControls = () => toggleScreen("controlsScreen", false);
+const closeControls = () => toggleScreen("controlsScreen", false);
 
 /**
  * Opens story screen.
  */
-window.openStory = () => toggleScreen("storyScreen", true);
+const openStory = () => toggleScreen("storyScreen", true);
 
 /**
  * Closes story screen.
  */
-window.closeStory = () => toggleScreen("storyScreen", false);
+const closeStory = () => toggleScreen("storyScreen", false);
 
 /**
  * Goes to home page.
  */
-window.goToHome = function () {
+function goToHome() {
   cleanupWorldResources();
   location.reload();
-};
+}
 
 /**
  * Shows footer on game end for mobile.
@@ -214,7 +214,6 @@ function toggleGlobalAudio() {
   isMuted = audioManager.isGameMuted;
   updateAudioIcon(isMuted);
 }
-window.toggleGlobalAudio = toggleGlobalAudio;
 
 /**
  * Adds touch event listeners to element.
@@ -247,11 +246,11 @@ function setupAllTouchControls() {
  */
 function setupIndividualTouchControls() {
   const controls = [
-    ["btn-home", null, () => window.goToHome()],
-    ["btn-left", "LEFT"], ["btn-right", "RIGHT"], 
+    ["btn-home", null, () => goToHome()],
+    ["btn-left", "LEFT"], ["btn-right", "RIGHT"],
     ["btn-jump", "SPACE"], ["btn-throw", "D"],
     ["btn-audio", null, (e) => { e.preventDefault(); toggleGlobalAudio(); }],
-    ["btn-play-again", null, () => window.playAgain()]
+    ["btn-play-again", null, () => playAgain()]
   ];
   
   controls.forEach(([id, key, callback]) => {
@@ -324,7 +323,7 @@ function setupOrientationListeners() {
  * end screens, and builds a fresh one. No page reload, so the decoded
  * image pool carries over to the next run.
  */
-window.playAgain = function () {
+function playAgain() {
   if (world) {
     world.stopAllLoops();
     audioManager.stopAllGameEndSounds(world);
@@ -332,7 +331,7 @@ window.playAgain = function () {
   clearEndScreens();
   init();
   toggleMobileControls(true);
-};
+}
 
 /**
  * Removes the game-over / win overlays and the new-life popup, and undoes
@@ -345,8 +344,31 @@ function clearEndScreens() {
   document.getElementById('titleCanvas').style.display = '';
 }
 
+/**
+ * Wires the menu, screen and footer buttons to their handlers. Replaces
+ * the inline `onclick` attributes the markup used to carry, so the CSP no
+ * longer needs `'unsafe-inline'` in `script-src`.
+ */
+function wireUiButtons() {
+  const bindings = {
+    "btn-play": startGame,
+    "btn-controls": openControls,
+    "btn-story": openStory,
+    "btn-controls-back": closeControls,
+    "btn-story-back": closeStory,
+    "btn-menu-back": returnToMenu,
+    "home-button": goToHome,
+    "music-toggle-button": toggleGlobalAudio,
+    "play-again-button": playAgain,
+  };
+  for (const [id, handler] of Object.entries(bindings)) {
+    document.getElementById(id)?.addEventListener("click", handler);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", handleDOMContentLoaded, { passive: true });
 document.addEventListener("DOMContentLoaded", initializeMobileAndOrientation, { passive: true });
 
+wireUiButtons();
 setupKeyListeners();
 setupOrientationListeners();
