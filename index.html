@@ -50,7 +50,7 @@
 
       <div id="controlsScreen" class="controls-screen">
         <div class="button-container">
-          <button class="button-start-screen" onclick="closeControls()">
+          <button class="button-start-screen" id="btn-controls-back">
             Back
           </button>
         </div>
@@ -90,7 +90,7 @@
 
       <div id="storyScreen" class="story-container">
         <div class="button-container">
-          <button class="button-start-screen" onclick="closeStory()">
+          <button class="button-start-screen" id="btn-story-back">
             Back
           </button>
         </div>
@@ -112,7 +112,7 @@
       </div>
 
       <div id="endScreen" class="end-screen">
-        <button class="button-start-screen" onclick="returnToMenu()">
+        <button class="button-start-screen" id="btn-menu-back">
           Back to Menu
         </button>
       </div>
@@ -122,7 +122,7 @@
         <footer class="footer">
           <div class="footer-content">
             <div class="footer-left">
-              <button id="home-button" class="button-footer" onclick="goToHome()">
+              <button id="home-button" class="button-footer">
                 Home
               </button>
               <a href="impressum.html" class="button-footer">Privacy Policy</a>
@@ -132,19 +132,19 @@
                 All rights reserved.
             </div>
             <div class="footer-right">
-              <button id="music-toggle-button" class="button-footer" onclick="toggleGlobalAudio()">
+              <button id="music-toggle-button" class="button-footer">
                 Sound: On
               </button>
-              <button id="play-again-button" class="button-footer" onclick="playAgain()">Play Again</button>
+              <button id="play-again-button" class="button-footer">Play Again</button>
             </div>
           </div>
         </footer>   
 
       <div id="startScreen" class="start-screen">
         <div id="menu" class="menu">
-          <button class="button-start-screen" onclick="startGame()">Play</button>
-          <button class="button-start-screen" onclick="openControls()">Controls</button>
-          <button class="button-start-screen" onclick="openStory()">Story</button>
+          <button class="button-start-screen" id="btn-play">Play</button>
+          <button class="button-start-screen" id="btn-controls">Controls</button>
+          <button class="button-start-screen" id="btn-story">Story</button>
         </div>
       </div>
     </div>
