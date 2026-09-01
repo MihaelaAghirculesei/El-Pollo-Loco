@@ -50,11 +50,22 @@ function initParticles() {
   }
 }
 
+let animating = false;
+
+/**
+ * The title is only visible on the start/menu screens. When it isn't
+ * (a game is running) or the tab is hidden, the loop stops rescheduling
+ * itself entirely instead of waking every frame just to bail out, so it
+ * never lands in a busy frame's rAF batch during gameplay. `resume`
+ * restarts it when the start screen or the tab comes back.
+ */
+function titleVisible() {
+  return !document.hidden && document.body.classList.contains("start-screen-active");
+}
+
 function animateParticles() {
-  requestAnimationFrame(animateParticles);
-  // Only the start/menu screens show the title, so skip the work while a
-  // game is running or the tab is hidden.
-  if (document.hidden || !document.body.classList.contains("start-screen-active")) {
+  if (!titleVisible()) {
+    animating = false;
     return;
   }
   ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
@@ -62,6 +73,13 @@ function animateParticles() {
     particle.update();
     particle.draw();
   });
+  requestAnimationFrame(animateParticles);
+}
+
+function resume() {
+  if (animating || !titleVisible()) return;
+  animating = true;
+  requestAnimationFrame(animateParticles);
 }
 
 window.addEventListener("resize", () => {
@@ -69,5 +87,11 @@ window.addEventListener("resize", () => {
   particleCanvas.height = h1.clientHeight;
 });
 
+document.addEventListener("visibilitychange", resume);
+new MutationObserver(resume).observe(document.body, {
+  attributes: true,
+  attributeFilter: ["class"],
+});
+
 initParticles();
-animateParticles();
+resume();

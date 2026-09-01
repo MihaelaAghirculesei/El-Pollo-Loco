@@ -102,3 +102,22 @@ function buildLevel1() {
 // their sprite paths stay in DrawableObject.imagePool and start decoding
 // now, so the first game — and every in-place restart — starts warm.
 buildLevel1();
+
+/**
+ * Blits every pooled sprite once to a throwaway canvas as soon as it has
+ * decoded, paying the decode + first-draw cost while the start screen is
+ * up instead of on the game's first real frame (which was hitching for
+ * ~100 ms on a cold cache).
+ */
+function warmSpritePool() {
+  const scratch = document.createElement("canvas").getContext("2d");
+  for (const img of Object.values(DrawableObject.imagePool)) {
+    const blit = () => {
+      try { scratch.drawImage(img, 0, 0, 1, 1); } catch { /* not decodable */ }
+    };
+    if (img.complete && img.naturalWidth) blit();
+    else img.addEventListener("load", blit, { once: true });
+  }
+}
+
+warmSpritePool();
