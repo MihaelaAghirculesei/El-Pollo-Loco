@@ -249,7 +249,7 @@ function setupIndividualTouchControls() {
     ["btn-home", null, () => goToHome()],
     ["btn-left", "LEFT"], ["btn-right", "RIGHT"],
     ["btn-jump", "SPACE"], ["btn-throw", "D"],
-    ["btn-audio", null, (e) => { e.preventDefault(); toggleGlobalAudio(); }],
+    ["btn-audio", null, (e) => { if (e.cancelable) e.preventDefault(); toggleGlobalAudio(); }],
     ["btn-play-again", null, () => playAgain()]
   ];
   
