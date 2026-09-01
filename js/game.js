@@ -1,6 +1,6 @@
 import { World } from "../models/world.class.js";
 
-let canvas, world, keyboard = new Keyboard(), isMuted = false;
+let canvas, world, keyboard = new Keyboard(), isMuted = false, booting = false;
 
 window.showFooterOnGameEnd = showFooterOnGameEnd;
 
@@ -87,13 +87,29 @@ function toggleMobileControls(showMobile) {
 }
 
 /**
- * Starts the game.
+ * Builds the world on the next frame instead of inside the click handler,
+ * so pressing Play / Play Again stays responsive and Chrome no longer
+ * warns about a long-running 'click' handler. The guard drops any second
+ * request until the first boot has finished.
+ */
+function bootGame() {
+  if (booting) return;
+  booting = true;
+  requestAnimationFrame(() => {
+    init();
+    booting = false;
+  });
+}
+
+/**
+ * Starts the game. The screen switch happens synchronously so the click
+ * feels instant; the heavy world build is deferred by `bootGame`.
  */
 function startGame() {
   setFooterButtonsVisibility(true);
   hideStartScreen();
-  init();
   toggleMobileControls(true);
+  bootGame();
 }
 
 /**
@@ -329,8 +345,8 @@ function playAgain() {
     audioManager.stopAllGameEndSounds(world);
   }
   clearEndScreens();
-  init();
   toggleMobileControls(true);
+  bootGame();
 }
 
 /**

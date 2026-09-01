@@ -45,7 +45,7 @@ export class World {
     this.setWorld();
     this.startLevelAnimations();
     this.spawnChickens();
-    this.draw();
+    requestAnimationFrame(() => this.draw());
   }
 
   /**
