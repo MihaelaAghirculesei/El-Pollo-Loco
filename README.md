@@ -261,7 +261,7 @@ npm install        # dev tooling only (ESLint, puppeteer-core); not needed to ru
 npm run lint       # ESLint 10, flat config in eslint.config.mjs
 npm test           # unit tests for the pure game logic (node:test, no browser)
 npm run test:e2e   # headless-browser smoke test (needs Chrome or Edge installed)
-npm run build      # copies the static files into dist/ for deployment
+npm run build      # copies the deployable file set into dist/ (cross-platform)
 ```
 
 - **`eslint.config.mjs`** declares the cross-file game globals, treats `js/**`, `models/**`,
@@ -276,7 +276,9 @@ npm run build      # copies the static files into dist/ for deployment
   system Chrome/Edge with `puppeteer-core` (no bundled browser download): it loads the
   page, presses **Play**, waits for the canvas to actually paint, and fails on any console
   error. Set `CHROME_PATH` if the browser isn't found automatically.
-- **`npm run build`** is a plain file copy (POSIX shell); run it on macOS/Linux or in CI.
+- **`npm run build`** (`build.mjs`) copies the deployable file set into `dist/` with
+  `node:fs` `cp`, so it runs on any OS. Cloudflare Pages serves the repo root directly —
+  this is only for local or CI packaging.
 - Every class and function is documented with **JSDoc**.
 - `.editorconfig` and the ESLint config define the shared code style.
 
@@ -292,6 +294,7 @@ npm run build      # copies the static files into dist/ for deployment
 ├── favicon.svg
 ├── _headers                   Cloudflare Pages security & cache headers
 ├── eslint.config.mjs          ESLint 10 flat config
+├── build.mjs                  static-copy build → dist/ (cross-platform)
 ├── package.json               scripts + dev dependencies (ESLint, puppeteer-core)
 ├── js/
 │   ├── game.js                entry point (ES module): bootstrap, input, UI wiring

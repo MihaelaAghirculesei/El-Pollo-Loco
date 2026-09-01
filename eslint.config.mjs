@@ -118,4 +118,12 @@ export default [
       globals: { ...globals.browser },
     },
   },
+  {
+    // Build script — an ES-module Node script.
+    files: ["build.mjs"],
+    languageOptions: {
+      sourceType: "module",
+      globals: { ...globals.node },
+    },
+  },
 ];

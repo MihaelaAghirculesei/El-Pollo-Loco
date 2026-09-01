@@ -10,7 +10,7 @@
     "url": "https://github.com/MihaelaAghirculesei/El-Pollo-Loco.git"
   },
   "scripts": {
-    "build": "rm -rf dist && mkdir -p dist && cp -r index.html impressum.html impressum.css style.css favicon.svg _headers fonts audio img_pollo_locco js models levels dist/",
+    "build": "node build.mjs",
     "lint": "eslint .",
     "test": "node --test \"test/**/*.test.js\"",
     "test:e2e": "node --test \"test/e2e/**/*.e2e.js\""
