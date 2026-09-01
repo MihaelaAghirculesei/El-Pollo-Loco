@@ -121,6 +121,15 @@ test("the start screen renders with a Play button", opts, async () => {
   assert.equal(state.painted, false, "#canvas should be blank before Play");
 });
 
+test("wired buttons drop focus after a click, so Space can't re-fire them", opts, async () => {
+  await page.focus("#btn-controls");
+  await page.click("#btn-controls");
+  const activeId = await page.evaluate(() => document.activeElement && document.activeElement.id);
+  assert.notEqual(activeId, "btn-controls", "the button should be blurred after its click");
+  await page.click("#btn-controls-back");
+  await page.waitForSelector("#btn-play", { visible: true });
+});
+
 test("pressing Play boots the world and paints the canvas", opts, async () => {
   await page.click("#btn-play");
   await page.waitForFunction(() => {

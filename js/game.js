@@ -383,7 +383,13 @@ function wireUiButtons() {
     "play-again-button": playAgain,
   };
   for (const [id, handler] of Object.entries(bindings)) {
-    document.getElementById(id)?.addEventListener("click", handler);
+    document.getElementById(id)?.addEventListener("click", (event) => {
+      handler(event);
+      // Release focus so a later Space / Enter doesn't re-fire the button.
+      // Most visible with Play Again, which stays in the footer during play:
+      // without this, every jump keypress restarted the game.
+      event.currentTarget.blur();
+    });
   }
 }
 
