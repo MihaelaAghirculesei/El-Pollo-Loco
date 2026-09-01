@@ -62,7 +62,7 @@ only the platform: plain classes, `<canvas>` 2D drawing and `requestAnimationFra
 
 | Gameplay | Boss fight | Mobile layout |
 |:---:|:---:|:---:|
-| <img src="img_pollo_locco/img/screenshots/gameplay1.png" width="240" alt="Gameplay" /> | <img src="img_pollo_locco/img/screenshots/boss-fight.png" width="240" alt="Boss fight" /> | <img src="img_pollo_locco/img/screenshots/mobile.png" width="240" alt="Mobile layout" /> |
+| <img src="img_pollo_locco/img/screenshots/gameplay1.jpg" width="240" alt="Gameplay" /> | <img src="img_pollo_locco/img/screenshots/boss-fight.png" width="240" alt="Boss fight" /> | <img src="img_pollo_locco/img/screenshots/mobile.png" width="240" alt="Mobile layout" /> |
 
 </div>
 
