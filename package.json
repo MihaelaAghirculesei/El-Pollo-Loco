@@ -1,6 +1,6 @@
 {
   "name": "el-pollo-loco",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A 2D jump-'n'-run built from scratch with vanilla JavaScript and the HTML5 Canvas 2D API - no game engine, zero runtime dependencies.",
   "private": true,
   "license": "MIT",
