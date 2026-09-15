@@ -8,13 +8,13 @@ class Endboss extends MovableObject {
   ANIMATION_SPEED = 150;
   REMOVAL_DELAY = 1000;
 
-  IMAGES_WALKING = [
+  static IMAGES_WALKING = [
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G1.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G2.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G3.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/1_walk/G4.png",
-  ]; 
-  IMAGES_STAY = [
+  ];
+  static IMAGES_STAY = [
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G5.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G6.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G7.png",
@@ -24,7 +24,7 @@ class Endboss extends MovableObject {
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G11.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/2_alert/G12.png",
   ];
-  IMAGES_ATTACK = [
+  static IMAGES_ATTACK = [
     "img_pollo_locco/img/4_enemie_boss_chicken/3_attack/G13.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/3_attack/G14.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/3_attack/G15.png",
@@ -34,16 +34,34 @@ class Endboss extends MovableObject {
     "img_pollo_locco/img/4_enemie_boss_chicken/3_attack/G19.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/3_attack/G20.png",
   ];
-  IMAGES_HURT = [
+  static IMAGES_HURT = [
     "img_pollo_locco/img/4_enemie_boss_chicken/4_hurt/G21.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/4_hurt/G22.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/4_hurt/G23.png",
   ];
-  IMAGES_DEAD = [
+  static IMAGES_DEAD = [
     "img_pollo_locco/img/4_enemie_boss_chicken/5_dead/G24.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/5_dead/G25.png",
     "img_pollo_locco/img/4_enemie_boss_chicken/5_dead/G26.png",
   ];
+
+  IMAGES_WALKING = Endboss.IMAGES_WALKING;
+  IMAGES_STAY = Endboss.IMAGES_STAY;
+  IMAGES_ATTACK = Endboss.IMAGES_ATTACK;
+  IMAGES_HURT = Endboss.IMAGES_HURT;
+  IMAGES_DEAD = Endboss.IMAGES_DEAD;
+
+  /**
+   * Every endboss sprite path across all states, for warming the shared
+   * image pool before the endboss itself is ever built.
+   * @returns {string[]} All endboss image paths
+   */
+  static getAllImagePaths() {
+    return [
+      ...Endboss.IMAGES_WALKING, ...Endboss.IMAGES_STAY,
+      ...Endboss.IMAGES_ATTACK, ...Endboss.IMAGES_HURT, ...Endboss.IMAGES_DEAD,
+    ];
+  }
 
   /**
    * Creates Endboss instance.

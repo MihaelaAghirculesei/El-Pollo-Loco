@@ -103,6 +103,21 @@ function buildLevel1() {
 // now, so the first game — and every in-place restart — starts warm.
 buildLevel1();
 
+// Character, Endboss and the four status bars are built directly by
+// World, not by buildLevel1(), so their sprites never entered the pool
+// above and used to decode cold on the game's very first drawn frames
+// instead — the actual source of the ~300-900ms first-frame stalls.
+// Pooling their paths here puts them through the same warmup as
+// everything else.
+[
+  ...Character.getAllImagePaths(),
+  ...Endboss.getAllImagePaths(),
+  ...StatusBarHeartCharacter.IMAGES,
+  ...StatusBarHeartEndboss.IMAGES,
+  ...StatusBarBottle.IMAGES,
+  ...StatusBarCoins.IMAGES,
+].forEach((path) => DrawableObject.getImage(path));
+
 let spriteWarmup;
 
 /**

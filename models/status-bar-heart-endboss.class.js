@@ -2,7 +2,7 @@
  * Status bar for endboss health display.
  */
 class StatusBarHeartEndboss extends DrawableObject {
-  IMAGES = [
+  static IMAGES = [
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/0.png",
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/20.png",
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/40.png",
@@ -10,6 +10,8 @@ class StatusBarHeartEndboss extends DrawableObject {
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/80.png",
     "img_pollo_locco/img/7_statusbars/2_statusbar_endboss/100.png"
   ];
+
+  IMAGES = StatusBarHeartEndboss.IMAGES;
 
   percentage = 100;
 

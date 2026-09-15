@@ -54,12 +54,12 @@ class Character extends MovableObject {
    * Loads all character animation images.
    */
   loadCharacterImages() {
-    this.IMAGES_IDLE = this.createImageArray('IDLE');
-    this.IMAGES_SLEEPING = this.createImageArray('SLEEPING');
-    this.IMAGES_WALKING = this.createImageArray('WALKING');
-    this.IMAGES_JUMPING = this.createImageArray('JUMPING');
-    this.IMAGES_HURT = this.createImageArray('HURT');
-    this.IMAGES_DEAD = this.createImageArray('DEAD');
+    this.IMAGES_IDLE = Character.createImageArray('IDLE');
+    this.IMAGES_SLEEPING = Character.createImageArray('SLEEPING');
+    this.IMAGES_WALKING = Character.createImageArray('WALKING');
+    this.IMAGES_JUMPING = Character.createImageArray('JUMPING');
+    this.IMAGES_HURT = Character.createImageArray('HURT');
+    this.IMAGES_DEAD = Character.createImageArray('DEAD');
   }
 
   /**
@@ -67,10 +67,21 @@ class Character extends MovableObject {
    * @param {string} type - Animation type
    * @returns {string[]} Array of image paths
    */
-  createImageArray(type) {
+  static createImageArray(type) {
     const { path, start, count } = Character.IMAGE_PATHS[type];
     const base = Character.IMAGE_PATHS.BASE_PATH;
     return Array.from({ length: count }, (_, i) => `${base}/${path}${start + i}.png`);
+  }
+
+  /**
+   * Every character sprite path across all animation states, for warming
+   * the shared image pool before the character itself is ever built.
+   * @returns {string[]} All character image paths
+   */
+  static getAllImagePaths() {
+    return Object.keys(Character.IMAGE_PATHS)
+      .filter((key) => key !== 'BASE_PATH')
+      .flatMap((type) => Character.createImageArray(type));
   }
 
   /**
