@@ -33,6 +33,14 @@ export class World {
   constructor(canvas, keyboard) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
+    // The source art (1920x1080 backgrounds, 600-1200px sprites) is far
+    // bigger than the 720x480 canvas, so every drawImage() call rescales
+    // it. Bilinear/bicubic smoothing (the default) redoes that filtering
+    // per pixel per frame across dozens of layers every draw — the real,
+    // recurring cost behind the long frames, not just a cold-start one.
+    // Nearest-neighbor skips the filtering and matches the pixel-art look
+    // the canvas CSS already asks for.
+    this.ctx.imageSmoothingEnabled = false;
     this.keyboard = keyboard;
     this.level = buildLevel1();
     this.clouds = this.level.clouds;
