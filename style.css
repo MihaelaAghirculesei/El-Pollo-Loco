@@ -113,7 +113,7 @@ h1 {
 
 .start-screen {
   z-index: var(--z-ui-base);
-  background: url(img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png) no-repeat center/100% 100%;
+  background: url(img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.jpg) no-repeat center/100% 100%;
   top: 50%;
   transform: translate(-50%, -50%);
   display: flex;
