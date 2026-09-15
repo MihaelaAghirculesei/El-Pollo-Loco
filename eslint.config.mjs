@@ -25,6 +25,7 @@ const gameGlobals = {
   World: "readonly",
   buildLevel1: "readonly",
   warmSpritePool: "readonly",
+  warmExtraSprites: "readonly",
   StatusBarHeartCharacter: "readonly",
   StatusBarHeartEndboss: "readonly",
   StatusBarBottle: "readonly",

@@ -100,6 +100,12 @@ async function bootGame(reveal) {
   if (booting) return;
   booting = true;
   try {
+    // warmExtraSprites() is idempotent (DrawableObject.getImage pools by
+    // path), so calling it again here is a no-op once the deferred
+    // post-load warmup has already run — it only does real work if Play
+    // is pressed before that fires, guaranteeing the pool is complete
+    // before the decode wait below either way.
+    warmExtraSprites();
     await warmSpritePool();
     reveal();
     toggleMobileControls(true);

@@ -156,8 +156,25 @@ function startIdleWarmup() {
   warmSpritePool();
 }
 
-if ("requestIdleCallback" in window) {
-  requestIdleCallback(startIdleWarmup, { timeout: 500 });
+/**
+ * requestIdleCallback only guarantees the main thread is free — on a cold
+ * cache the browser can still be mid-download of the start screen's own
+ * critical resources when it fires, so this extra warmup would still
+ * fight them for bandwidth (that's what dropped the incognito/cold-cache
+ * Lighthouse score even with lowPriority fetches queued). Waiting for the
+ * window's load event first means those critical resources have already
+ * finished, and only then does idle time (or its timeout) kick this off.
+ */
+function scheduleIdleWarmup() {
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(startIdleWarmup, { timeout: 500 });
+  } else {
+    setTimeout(startIdleWarmup, 0);
+  }
+}
+
+if (document.readyState === "complete") {
+  scheduleIdleWarmup();
 } else {
-  setTimeout(startIdleWarmup, 0);
+  window.addEventListener("load", scheduleIdleWarmup, { once: true });
 }
