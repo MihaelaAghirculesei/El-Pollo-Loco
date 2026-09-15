@@ -103,20 +103,28 @@ function buildLevel1() {
 // now, so the first game — and every in-place restart — starts warm.
 buildLevel1();
 
-// Character, Endboss and the four status bars are built directly by
-// World, not by buildLevel1(), so their sprites never entered the pool
-// above and used to decode cold on the game's very first drawn frames
-// instead — the actual source of the ~300-900ms first-frame stalls.
-// Pooling their paths here puts them through the same warmup as
-// everything else.
-[
-  ...Character.getAllImagePaths(),
-  ...Endboss.getAllImagePaths(),
-  ...StatusBarHeartCharacter.IMAGES,
-  ...StatusBarHeartEndboss.IMAGES,
-  ...StatusBarBottle.IMAGES,
-  ...StatusBarCoins.IMAGES,
-].forEach((path) => DrawableObject.getImage(path));
+/**
+ * Character, Endboss and the four status bars are built directly by
+ * World, not by buildLevel1(), so their sprites never entered the pool
+ * above and used to decode cold on the game's very first drawn frames
+ * instead. Pooling their paths puts them through the same warmup as
+ * everything else — but registering them (like buildLevel1()'s own
+ * images) fires the actual network fetch immediately, and this is ~2-3MB
+ * more of it across bigger sprite sheets. Done eagerly, that competed
+ * with the start screen's own critical resources for bandwidth and
+ * tanked the Lighthouse performance score; it's deferred to idle time
+ * below instead, same as the title particle animation.
+ */
+function warmExtraSprites() {
+  [
+    ...Character.getAllImagePaths(),
+    ...Endboss.getAllImagePaths(),
+    ...StatusBarHeartCharacter.IMAGES,
+    ...StatusBarHeartEndboss.IMAGES,
+    ...StatusBarBottle.IMAGES,
+    ...StatusBarCoins.IMAGES,
+  ].forEach((path) => DrawableObject.getImage(path));
+}
 
 let spriteWarmup;
 
@@ -124,33 +132,32 @@ let spriteWarmup;
  * Resolves once every pooled sprite has decoded and been blitted once, so
  * the game's first real frame never pays a synchronous decode (that was
  * blocking the first rAF for ~300-400 ms on a cold cache). Memoised:
- * fired at load to warm while the start screen is up, and awaited again by
- * the game bootstrap — instant on every run after the first.
- *
- * The blit happens on the real #canvas, not a throwaway one: a decoded
- * image still needs its GPU texture uploaded the first time it's drawn to
- * a given canvas's own rendering surface, and that upload doesn't carry
- * over from a separate canvas. Warming on the actual gameplay canvas (it
- * sits behind the opaque start-screen panel, so this never flashes) means
- * that upload has already happened by the time World starts drawing to
- * it for real.
+ * fired once idle while the start screen is up, and awaited again by the
+ * game bootstrap — instant on every run after the first.
  */
 function warmSpritePool() {
   if (spriteWarmup) return spriteWarmup;
   const images = Object.values(DrawableObject.imagePool);
-  const target = document.getElementById("canvas");
-  const ctx = (target || document.createElement("canvas")).getContext("2d");
+  const scratch = document.createElement("canvas").getContext("2d");
   spriteWarmup = Promise.allSettled(
     images.map((img) =>
       typeof img.decode === "function" ? img.decode() : Promise.resolve()
     )
   ).then(() => {
     for (const img of images) {
-      try { ctx.drawImage(img, 0, 0); } catch { /* unusable sprite */ }
+      try { scratch.drawImage(img, 0, 0); } catch { /* unusable sprite */ }
     }
-    if (target) ctx.clearRect(0, 0, target.width, target.height);
   });
   return spriteWarmup;
 }
 
-warmSpritePool();
+function startIdleWarmup() {
+  warmExtraSprites();
+  warmSpritePool();
+}
+
+if ("requestIdleCallback" in window) {
+  requestIdleCallback(startIdleWarmup, { timeout: 500 });
+} else {
+  setTimeout(startIdleWarmup, 0);
+}
