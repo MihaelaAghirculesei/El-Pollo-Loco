@@ -629,7 +629,6 @@ body.start-screen-active #play-again-button {
   #titleCanvas, h1 { display: none !important; }
   
   .start-screen-active footer {
-    min-height: 55px !important;
     display: flex !important;
     position: fixed;
     bottom: 0;
@@ -639,10 +638,10 @@ body.start-screen-active #play-again-button {
     justify-content: center !important;
     align-items: center !important;
   }
-  
+
   .menu { z-index: var(--z-menu) !important; position: relative; }
   .button-start-screen { z-index: var(--z-buttons) !important; position: relative; }
-  
+
   .controls-screen, .story-container {
     width: 95vw;
     max-width: 99vw;
@@ -679,7 +678,6 @@ body.start-screen-active #play-again-button {
   .button-start-screen { z-index: var(--z-buttons) !important; position: relative; }
   
   .start-screen-active footer {
-    min-height: 68px !important;
     display: flex !important;
     position: fixed;
     bottom: 0;
@@ -689,9 +687,9 @@ body.start-screen-active #play-again-button {
     justify-content: center !important;
     align-items: center !important;
   }
-  
+
   .game-active footer { display: none !important; }
-  
+
   .mobile-btn { padding: 5px; border-radius: 8px; }
   .mobile-btn img { width: 35px; height: 35px; }
   
@@ -724,7 +722,6 @@ body.start-screen-active #play-again-button {
   .menu { padding-top: clamp(40px, 10vh, 80px) !important; z-index: var(--z-menu) !important; }
   
   .start-screen-active footer {
-    min-height: 90px !important;
     display: flex !important;
     position: fixed;
     bottom: 0;
@@ -734,13 +731,13 @@ body.start-screen-active #play-again-button {
     justify-content: center !important;
     align-items: center !important;
   }
-  
+
   .game-active footer { display: none !important; }
-  
+
   .popup {
     width: clamp(150px, 20vw, 200px) !important;
-    top: 39% !important; 
-    left: 69% !important;  
+    top: 39% !important;
+    left: 69% !important;
     font-size: clamp(14px, 1vw, 16px);
   }
 }
@@ -748,11 +745,10 @@ body.start-screen-active #play-again-button {
 /* === Large Desktop === */
 @media (min-width: 1281px) {
   #titleCanvas { width: 720px !important; height: 100px !important; }
-  
+
   .start-screen { z-index: var(--z-ui-base) !important; }
   
   .start-screen-active footer {
-    min-height: 100px !important;
     display: flex !important;
     position: fixed;
     bottom: 0;
