@@ -8,7 +8,6 @@ function setUpTitleParticles() {
   const particleCanvas = document.createElement("canvas");
   const ctx = particleCanvas.getContext("2d");
 
-  h1.style.position = "relative";
   h1.appendChild(particleCanvas);
 
   particleCanvas.style.position = "absolute";
