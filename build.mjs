@@ -15,6 +15,8 @@ const ENTRIES = [
   "impressum.css",
   "style.css",
   "favicon.svg",
+  "robots.txt",
+  "sitemap.xml",
   "_headers",
   "fonts",
   "audio",
