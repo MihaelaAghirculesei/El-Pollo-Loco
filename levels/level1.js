@@ -123,7 +123,7 @@ function warmExtraSprites() {
     ...StatusBarHeartEndboss.IMAGES,
     ...StatusBarBottle.IMAGES,
     ...StatusBarCoins.IMAGES,
-  ].forEach((path) => DrawableObject.getImage(path));
+  ].forEach((path) => DrawableObject.getImage(path, { lowPriority: true }));
 }
 
 let spriteWarmup;

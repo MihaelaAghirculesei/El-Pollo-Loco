@@ -11,13 +11,19 @@ class DrawableObject {
 
   /**
    * Returns the pooled image for a path, creating it on first request.
+   * `lowPriority` marks a fetch that isn't part of the critical render
+   * path (e.g. warmup for sprites not needed until Play is pressed) so
+   * the browser's own scheduler, not just request timing, keeps it from
+   * competing with the actual start-screen resources on a cold cache.
    * @param {string} path - Image file path
+   * @param {{lowPriority?: boolean}} [options] - Fetch priority hint
    * @returns {HTMLImageElement} Shared image element
    */
-  static getImage(path) {
+  static getImage(path, { lowPriority = false } = {}) {
     let img = DrawableObject.imagePool[path];
     if (!img) {
       img = new Image();
+      if (lowPriority) img.fetchPriority = "low";
       img.src = path;
       DrawableObject.imagePool[path] = img;
     }
