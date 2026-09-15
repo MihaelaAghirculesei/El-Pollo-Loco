@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![El Pollo Loco start screen](img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.png)
+![El Pollo Loco start screen](img_pollo_locco/img/9_intro_outro_screens/start/startscreen_1.jpg)
 
 **A 2D jump-'n'-run built from scratch on the HTML5 Canvas 2D API — no game engine, no rendering library, zero runtime dependencies. Class-based OOP, ~60 FPS, mobile touch controls.**
 
