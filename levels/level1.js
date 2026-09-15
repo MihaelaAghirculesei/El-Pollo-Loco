@@ -126,19 +126,29 @@ let spriteWarmup;
  * blocking the first rAF for ~300-400 ms on a cold cache). Memoised:
  * fired at load to warm while the start screen is up, and awaited again by
  * the game bootstrap — instant on every run after the first.
+ *
+ * The blit happens on the real #canvas, not a throwaway one: a decoded
+ * image still needs its GPU texture uploaded the first time it's drawn to
+ * a given canvas's own rendering surface, and that upload doesn't carry
+ * over from a separate canvas. Warming on the actual gameplay canvas (it
+ * sits behind the opaque start-screen panel, so this never flashes) means
+ * that upload has already happened by the time World starts drawing to
+ * it for real.
  */
 function warmSpritePool() {
   if (spriteWarmup) return spriteWarmup;
   const images = Object.values(DrawableObject.imagePool);
-  const scratch = document.createElement("canvas").getContext("2d");
+  const target = document.getElementById("canvas");
+  const ctx = (target || document.createElement("canvas")).getContext("2d");
   spriteWarmup = Promise.allSettled(
     images.map((img) =>
       typeof img.decode === "function" ? img.decode() : Promise.resolve()
     )
   ).then(() => {
     for (const img of images) {
-      try { scratch.drawImage(img, 0, 0); } catch { /* unusable sprite */ }
+      try { ctx.drawImage(img, 0, 0); } catch { /* unusable sprite */ }
     }
+    if (target) ctx.clearRect(0, 0, target.width, target.height);
   });
   return spriteWarmup;
 }
