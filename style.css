@@ -1,25 +1,25 @@
 /* === FONT FACE === */
 @font-face {
   font-family: "nabla";
-  src: url(fonts/nabla-regular-variable-font.ttf) format("truetype");
+  src: url(fonts/nabla-regular-variable-font.woff2) format("woff2");
   font-display: swap;
 }
 
 @font-face {
   font-family: "Milchroma";
-  src: url("fonts/Michroma/Michroma-Regular.ttf") format("truetype");
+  src: url("fonts/Michroma/Michroma-Regular.woff2") format("woff2");
   font-display: swap;
 }
 
 @font-face {
   font-family: "Roboto";
-  src: url("fonts/Roboto/Roboto-VariableFont_wdth,wght.ttf") format("truetype");
+  src: url("fonts/Roboto/Roboto-VariableFont_wdth,wght.woff2") format("woff2");
   font-display: swap;
 }
 
 @font-face {
   font-family: "Sofia_Sans";
-  src: url("fonts/Sofia_Sans/SofiaSans-VariableFont_wght.ttf") format("truetype");
+  src: url("fonts/Sofia_Sans/SofiaSans-VariableFont_wght.woff2") format("woff2");
   font-display: swap;
 }
 

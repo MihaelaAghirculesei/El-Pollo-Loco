@@ -1,11 +1,13 @@
 @font-face {
   font-family: "nabla";
-  src: url(fonts/nabla-regular-variable-font.ttf) format("truetype");
+  src: url(fonts/nabla-regular-variable-font.woff2) format("woff2");
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Milchroma";
-  src: url("fonts/Michroma/Michroma-Regular.ttf") format("truetype");
+  src: url("fonts/Michroma/Michroma-Regular.woff2") format("woff2");
+  font-display: swap;
 }
 
 @font-face {
