@@ -11,6 +11,7 @@ const OUT = "dist";
 // manifests, tooling config, tests or node_modules).
 const ENTRIES = [
   "index.html",
+  "404.html",
   "impressum.html",
   "impressum.css",
   "style.css",
