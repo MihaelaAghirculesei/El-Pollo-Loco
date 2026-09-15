@@ -746,8 +746,18 @@ body.start-screen-active #play-again-button {
 @media (min-width: 1281px) {
   #titleCanvas { width: 720px !important; height: 100px !important; }
 
+  #canvas {
+    width: 720px !important;
+    height: 480px !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 1 !important;
+  }
+
   .start-screen { z-index: var(--z-ui-base) !important; }
-  
+
   .start-screen-active footer {
     display: flex !important;
     position: fixed;
