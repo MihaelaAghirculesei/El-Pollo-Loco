@@ -24,6 +24,22 @@ function setUpTitleParticles() {
   const particles = [];
   const numParticles = 50;
 
+  /**
+   * A single circle rasterized once and reused for every particle every
+   * frame. Filling an arc() path per particle forces the canvas to
+   * re-tessellate and anti-alias a curve 50 times a frame, which is what
+   * pushed this handler past 50ms; drawImage()-ing a pre-rendered sprite
+   * is a cheap blit instead.
+   */
+  const spriteSize = 10;
+  const sprite = document.createElement("canvas");
+  sprite.width = sprite.height = spriteSize;
+  const spriteCtx = sprite.getContext("2d");
+  spriteCtx.fillStyle = "#fff";
+  spriteCtx.beginPath();
+  spriteCtx.arc(spriteSize / 2, spriteSize / 2, spriteSize / 2, 0, Math.PI * 2);
+  spriteCtx.fill();
+
   class Particle {
     constructor() {
       this.x = Math.random() * particleCanvas.width;
@@ -43,10 +59,8 @@ function setUpTitleParticles() {
     }
 
     draw() {
-      ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.globalAlpha = this.opacity;
+      ctx.drawImage(sprite, this.x - this.size, this.y - this.size, this.size * 2, this.size * 2);
     }
   }
 
@@ -57,6 +71,8 @@ function setUpTitleParticles() {
   }
 
   let animating = false;
+  let lastFrameTime = 0;
+  const frameInterval = 1000 / 30;
 
   /**
    * The title is only visible on the start/menu screens. When it isn't
@@ -69,17 +85,25 @@ function setUpTitleParticles() {
     return !document.hidden && document.body.classList.contains("start-screen-active");
   }
 
-  function animateParticles() {
+  /**
+   * Purely decorative, so it's capped at 30fps instead of riding every
+   * rAF tick: half the draw calls per second for a still-smooth drift.
+   */
+  function animateParticles(now) {
     if (!titleVisible()) {
       animating = false;
       return;
     }
+    requestAnimationFrame(animateParticles);
+    if (now - lastFrameTime < frameInterval) return;
+    lastFrameTime = now;
+
     ctx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
     particles.forEach((particle) => {
       particle.update();
       particle.draw();
     });
-    requestAnimationFrame(animateParticles);
+    ctx.globalAlpha = 1;
   }
 
   function resume() {
