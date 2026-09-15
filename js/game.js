@@ -123,7 +123,9 @@ function startGame() {
  * Cleans up world resources.
  */
 function cleanupWorldResources() {
-  world?.stopAllLoops();
+  if (!world) return;
+  world.stopAllLoops();
+  audioManager.stopAllGameEndSounds(world);
 }
 
 /**
@@ -136,13 +138,10 @@ function showStartScreen() {
 }
 
 /**
- * Returns to main menu.
+ * Returns to main menu, in place - no page reload, so no flash on the canvas.
  */
 function returnToMenu() {
-  cleanupWorldResources();
-  showStartScreen();
-  toggleMobileControls(false);
-  location.reload();
+  goToHome();
 }
 
 /**
@@ -175,11 +174,14 @@ const openStory = () => toggleScreen("storyScreen", true);
 const closeStory = () => toggleScreen("storyScreen", false);
 
 /**
- * Goes to home page.
+ * Goes to home page, in place - no page reload, so no flash on the canvas.
  */
 function goToHome() {
   cleanupWorldResources();
-  location.reload();
+  clearEndScreens();
+  toggleMobileControls(false);
+  setFooterButtonsVisibility(false);
+  showStartScreen();
 }
 
 /**
