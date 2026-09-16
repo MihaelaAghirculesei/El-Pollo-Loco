@@ -129,6 +129,48 @@ function warmExtraSprites() {
 let spriteWarmup;
 
 /**
+ * Blits every image in small batches spread across idle callbacks instead
+ * of one synchronous loop, so warming 150+ sprites (once Character/Endboss/
+ * status-bar sheets joined the pool) never becomes a single long main-thread
+ * task — that showed up in Lighthouse as ~1.6s of Total Blocking Time even
+ * though it never delayed anything the player could see.
+ * @param {HTMLImageElement[]} images - Pooled images to blit
+ * @param {CanvasRenderingContext2D} scratch - Off-screen context to draw into
+ * @returns {Promise<void>} Resolves once every image has been blitted
+ */
+function blitAllIdle(images, scratch) {
+  // Hard cap per callback: a starved requestIdleCallback still fires with
+  // didTimeout=true, and that must never mean "drain everything remaining
+  // in one go" — this bounds the worst case to a handful of sprites.
+  const MAX_PER_SLICE = 2;
+  return new Promise((resolve) => {
+    let i = 0;
+    const blitOne = (img) => { try { scratch.drawImage(img, 0, 0); } catch { /* unusable sprite */ } };
+    function scheduleNext() {
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(stepIdle, { timeout: 50 });
+      } else {
+        setTimeout(stepChunk, 0);
+      }
+    }
+    function stepIdle(deadline) {
+      const end = Math.min(i + MAX_PER_SLICE, images.length);
+      while (i < end && (deadline.timeRemaining() > 0 || deadline.didTimeout)) {
+        blitOne(images[i]);
+        i++;
+      }
+      i < images.length ? scheduleNext() : resolve();
+    }
+    function stepChunk() {
+      const end = Math.min(i + MAX_PER_SLICE, images.length);
+      for (; i < end; i++) blitOne(images[i]);
+      i < images.length ? scheduleNext() : resolve();
+    }
+    images.length ? scheduleNext() : resolve();
+  });
+}
+
+/**
  * Resolves once every pooled sprite has decoded and been blitted once, so
  * the game's first real frame never pays a synchronous decode (that was
  * blocking the first rAF for ~300-400 ms on a cold cache). Memoised:
@@ -143,11 +185,7 @@ function warmSpritePool() {
     images.map((img) =>
       typeof img.decode === "function" ? img.decode() : Promise.resolve()
     )
-  ).then(() => {
-    for (const img of images) {
-      try { scratch.drawImage(img, 0, 0); } catch { /* unusable sprite */ }
-    }
-  });
+  ).then(() => blitAllIdle(images, scratch));
   return spriteWarmup;
 }
 
