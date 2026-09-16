@@ -315,8 +315,12 @@ function showMobileControls() {
  * Initializes mobile and orientation.
  */
 function initializeMobileAndOrientation() {
-  showMobileControls();
+  // Order matters: checkOrientation() reads window.innerHeight/innerWidth,
+  // and showMobileControls() writes mobileControls.style.display right
+  // before it used to — that write-then-read forced a synchronous layout.
+  // Reading first avoids it; the two touch unrelated elements either way.
   checkOrientation();
+  showMobileControls();
 }
 
 /**
