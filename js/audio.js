@@ -22,16 +22,19 @@ class AudioManager {
     this.AUDIO_PATHS = this.defineAudioPaths();
     this.isGameMuted = JSON.parse(localStorage.getItem('gameSoundMuted') || 'true');
     this.audioPool = {};
-    this.backgroundMusic = this.createAudioInstance(this.AUDIO_PATHS.BACKGROUND, 0.1);
+    this.backgroundMusic = null;
     this.characterSnoringSound = null;
-    this.endGameAudio = null; 
+    this.endGameAudio = null;
   }
 
   /**
-   * Sets up initial game state.
+   * Sets up initial game state. Sound pools are warmed later, once idle
+   * (see scheduleIdleAudioWarmup below) — creating them here used to fire
+   * ~18 eager audio fetches (plus the 9 MB background track) before the
+   * page had even painted, competing with the start screen's own critical
+   * resources for bandwidth on slow connections.
    */
   setupGame() {
-    this.preloadFrequentSounds();
     this.updateAllButtons();
   }
 
@@ -157,6 +160,9 @@ class AudioManager {
    */
   playBackgroundMusic() {
     if (this.isGameMuted) return;
+    if (!this.backgroundMusic) {
+      this.backgroundMusic = this.createAudioInstance(this.AUDIO_PATHS.BACKGROUND, 0.1);
+    }
     this.backgroundMusic.play().catch(() => {});
   }
 
@@ -386,3 +392,24 @@ document.addEventListener('DOMContentLoaded', function() {
   isGameMuted = audioManager.isGameMuted;
   audioManager.updateAllButtons();
 });
+
+/**
+ * Warms the frequent-sound pool once idle, same pattern as the sprite
+ * warmup in levels/level1.js: waiting for window "load" first means the
+ * page's own critical resources have already finished fetching, so these
+ * ~18 short sound-effect requests never fight them for bandwidth.
+ */
+function scheduleIdleAudioWarmup() {
+  const warm = () => audioManager.preloadFrequentSounds();
+  if ("requestIdleCallback" in window) {
+    requestIdleCallback(warm, { timeout: 500 });
+  } else {
+    setTimeout(warm, 0);
+  }
+}
+
+if (document.readyState === "complete") {
+  scheduleIdleAudioWarmup();
+} else {
+  window.addEventListener("load", scheduleIdleAudioWarmup, { once: true });
+}
