@@ -60,7 +60,7 @@ body {
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  background: url(img_pollo_locco/img/5_background/layers/background-mesico.jpeg) center/cover;
+  background: url(img_pollo_locco/img/5_background/layers/background-mesico.webp) center/cover;
   overflow: hidden;
 }
 
@@ -268,7 +268,7 @@ body:not(.start-screen-active) #game-container > h1 {
 }
 
 .game-over-screen {
-  background: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg") center/cover no-repeat;
+  background: url("img_pollo_locco/img/5_background/layers/background-mesico.webp") center/cover no-repeat;
 }
 
 .game-over-screen img { max-width: clamp(30%, 50%, 60%); }
@@ -390,7 +390,7 @@ footer {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: url("img_pollo_locco/img/5_background/layers/background-mesico.jpeg") center/cover no-repeat;
+  background: url("img_pollo_locco/img/5_background/layers/background-mesico.webp") center/cover no-repeat;
   align-items: center;
   justify-content: center;
   flex-direction: column;
