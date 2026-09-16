@@ -205,7 +205,7 @@ DrawableObject                     draw + shared image pool
 
 ## Performance & Resource Management
 
-- **Shared image pool** — `DrawableObject.imagePool` decodes each sprite once and hands the same `Image` to every instance that needs it. A throwaway level is built at page load to start that decoding immediately, and pressing *Play* waits for the pooled sprites to finish decoding before the world is built, so the first rendered frame never stalls on a cold decode.
+- **Shared image pool** — `DrawableObject.imagePool` decodes each sprite once and hands the same `Image` to every instance that needs it. Character, Endboss and status-bar sprites are registered into the pool and warmed — decoded via `img.decode()` and blitted into an off-screen scratch canvas in small batches — once the page has fully loaded and the main thread is idle, so warmup never competes with the start screen's own critical resources for bandwidth or blocks the main thread long enough to show up in Lighthouse. Pressing *Play* awaits that same warmup before the world is built, so the first rendered frame never stalls on a cold decode.
 - **In-place restart** — *Play Again* tears the finished world down and builds a fresh one without reloading the page, so the decoded image pool carries straight into the next run.
 - **Lazy level animation** — clouds, coins and bottles stay still on the start screen and only begin animating when a game actually starts.
 - **Full teardown on game end** — `World.stopAllLoops()` sets the flag that ends the `requestAnimationFrame` loop, clears the spawn timer and calls `stop()` on every entity to kill its own intervals and timeouts (`Character.stop()`, `Endboss.stop()`, `Chicken.stop()`, `ThrowableObject.stop()`), so no work happens behind the end screen or after a restart.
@@ -233,7 +233,7 @@ Static assets under `/audio`, `/img_pollo_locco` and `/fonts` are served with
 `Cache-Control: public, max-age=31536000, immutable`.
 
 The page also ships SEO and social metadata (`description`, canonical URL, Open Graph and
-Twitter card tags) and an SVG favicon.
+Twitter card tags), a `robots.txt` and `sitemap.xml`, a custom 404 page, and an SVG favicon.
 
 ---
 
@@ -298,9 +298,12 @@ npm run build      # copies the deployable file set into dist/ (cross-platform)
 .
 ├── index.html                 markup, screens, script tags
 ├── impressum.html             legal notice / privacy page
+├── 404.html                   custom not-found page
 ├── style.css / impressum.css  styling
 ├── favicon.svg
+├── robots.txt / sitemap.xml   search engine crawling
 ├── _headers                   Cloudflare Pages security & cache headers
+├── .github/workflows/ci.yml   GitHub Actions: lint, test, e2e, build
 ├── eslint.config.mjs          ESLint 10 flat config
 ├── build.mjs                  static-copy build → dist/ (cross-platform)
 ├── package.json               scripts + dev dependencies (ESLint, puppeteer-core)
