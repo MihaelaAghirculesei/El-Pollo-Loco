@@ -7,6 +7,7 @@
 **A 2D jump-'n'-run built from scratch on the HTML5 Canvas 2D API — no game engine, no rendering library, zero runtime dependencies. Class-based OOP, ~60 FPS, mobile touch controls.**
 
 [![Play the game](https://img.shields.io/badge/▶_Play-Live_Demo-2ea44f?style=for-the-badge)](https://el-pollo-loco-aghirculesei.pages.dev/)
+[![CI](https://github.com/MihaelaAghirculesei/El-Pollo-Loco/actions/workflows/ci.yml/badge.svg)](https://github.com/MihaelaAghirculesei/El-Pollo-Loco/actions/workflows/ci.yml)
 [![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![HTML5 Canvas](https://img.shields.io/badge/HTML5-Canvas_2D-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](#license)
@@ -93,6 +94,7 @@ only the platform: plain classes, `<canvas>` 2D drawing and `requestAnimationFra
 - **Security headers & CSP** shipped with the deployment (see [Security & Deployment](#security--deployment)).
 - **Lint-clean** against a custom ESLint 10 flat config; every class and function carries JSDoc.
 - **Unit-tested logic** — the collision, jump-validity, damage-cooldown and collectible helpers are covered by a `node:test` suite that loads the classic scripts into a VM sandbox, so it needs no browser, no build and no dependencies.
+- **Asset-integrity check** — a companion `node:test` case scans every local `src`/`href`/`url()` reference in the repo and fails if one points to a file that doesn't exist, catching a renamed or deleted asset before it ships.
 - **Browser smoke test** — a headless-Chromium check (`node:test` + `puppeteer-core`, driving the system Chrome/Edge) serves the repo, presses **Play**, and asserts the canvas actually paints with no console errors.
 
 ---
@@ -160,7 +162,8 @@ pool of pre-created `Audio` elements to avoid restart latency. The mute setting 
 | Styling | Hand-written CSS (`style.css`, `impressum.css`), self-hosted fonts |
 | Persistence | `localStorage` for the mute setting |
 | Tooling | ESLint 10 (flat config), `node:test` (unit + `puppeteer-core` smoke test), npm scripts |
-| Hosting / CI | Cloudflare Pages with a `_headers` config |
+| CI | GitHub Actions — lint, unit tests, e2e smoke test and build on every push and pull request |
+| Hosting | Cloudflare Pages with a `_headers` config |
 
 No frameworks, bundlers or transpilers are used.
 
@@ -208,6 +211,8 @@ DrawableObject                     draw + shared image pool
 - **Full teardown on game end** — `World.stopAllLoops()` sets the flag that ends the `requestAnimationFrame` loop, clears the spawn timer and calls `stop()` on every entity to kill its own intervals and timeouts (`Character.stop()`, `Endboss.stop()`, `Chicken.stop()`, `ThrowableObject.stop()`), so no work happens behind the end screen or after a restart.
 - **Throttled resize handling** — orientation checks are coalesced through `requestAnimationFrame`.
 - **Render loop** targets the display refresh rate (typically 60 FPS) and stops immediately when `gameOver` is set.
+- **Deferred audio loading** — the background track and sound-effect pool load on demand instead of at page load, so they never compete with the start screen's own critical resources for bandwidth before the player has pressed Play.
+- **Right-sized image assets** — UI icons and background layers ship at (or near) their actual display resolution, with modern formats used where they meaningfully cut bytes.
 
 ---
 
@@ -279,6 +284,9 @@ npm run build      # copies the deployable file set into dist/ (cross-platform)
 - **`npm run build`** (`build.mjs`) copies the deployable file set into `dist/` with
   `node:fs` `cp`, so it runs on any OS. Cloudflare Pages serves the repo root directly —
   this is only for local or CI packaging.
+- **Continuous Integration** — every push and pull request against `main` runs the full
+  pipeline (lint → unit tests → e2e smoke test → build) via GitHub Actions
+  (`.github/workflows/ci.yml`).
 - Every class and function is documented with **JSDoc**.
 - `.editorconfig` and the ESLint config define the shared code style.
 
