@@ -349,7 +349,7 @@ third-party assets and are not covered by this licence.
 
 <div align="center">
 
-[![Portfolio](https://img.shields.io/badge/Portfolio-aghirculesei.pages.dev-orange?style=for-the-badge&logo=firefox)](https://aghirculesei.pages.dev/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-aghirculesei.de-orange?style=for-the-badge&logo=firefox)](https://aghirculesei.de/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/mihaela-aghirculesei-84147a23b/)
 [![Email](https://img.shields.io/badge/Email-aghirculesei@gmail.com-D14836?style=for-the-badge&logo=gmail)](mailto:aghirculesei@gmail.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/MihaelaAghirculesei/El-Pollo-Loco)
