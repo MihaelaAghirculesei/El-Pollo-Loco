@@ -338,7 +338,7 @@ npm run build      # copies the deployable file set into dist/ (cross-platform)
 
 ## License
 
-Released under the **MIT License** — see [`LICENSE`](LICENSE).
+Released under the **MIT License** — see [`LICENSE`](LICENSE). Third-party assets are listed in [`NOTICE`](NOTICE).
 
 The bundled fonts keep their own SIL Open Font License; the game sprites and audio are
 third-party assets and are not covered by this licence.
