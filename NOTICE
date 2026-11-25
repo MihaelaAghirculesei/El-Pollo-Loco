@@ -1,0 +1,9 @@
+El Pollo Loco
+Copyright (c) 2025-2026 Mihaela Melania Aghirculesei
+
+The code in this repository is released under the MIT License (see LICENSE).
+
+The game sprite art and sound effects are third-party "El Pollo Loco" assets
+and are not covered by this licence. The bundled fonts under fonts/ (Michroma,
+Roboto, Sofia Sans, Nabla) are licensed separately under the SIL Open Font
+License; see the OFL.txt file in each font's folder.
