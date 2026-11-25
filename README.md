@@ -196,9 +196,11 @@ DrawableObject                     draw + shared image pool
 
 - **`World`** builds the level (`buildLevel1()`), owns every entity and runs a single `requestAnimationFrame` loop. Each frame it:
   - advances the **game logic** — boss activation, collision resolution, bottle throwing, item collection and the win/lose check — in fixed 35 ms steps drawn from a delta-time accumulator, so the simulation stays frame-rate independent and a backgrounded tab can't burst-catch-up (the per-frame delta is clamped);
+  - advances the **game clock** (`models/game-clock.class.js`) by the same clamped delta, which runs every entity timer that falls due;
   - **renders** — clear the canvas, apply the camera translation, redraw every entity and status bar.
-- **`Character`** runs its own input, state (active / idle / sleeping) and animation intervals.
-- **`Endboss`** runs a state-machine interval (walking / alert / attack / jump).
+- **Entity timers run on the game clock, not on the browser's.** `gameClock.setInterval` / `setTimeout` mirror the browser API, but they only advance inside the world's frame. Movement, gravity, walk cycles and removal delays keep their millisecond cadence, pause with the tab and stay in step with the frame that draws them. A new `World` resets the clock, so nothing from a finished run can fire in the next one.
+- **`Character`** runs its input, state (active / idle / sleeping) and animation timers on the clock.
+- **`Endboss`** runs a state-machine timer (walking / alert / attack / jump) on the clock.
 - **Script loading** — every class and helper is loaded as a classic `<script>` sharing global scope; `js/game.js` and `models/world.class.js` are the only ES modules. This is deliberate and is encoded in the ESLint config's `globals` list.
 
 ---
@@ -208,7 +210,7 @@ DrawableObject                     draw + shared image pool
 - **Shared image pool** — `DrawableObject.imagePool` decodes each sprite once and hands the same `Image` to every instance that needs it. Character, Endboss and status-bar sprites are registered into the pool and warmed — decoded via `img.decode()` and blitted into an off-screen scratch canvas in small batches — once the page has fully loaded and the main thread is idle, so warmup never competes with the start screen's own critical resources for bandwidth or blocks the main thread long enough to show up in Lighthouse. Pressing *Play* awaits that same warmup before the world is built, so the first rendered frame never stalls on a cold decode.
 - **In-place restart** — *Play Again* tears the finished world down and builds a fresh one without reloading the page, so the decoded image pool carries straight into the next run.
 - **Lazy level animation** — clouds, coins and bottles stay still on the start screen and only begin animating when a game actually starts.
-- **Full teardown on game end** — `World.stopAllLoops()` sets the flag that ends the `requestAnimationFrame` loop, clears the spawn timer and calls `stop()` on every entity to kill its own intervals and timeouts (`Character.stop()`, `Endboss.stop()`, `Chicken.stop()`, `ThrowableObject.stop()`), so no work happens behind the end screen or after a restart.
+- **Full teardown on game end** — `World.stopAllLoops()` sets the flag that ends the `requestAnimationFrame` loop, clears the spawn timer and calls `stop()` on every entity to cancel its game-clock timers (`Character.stop()`, `Endboss.stop()`, `Chicken.stop()`, `ThrowableObject.stop()`), so no work happens behind the end screen or after a restart.
 - **Throttled resize handling** — orientation checks are coalesced through `requestAnimationFrame`.
 - **Render loop** targets the display refresh rate (typically 60 FPS) and stops immediately when `gameOver` is set.
 - **Deferred audio loading** — the background track and sound-effect pool load on demand instead of at page load, so they never compete with the start screen's own critical resources for bandwidth before the player has pressed Play.
@@ -323,7 +325,6 @@ npm run build      # copies the deployable file set into dist/ (cross-platform)
 ## Roadmap
 
 - Additional levels — `buildLevel1()` already separates the level data from world logic.
-- Fold the remaining per-entity animation timers (character, chickens, boss, clouds) into the world's `requestAnimationFrame` loop, so nothing runs on its own `setInterval`.
 - Optional keyboard remapping and a settings screen.
 
 ---

@@ -123,7 +123,7 @@ class Endboss extends MovableObject {
    */
   animate() {
     if (this._moveInterval) return;
-    this._moveInterval = setInterval(() => this.executeMovementCycle(), this.ANIMATION_SPEED);
+    this._moveInterval = gameClock.setInterval(() => this.executeMovementCycle(), this.ANIMATION_SPEED);
   }
 
   /**
@@ -281,7 +281,7 @@ class Endboss extends MovableObject {
    */
   performJumpAnimation() {
     this.y = 30;
-    this._jumpTimeout = setTimeout(() => {
+    this._jumpTimeout = gameClock.setTimeout(() => {
       this.y = 60;
       this._isJumping = false;
     }, 300);
@@ -378,7 +378,7 @@ class Endboss extends MovableObject {
    */
   stopMovement() {
     if (this._moveInterval) {
-      clearInterval(this._moveInterval);
+      gameClock.clearInterval(this._moveInterval);
       this._moveInterval = null;
     }
   }
@@ -389,15 +389,15 @@ class Endboss extends MovableObject {
    */
   stop() {
     this.stopMovement();
-    clearTimeout(this._jumpTimeout);
-    clearTimeout(this._removalTimeout);
+    gameClock.clearTimeout(this._jumpTimeout);
+    gameClock.clearTimeout(this._removalTimeout);
   }
 
   /**
    * Schedules removal from world.
    */
   scheduleRemoval() {
-    this._removalTimeout = setTimeout(() => this.removeFromWorld(), 2000);
+    this._removalTimeout = gameClock.setTimeout(() => this.removeFromWorld(), 2000);
   }
 
   /**

@@ -23,6 +23,8 @@ const gameGlobals = {
   Keyboard: "readonly",
   Level: "readonly",
   World: "readonly",
+  GameClock: "readonly",
+  gameClock: "readonly",
   buildLevel1: "readonly",
   warmSpritePool: "readonly",
   warmExtraSprites: "readonly",

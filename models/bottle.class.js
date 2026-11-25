@@ -56,7 +56,7 @@ class Bottle extends MovableObject {
    */
   startAnimation() {
     this.stopAnimation();
-    this.animationInterval = setInterval(() => {
+    this.animationInterval = gameClock.setInterval(() => {
       if (!this.isCollected) {
         this.playAnimation(this.bottleImages);
       }
@@ -68,7 +68,7 @@ class Bottle extends MovableObject {
    */
   stopAnimation() {
     if (this.animationInterval) {
-      clearInterval(this.animationInterval);
+      gameClock.clearInterval(this.animationInterval);
       this.animationInterval = null;
     }
   }

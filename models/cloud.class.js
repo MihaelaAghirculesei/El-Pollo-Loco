@@ -23,7 +23,7 @@ class Cloud extends MovableObject {
    * Starts the cloud drift loop. Called by the world once the game starts.
    */
   start() {
-    this.animationInterval = setInterval(() => {
+    this.animationInterval = gameClock.setInterval(() => {
       this.moveLeft();
       this.resetIfOutOfView();
     }, 1000 / 60);
@@ -33,7 +33,7 @@ class Cloud extends MovableObject {
    * Stops the cloud drift loop. Called when the game ends.
    */
   stop() {
-    clearInterval(this.animationInterval);
+    gameClock.clearInterval(this.animationInterval);
   }
 
   /**

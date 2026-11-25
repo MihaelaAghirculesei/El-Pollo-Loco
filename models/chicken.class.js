@@ -64,8 +64,8 @@ class Chicken extends MovableObject {
    * Starts leftward movement and the walk-cycle animation.
    */
   animate() {
-    this.movementInterval = setInterval(() => this.moveLeft(), 1000 / 60);
-    this.walkingInterval = setInterval(
+    this.movementInterval = gameClock.setInterval(() => this.moveLeft(), 1000 / 60);
+    this.walkingInterval = gameClock.setInterval(
       () => this.playAnimation(this.imagesWalking),
       200
     );
@@ -88,7 +88,7 @@ class Chicken extends MovableObject {
     this.loadImages(this.imagesDead);
     this.playAnimation(this.imagesDead);
     if (this.world?.character) this.world.character.speedY = 0;
-    this.removalTimeout = setTimeout(() => {
+    this.removalTimeout = gameClock.setTimeout(() => {
       this.removeFromWorld();
       this.markedForRemoval = true;
     }, this.removalDelay);
@@ -98,8 +98,8 @@ class Chicken extends MovableObject {
    * Clears the movement and animation intervals.
    */
   stopIntervals() {
-    clearInterval(this.movementInterval);
-    clearInterval(this.walkingInterval);
+    gameClock.clearInterval(this.movementInterval);
+    gameClock.clearInterval(this.walkingInterval);
   }
 
   /**
@@ -108,7 +108,7 @@ class Chicken extends MovableObject {
    */
   stop() {
     this.stopIntervals();
-    clearTimeout(this.removalTimeout);
+    gameClock.clearTimeout(this.removalTimeout);
   }
 
   /**

@@ -25,7 +25,7 @@ class MovableObject extends DrawableObject {
    */
   applyGravity() {
     this.stopGravity();
-    this.gravityInterval = setInterval(() => {
+    this.gravityInterval = gameClock.setInterval(() => {
       this.updateVerticalPosition();
     }, MovableObject.GRAVITY_INTERVAL);
   }
@@ -35,7 +35,7 @@ class MovableObject extends DrawableObject {
    */
   stopGravity() {
     if (this.gravityInterval) {
-      clearInterval(this.gravityInterval);
+      gameClock.clearInterval(this.gravityInterval);
       this.gravityInterval = null;
     }
   }
