@@ -1,4 +1,5 @@
 "use strict";
+/* global gameClock */
 
 // Browser smoke test: serve the repo over HTTP, drive a real Chromium
 // (system Chrome or Edge) and check that the game boots. Runs via
@@ -140,6 +141,46 @@ test("pressing Play boots the world and paints the canvas", opts, async () => {
     return false;
   }, { timeout: 20000 });
   assert.equal(await page.$eval("#startScreen", (el) => getComputedStyle(el).display === "none"), true);
+});
+
+test("entities move on the game clock while the world runs", opts, async () => {
+  const snapshot = () => page.evaluate(() => {
+    const w = window.world;
+    const chicken = w.level.enemies.find((e) => e.constructor.name !== "Endboss" && !e.isDead);
+    if (chicken) chicken.smokeProbe = true;
+    return {
+      clock: gameClock.now,
+      cloudXs: w.clouds.map((c) => c.x),
+      chicken: chicken && { x: chicken.x, speed: chicken.speed },
+      characterX: w.character.x,
+    };
+  });
+  const before = await snapshot();
+  await page.keyboard.down("ArrowRight");
+  await new Promise((r) => setTimeout(r, 1000));
+  await page.keyboard.up("ArrowRight");
+  const after = await snapshot();
+
+  const elapsed = after.clock - before.clock;
+  assert.ok(elapsed > 500, `game clock should advance with the frames (advanced ${elapsed} ms)`);
+  // A cloud that leaves the screen wraps to the right edge, so check that
+  // most of them drifted left rather than one in particular.
+  const drifted = after.cloudXs.filter((x, i) => x < before.cloudXs[i]).length;
+  assert.ok(drifted >= before.cloudXs.length / 2, `clouds drift left (${drifted}/${before.cloudXs.length})`);
+  assert.ok(after.characterX > before.characterX, "the character walks right while ArrowRight is held");
+  if (before.chicken) {
+    const moved = await page.evaluate(() => {
+      const probe = window.world.level.enemies.find((e) => e.smokeProbe);
+      return probe && !probe.isDead ? probe.x : undefined;
+    });
+    if (moved !== undefined) {
+      // moveLeft runs every 1000/60 ms of game time.
+      const expected = before.chicken.speed * (elapsed / (1000 / 60));
+      const actual = before.chicken.x - moved;
+      assert.ok(Math.abs(actual - expected) <= before.chicken.speed * 3,
+        `chicken moved ${actual.toFixed(1)} px, expected about ${expected.toFixed(1)} px`);
+    }
+  }
 });
 
 test("startup produced no console errors or failed requests", opts, () => {

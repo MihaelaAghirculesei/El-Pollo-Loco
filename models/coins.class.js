@@ -27,31 +27,10 @@ class Coin extends CollectableObject {
    * Starts the coin spin animation. Called by the world once the game starts.
    */
   start() {
-    this.lastTime = 0;
-    this.animationInterval = requestAnimationFrame(this.animateFrame.bind(this));
-  }
-
-  /**
-   * Handles animation frame updates.
-   * @param {DOMHighResTimeStamp} currentTime - Current time
-   */
-  animateFrame(currentTime) {
-    if (this.shouldAnimate(currentTime)) {
-      this.playCoinAnimation();
-      this.lastTime = currentTime;
-    }
-    if (!this.isCollected) {
-      this.animationInterval = requestAnimationFrame(this.animateFrame.bind(this));
-    }
-  }
-
-  /**
-   * Checks if animation frame should update.
-   * @param {DOMHighResTimeStamp} currentTime - Current time
-   * @returns {boolean} True if should animate
-   */
-  shouldAnimate(currentTime) {
-    return currentTime - this.lastTime >= 200;
+    this.stopAnimation();
+    this.animationInterval = gameClock.setInterval(() => {
+      if (!this.isCollected) this.playCoinAnimation();
+    }, 200);
   }
 
   /**
@@ -66,7 +45,7 @@ class Coin extends CollectableObject {
    */
   stopAnimation() {
     if (this.animationInterval) {
-      cancelAnimationFrame(this.animationInterval);
+      gameClock.clearInterval(this.animationInterval);
       this.animationInterval = null;
     }
   }
@@ -80,7 +59,7 @@ class Coin extends CollectableObject {
   }
 
   /**
-   * Stops the spin animation frame loop. Called when the game ends.
+   * Stops the spin animation. Called when the game ends.
    */
   stop() {
     this.stopAnimation();

@@ -31,6 +31,9 @@ export class World {
    * @param {Object} keyboard - Keyboard input handler
    */
   constructor(canvas, keyboard) {
+    // A fresh world starts a fresh game clock, so no timer left over from a
+    // finished run can fire in this one.
+    gameClock.reset();
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     // The source art (1920x1080 backgrounds, 600-1200px sprites) is far
@@ -118,7 +121,7 @@ export class World {
    */
   stopAllLoops() {
     this.gameOver = true;
-    clearInterval(this.spawnInterval);
+    gameClock.clearInterval(this.spawnInterval);
     this.character?.stop();
     [
       this.level.enemies, this.clouds,
@@ -148,7 +151,9 @@ export class World {
   draw() {
     if (this.gameOver) return;
     const now = performance.now();
-    this.stepGameLogic(this.lastFrameTime ? now - this.lastFrameTime : 0);
+    const dt = this.lastFrameTime ? now - this.lastFrameTime : 0;
+    gameClock.advance(Math.min(dt, World.MAX_FRAME_MS));
+    this.stepGameLogic(dt);
     this.lastFrameTime = now;
     if (this.gameOver) return;
     clearCanvas(this.ctx, this.canvas);
@@ -365,7 +370,7 @@ export class World {
    * Spawns new chicken enemies periodically.
    */
   spawnChickens() {
-    this.spawnInterval = setInterval(() => {
+    this.spawnInterval = gameClock.setInterval(() => {
       if (this.gameOver) return;
       if (this.level.enemies.length < 10) {
         const enemy = Math.random() < 0.5 ? new Chicken(this) : new SmallChicken(this);

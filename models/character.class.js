@@ -120,9 +120,9 @@ class Character extends MovableObject {
    * game-over / win screen.
    */
   stop() {
-    clearInterval(this.movementLoop);
-    clearInterval(this.stateLoop);
-    clearInterval(this.animationLoop);
+    gameClock.clearInterval(this.movementLoop);
+    gameClock.clearInterval(this.stateLoop);
+    gameClock.clearInterval(this.animationLoop);
     this.stopGravity();
   }
 
@@ -130,7 +130,7 @@ class Character extends MovableObject {
    * Starts movement processing loop.
    */
   startMovementLoop() {
-    this.movementLoop = setInterval(() => {
+    this.movementLoop = gameClock.setInterval(() => {
       this.processInput();
       this.updateCameraPosition();
     }, Character.CONFIG.FRAME_RATE);
@@ -193,7 +193,7 @@ class Character extends MovableObject {
    * Starts state checking loop.
    */
   startStateLoop() {
-    this.stateLoop = setInterval(() => {
+    this.stateLoop = gameClock.setInterval(() => {
       const newState = this.determineState();
       if (newState !== this.currentState) {
         this.currentState = newState;
@@ -236,7 +236,7 @@ class Character extends MovableObject {
    * Starts animation loop for state-based animations.
    */
   startAnimationLoop() {
-    this.animationLoop = setInterval(() => this.playAnimationByState(), Character.CONFIG.ANIMATION_SPEED);
+    this.animationLoop = gameClock.setInterval(() => this.playAnimationByState(), Character.CONFIG.ANIMATION_SPEED);
   }
 
   /**

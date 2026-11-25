@@ -82,7 +82,7 @@ class ThrowableObject extends MovableObject {
    */
   startMoving() {
     let speed = this.getThrowSpeed();
-    this.movementInterval = setInterval(
+    this.movementInterval = gameClock.setInterval(
       () => (this.x += speed * this.direction),
       30
     );
@@ -102,7 +102,7 @@ class ThrowableObject extends MovableObject {
    * Starts rotation animation.
    */
   startRotationAnimation() {
-    this.rotationInterval = setInterval(() => {
+    this.rotationInterval = gameClock.setInterval(() => {
       if (!this.splashed) this.playRotationAnimation();
     }, 100);
   }
@@ -132,14 +132,14 @@ class ThrowableObject extends MovableObject {
    * Stops horizontal movement.
    */
   stopMoving() {
-    clearInterval(this.movementInterval);
+    gameClock.clearInterval(this.movementInterval);
   }
 
   /**
    * Stops rotation animation.
    */
   stopRotationAnimation() {
-    clearInterval(this.rotationInterval);
+    gameClock.clearInterval(this.rotationInterval);
   }
 
   /**
@@ -167,11 +167,11 @@ class ThrowableObject extends MovableObject {
   playAnimationOnce(images) {
     return new Promise((resolve) => {
       let i = 0;
-      const interval = setInterval(() => {
+      const interval = gameClock.setInterval(() => {
         if (i < images.length) {
           this.img = this.imageCache[images[i++]];
         } else {
-          clearInterval(interval);
+          gameClock.clearInterval(interval);
           resolve();
         }
       }, 100);
